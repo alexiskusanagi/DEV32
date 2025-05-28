@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\exercicio_passagem_aerea\obj\Debug\exercicio_passagem_aerea.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\exercicio_passagem_aerea\obj\Debug\exercicio_passagem_aerea.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\exercicio_passagem_aerea\bin\Debug\exercicio_passagem_aerea.exe.config
+C:\Users\alexis.hskamizaki\source\repos\exercicio_passagem_aerea\bin\Debug\exercicio_passagem_aerea.exe
+C:\Users\alexis.hskamizaki\source\repos\exercicio_passagem_aerea\bin\Debug\exercicio_passagem_aerea.pdb
+C:\Users\alexis.hskamizaki\source\repos\exercicio_passagem_aerea\obj\Debug\exercicio_passagem_aerea.exe
+C:\Users\alexis.hskamizaki\source\repos\exercicio_passagem_aerea\obj\Debug\exercicio_passagem_aerea.pdb

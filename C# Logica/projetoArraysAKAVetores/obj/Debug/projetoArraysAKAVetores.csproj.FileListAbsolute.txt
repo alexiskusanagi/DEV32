@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoArraysAKAVetores\bin\Debug\projetoArraysAKAVetores.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoArraysAKAVetores\bin\Debug\projetoArraysAKAVetores.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoArraysAKAVetores\bin\Debug\projetoArraysAKAVetores.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoArraysAKAVetores\obj\Debug\projetoArraysAKAVetores.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoArraysAKAVetores\obj\Debug\projetoArraysAKAVetores.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoArraysAKAVetores\obj\Debug\projetoArraysAKAVetores.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoArraysAKAVetores\obj\Debug\projetoArraysAKAVetores.pdb

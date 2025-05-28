@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplos\bin\Debug\projetoMultiplos.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplos\bin\Debug\projetoMultiplos.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplos\bin\Debug\projetoMultiplos.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplos\obj\Debug\projetoMultiplos.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplos\obj\Debug\projetoMultiplos.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplos\obj\Debug\projetoMultiplos.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplos\obj\Debug\projetoMultiplos.pdb

@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoConsoleGame1.1\bin\Debug\projetoConsoleGame1.1.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoConsoleGame1.1\bin\Debug\projetoConsoleGame1.1.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoConsoleGame1.1\bin\Debug\projetoConsoleGame1.1.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoConsoleGame1.1\obj\Debug\projetoConsoleGame1.1.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoConsoleGame1.1\obj\Debug\projetoConsoleGame1.1.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoConsoleGame1.1\obj\Debug\projetoConsoleGame1.1.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoConsoleGame1.1\obj\Debug\projetoConsoleGame1.1.pdb

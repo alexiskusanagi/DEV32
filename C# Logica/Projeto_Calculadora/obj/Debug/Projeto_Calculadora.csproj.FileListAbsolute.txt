@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Calculadora\obj\Debug\Projeto_Calculadora.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Calculadora\obj\Debug\Projeto_Calculadora.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Calculadora\bin\Debug\Projeto_Calculadora.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Calculadora\bin\Debug\Projeto_Calculadora.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Calculadora\bin\Debug\Projeto_Calculadora.pdb
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Calculadora\obj\Debug\Projeto_Calculadora.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Calculadora\obj\Debug\Projeto_Calculadora.pdb

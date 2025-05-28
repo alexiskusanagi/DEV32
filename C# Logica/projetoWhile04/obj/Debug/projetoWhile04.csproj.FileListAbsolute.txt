@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoWhile04\bin\Debug\projetoWhile04.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoWhile04\bin\Debug\projetoWhile04.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWhile04\bin\Debug\projetoWhile04.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoWhile04\obj\Debug\projetoWhile04.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWhile04\obj\Debug\projetoWhile04.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWhile04\obj\Debug\projetoWhile04.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWhile04\obj\Debug\projetoWhile04.pdb

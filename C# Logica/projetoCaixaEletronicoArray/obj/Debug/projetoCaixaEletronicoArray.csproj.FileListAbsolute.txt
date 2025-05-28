@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoCaixaEletronicoArray\bin\Debug\projetoCaixaEletronicoArray.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoCaixaEletronicoArray\bin\Debug\projetoCaixaEletronicoArray.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoCaixaEletronicoArray\bin\Debug\projetoCaixaEletronicoArray.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoCaixaEletronicoArray\obj\Debug\projetoCaixaEletronicoArray.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoCaixaEletronicoArray\obj\Debug\projetoCaixaEletronicoArray.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoCaixaEletronicoArray\obj\Debug\projetoCaixaEletronicoArray.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoCaixaEletronicoArray\obj\Debug\projetoCaixaEletronicoArray.pdb

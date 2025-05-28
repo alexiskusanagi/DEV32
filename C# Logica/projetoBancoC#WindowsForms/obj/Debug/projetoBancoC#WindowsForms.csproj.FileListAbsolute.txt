@@ -1,0 +1,14 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\bin\Debug\projetoBancoC#WindowsForms.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\bin\Debug\projetoBancoC#WindowsForms.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\bin\Debug\projetoBancoC#WindowsForms.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\bin\Debug\System.Data.SqlClient.dll
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\bin\Debug\System.Data.SqlClient.xml
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC#WindowsForms.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC_WindowsForms.Form1.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC_WindowsForms.frm_user.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC_WindowsForms.Properties.Resources.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC#WindowsForms.csproj.GenerateResource.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC#WindowsForms.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoB.9FE3727F.Up2Date
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC#WindowsForms.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoBancoC#WindowsForms\obj\Debug\projetoBancoC#WindowsForms.pdb

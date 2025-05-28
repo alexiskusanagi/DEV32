@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoProdutoDesconto\bin\Debug\projetoProdutoDesconto.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoProdutoDesconto\bin\Debug\projetoProdutoDesconto.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoProdutoDesconto\bin\Debug\projetoProdutoDesconto.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoProdutoDesconto\obj\Debug\projetoProdutoDesconto.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoProdutoDesconto\obj\Debug\projetoProdutoDesconto.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoProdutoDesconto\obj\Debug\projetoProdutoDesconto.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoProdutoDesconto\obj\Debug\projetoProdutoDesconto.pdb

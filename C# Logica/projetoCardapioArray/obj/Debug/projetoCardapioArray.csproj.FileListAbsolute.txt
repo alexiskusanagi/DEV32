@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoCardapioArray\bin\Debug\projetoCardapioArray.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoCardapioArray\bin\Debug\projetoCardapioArray.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoCardapioArray\bin\Debug\projetoCardapioArray.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoCardapioArray\obj\Debug\projetoCardapioArray.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoCardapioArray\obj\Debug\projetoCardapioArray.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoCardapioArray\obj\Debug\projetoCardapioArray.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoCardapioArray\obj\Debug\projetoCardapioArray.pdb

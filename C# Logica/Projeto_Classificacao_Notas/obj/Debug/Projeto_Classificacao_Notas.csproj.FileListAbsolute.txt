@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Classificacao_Notas\bin\Debug\Projeto_Classificacao_Notas.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Classificacao_Notas\bin\Debug\Projeto_Classificacao_Notas.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Classificacao_Notas\bin\Debug\Projeto_Classificacao_Notas.pdb
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Classificacao_Notas\obj\Debug\Projeto_Classificacao_Notas.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Classificacao_Notas\obj\Debug\Projeto_Classificacao_Notas.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Classificacao_Notas\obj\Debug\Projeto_Classificacao_Notas.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Classificacao_Notas\obj\Debug\Projeto_Classificacao_Notas.pdb

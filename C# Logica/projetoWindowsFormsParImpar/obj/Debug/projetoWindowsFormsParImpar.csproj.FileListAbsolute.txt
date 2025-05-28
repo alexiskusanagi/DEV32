@@ -1,0 +1,10 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\bin\Debug\projetoWindowsFormsParImpar.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\bin\Debug\projetoWindowsFormsParImpar.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\bin\Debug\projetoWindowsFormsParImpar.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\obj\Debug\projetoWindowsFormsParImpar.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\obj\Debug\projetoWindowsFormsParImpar.Form1.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\obj\Debug\projetoWindowsFormsParImpar.Properties.Resources.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\obj\Debug\projetoWindowsFormsParImpar.csproj.GenerateResource.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\obj\Debug\projetoWindowsFormsParImpar.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\obj\Debug\projetoWindowsFormsParImpar.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsParImpar\obj\Debug\projetoWindowsFormsParImpar.pdb

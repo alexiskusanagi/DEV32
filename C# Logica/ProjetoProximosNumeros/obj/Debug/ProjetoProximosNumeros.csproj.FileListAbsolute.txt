@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\ProjetoProximosNumeros\bin\Debug\ProjetoProximosNumeros.exe.config
+C:\Users\alexis.hskamizaki\source\repos\ProjetoProximosNumeros\bin\Debug\ProjetoProximosNumeros.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoProximosNumeros\bin\Debug\ProjetoProximosNumeros.pdb
+C:\Users\alexis.hskamizaki\source\repos\ProjetoProximosNumeros\obj\Debug\ProjetoProximosNumeros.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoProximosNumeros\obj\Debug\ProjetoProximosNumeros.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoProximosNumeros\obj\Debug\ProjetoProximosNumeros.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoProximosNumeros\obj\Debug\ProjetoProximosNumeros.pdb

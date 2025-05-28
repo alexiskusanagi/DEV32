@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\calculadora_Simples_Switch\obj\Debug\calculadora_Simples_Switch.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\calculadora_Simples_Switch\obj\Debug\calculadora_Simples_Switch.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\calculadora_Simples_Switch\bin\Debug\calculadora_Simples_Switch.exe.config
+C:\Users\alexis.hskamizaki\source\repos\calculadora_Simples_Switch\bin\Debug\calculadora_Simples_Switch.exe
+C:\Users\alexis.hskamizaki\source\repos\calculadora_Simples_Switch\bin\Debug\calculadora_Simples_Switch.pdb
+C:\Users\alexis.hskamizaki\source\repos\calculadora_Simples_Switch\obj\Debug\calculadora_Simples_Switch.exe
+C:\Users\alexis.hskamizaki\source\repos\calculadora_Simples_Switch\obj\Debug\calculadora_Simples_Switch.pdb

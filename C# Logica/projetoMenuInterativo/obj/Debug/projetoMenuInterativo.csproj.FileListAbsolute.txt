@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuInterativo\bin\Debug\projetoMenuInterativo.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuInterativo\bin\Debug\projetoMenuInterativo.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuInterativo\bin\Debug\projetoMenuInterativo.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuInterativo\obj\Debug\projetoMenuInterativo.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuInterativo\obj\Debug\projetoMenuInterativo.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuInterativo\obj\Debug\projetoMenuInterativo.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuInterativo\obj\Debug\projetoMenuInterativo.pdb

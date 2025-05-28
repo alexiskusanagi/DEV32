@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplosTresECinco\bin\Debug\projetoMultiplosTresECinco.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplosTresECinco\bin\Debug\projetoMultiplosTresECinco.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplosTresECinco\bin\Debug\projetoMultiplosTresECinco.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplosTresECinco\obj\Debug\projetoMultiplosTresECinco.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplosTresECinco\obj\Debug\projetoMultiplosTresECinco.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplosTresECinco\obj\Debug\projetoMultiplosTresECinco.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMultiplosTresECinco\obj\Debug\projetoMultiplosTresECinco.pdb

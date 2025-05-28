@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Par_Impar\bin\Debug\Projeto_Par_Impar.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Par_Impar\bin\Debug\Projeto_Par_Impar.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Par_Impar\bin\Debug\Projeto_Par_Impar.pdb
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Par_Impar\obj\Debug\Projeto_Par_Impar.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Par_Impar\obj\Debug\Projeto_Par_Impar.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Par_Impar\obj\Debug\Projeto_Par_Impar.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Par_Impar\obj\Debug\Projeto_Par_Impar.pdb

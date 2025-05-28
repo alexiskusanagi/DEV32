@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuClasses\bin\Debug\projetoMenuClasses.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuClasses\bin\Debug\projetoMenuClasses.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuClasses\bin\Debug\projetoMenuClasses.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuClasses\obj\Debug\projetoMenuClasses.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuClasses\obj\Debug\projetoMenuClasses.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuClasses\obj\Debug\projetoMenuClasses.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoMenuClasses\obj\Debug\projetoMenuClasses.pdb

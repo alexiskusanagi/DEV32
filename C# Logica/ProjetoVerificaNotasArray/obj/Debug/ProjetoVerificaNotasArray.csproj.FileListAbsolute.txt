@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\ProjetoVerificaNotasArray\bin\Debug\ProjetoVerificaNotasArray.exe.config
+C:\Users\alexis.hskamizaki\source\repos\ProjetoVerificaNotasArray\bin\Debug\ProjetoVerificaNotasArray.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoVerificaNotasArray\bin\Debug\ProjetoVerificaNotasArray.pdb
+C:\Users\alexis.hskamizaki\source\repos\ProjetoVerificaNotasArray\obj\Debug\ProjetoVerificaNotasArray.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoVerificaNotasArray\obj\Debug\ProjetoVerificaNotasArray.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoVerificaNotasArray\obj\Debug\ProjetoVerificaNotasArray.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoVerificaNotasArray\obj\Debug\ProjetoVerificaNotasArray.pdb

@@ -1,0 +1,13 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\bin\Debug\projetoWindowsForms2.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\bin\Debug\projetoWindowsForms2.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\bin\Debug\projetoWindowsForms2.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.Form1.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.Properties.Resources.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.csproj.GenerateResource.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.frmMenu.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.Form2.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsForms2\obj\Debug\projetoWindowsForms2.FrmLogin.resources

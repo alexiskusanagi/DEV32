@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Switch_2\obj\Debug\Projeto_Switch_2.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Switch_2\obj\Debug\Projeto_Switch_2.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Switch_2\bin\Debug\Projeto_Switch_2.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Switch_2\bin\Debug\Projeto_Switch_2.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Switch_2\bin\Debug\Projeto_Switch_2.pdb
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Switch_2\obj\Debug\Projeto_Switch_2.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Switch_2\obj\Debug\Projeto_Switch_2.pdb

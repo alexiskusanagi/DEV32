@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\ProjetoMedia\obj\Debug\ProjetoMedia.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoMedia\obj\Debug\ProjetoMedia.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoMedia\bin\Debug\ProjetoMedia.exe.config
+C:\Users\alexis.hskamizaki\source\repos\ProjetoMedia\bin\Debug\ProjetoMedia.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoMedia\bin\Debug\ProjetoMedia.pdb
+C:\Users\alexis.hskamizaki\source\repos\ProjetoMedia\obj\Debug\ProjetoMedia.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoMedia\obj\Debug\ProjetoMedia.pdb

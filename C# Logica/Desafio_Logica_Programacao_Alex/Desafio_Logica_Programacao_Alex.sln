@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio_Logica_Programacao_Alex", "Desafio_Logica_Programacao_Alex.csproj", "{6A8213E5-3503-4545-9926-A1B3F6EB026C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A8213E5-3503-4545-9926-A1B3F6EB026C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A8213E5-3503-4545-9926-A1B3F6EB026C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A8213E5-3503-4545-9926-A1B3F6EB026C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A8213E5-3503-4545-9926-A1B3F6EB026C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

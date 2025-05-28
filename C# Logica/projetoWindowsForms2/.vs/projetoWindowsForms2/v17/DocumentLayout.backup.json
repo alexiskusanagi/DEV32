@@ -1,0 +1,169 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|c:\\users\\alexis.hskamizaki\\source\\repos\\projetowindowsforms2\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|c:\\users\\alexis.hskamizaki\\source\\repos\\projetowindowsforms2\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|c:\\users\\alexis.hskamizaki\\source\\repos\\projetowindowsforms2\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\frmmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:frmmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\frmmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DAEC3B14-9D27-4A6D-A499-C307092A8DA7}|projetoWindowsForms2.csproj|solutionrelative:frmmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FrmLogin.cs",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\FrmLogin.cs",
+              "RelativeDocumentMoniker": "FrmLogin.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\FrmLogin.cs",
+              "RelativeToolTip": "FrmLogin.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwCUAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T12:34:04.522Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FrmLogin.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\FrmLogin.cs",
+              "RelativeDocumentMoniker": "FrmLogin.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\FrmLogin.cs [Design]",
+              "RelativeToolTip": "FrmLogin.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T12:17:33.945Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form2.cs",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form2.cs",
+              "RelativeDocumentMoniker": "Form2.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form2.cs",
+              "RelativeToolTip": "Form2.cs",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAQwIAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T11:51:04.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Form2.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form2.cs",
+              "RelativeDocumentMoniker": "Form2.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form2.cs [Design]",
+              "RelativeToolTip": "Form2.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T11:27:37.487Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "frmMenu.cs",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\frmMenu.cs",
+              "RelativeDocumentMoniker": "frmMenu.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\frmMenu.cs",
+              "RelativeToolTip": "frmMenu.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAYwBcAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T14:00:32.756Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "frmMenu.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\frmMenu.cs",
+              "RelativeDocumentMoniker": "frmMenu.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\frmMenu.cs [Design]",
+              "RelativeToolTip": "frmMenu.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T13:58:12.212Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T13:56:52.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form1.cs",
+              "RelativeToolTip": "Form1.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAKYAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T13:44:43.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "C:\\Users\\alexis.hskamizaki\\source\\repos\\projetoWindowsForms2\\Form1.cs [Design]",
+              "RelativeToolTip": "Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T12:53:36.905Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

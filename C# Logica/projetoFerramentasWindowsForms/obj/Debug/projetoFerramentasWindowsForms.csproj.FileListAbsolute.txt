@@ -1,0 +1,10 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\bin\Debug\projetoFerramentasWindowsForms.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\bin\Debug\projetoFerramentasWindowsForms.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\bin\Debug\projetoFerramentasWindowsForms.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\obj\Debug\projetoFerramentasWindowsForms.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\obj\Debug\projetoFerramentasWindowsForms.Form1.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\obj\Debug\projetoFerramentasWindowsForms.Properties.Resources.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\obj\Debug\projetoFerramentasWindowsForms.csproj.GenerateResource.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\obj\Debug\projetoFerramentasWindowsForms.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\obj\Debug\projetoFerramentasWindowsForms.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoFerramentasWindowsForms\obj\Debug\projetoFerramentasWindowsForms.pdb

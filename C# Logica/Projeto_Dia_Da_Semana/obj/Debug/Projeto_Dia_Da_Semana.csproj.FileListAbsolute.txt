@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Dia_Da_Semana\bin\Debug\Projeto_Dia_Da_Semana.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Dia_Da_Semana\bin\Debug\Projeto_Dia_Da_Semana.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Dia_Da_Semana\bin\Debug\Projeto_Dia_Da_Semana.pdb
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Dia_Da_Semana\obj\Debug\Projeto_Dia_Da_Semana.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Dia_Da_Semana\obj\Debug\Projeto_Dia_Da_Semana.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Dia_Da_Semana\obj\Debug\Projeto_Dia_Da_Semana.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Dia_Da_Semana\obj\Debug\Projeto_Dia_Da_Semana.pdb

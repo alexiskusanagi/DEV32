@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoRepeteMediaArray\bin\Debug\projetoRepeteMediaArray.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoRepeteMediaArray\bin\Debug\projetoRepeteMediaArray.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoRepeteMediaArray\bin\Debug\projetoRepeteMediaArray.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoRepeteMediaArray\obj\Debug\projetoRepeteMediaArray.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoRepeteMediaArray\obj\Debug\projetoRepeteMediaArray.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoRepeteMediaArray\obj\Debug\projetoRepeteMediaArray.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoRepeteMediaArray\obj\Debug\projetoRepeteMediaArray.pdb

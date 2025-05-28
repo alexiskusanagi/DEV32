@@ -1,0 +1,10 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\bin\Debug\projetoSenacWindowsForms.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\bin\Debug\projetoSenacWindowsForms.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\bin\Debug\projetoSenacWindowsForms.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\obj\Debug\projetoSenacWindowsForms.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\obj\Debug\projetoSenacWindowsForms.Form1.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\obj\Debug\projetoSenacWindowsForms.Properties.Resources.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\obj\Debug\projetoSenacWindowsForms.csproj.GenerateResource.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\obj\Debug\projetoSenacWindowsForms.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\obj\Debug\projetoSenacWindowsForms.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoSenacWindowsForms\obj\Debug\projetoSenacWindowsForms.pdb

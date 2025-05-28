@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\ProjetoCalculoSalarioBonus\obj\Debug\ProjetoCalculoSalarioBonus.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoCalculoSalarioBonus\obj\Debug\ProjetoCalculoSalarioBonus.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoCalculoSalarioBonus\bin\Debug\ProjetoCalculoSalarioBonus.exe.config
+C:\Users\alexis.hskamizaki\source\repos\ProjetoCalculoSalarioBonus\bin\Debug\ProjetoCalculoSalarioBonus.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoCalculoSalarioBonus\bin\Debug\ProjetoCalculoSalarioBonus.pdb
+C:\Users\alexis.hskamizaki\source\repos\ProjetoCalculoSalarioBonus\obj\Debug\ProjetoCalculoSalarioBonus.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoCalculoSalarioBonus\obj\Debug\ProjetoCalculoSalarioBonus.pdb

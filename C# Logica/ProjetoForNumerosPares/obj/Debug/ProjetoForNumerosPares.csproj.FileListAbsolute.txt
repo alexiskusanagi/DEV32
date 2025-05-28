@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForNumerosPares\bin\Debug\ProjetoForNumerosPares.exe.config
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForNumerosPares\bin\Debug\ProjetoForNumerosPares.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForNumerosPares\bin\Debug\ProjetoForNumerosPares.pdb
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForNumerosPares\obj\Debug\ProjetoForNumerosPares.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForNumerosPares\obj\Debug\ProjetoForNumerosPares.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForNumerosPares\obj\Debug\ProjetoForNumerosPares.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForNumerosPares\obj\Debug\ProjetoForNumerosPares.pdb

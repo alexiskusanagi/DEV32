@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Salario\bin\Debug\Projeto_Salario.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Salario\bin\Debug\Projeto_Salario.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Salario\bin\Debug\Projeto_Salario.pdb
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Salario\obj\Debug\Projeto_Salario.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Salario\obj\Debug\Projeto_Salario.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Salario\obj\Debug\Projeto_Salario.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Salario\obj\Debug\Projeto_Salario.pdb

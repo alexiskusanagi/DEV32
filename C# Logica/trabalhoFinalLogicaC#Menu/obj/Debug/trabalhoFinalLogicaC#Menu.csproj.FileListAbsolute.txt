@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#Menu\bin\Debug\trabalhoFinalLogicaC#Menu.exe.config
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#Menu\bin\Debug\trabalhoFinalLogicaC#Menu.exe
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#Menu\bin\Debug\trabalhoFinalLogicaC#Menu.pdb
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#Menu\obj\Debug\trabalhoFinalLogicaC#Menu.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#Menu\obj\Debug\trabalhoFinalLogicaC#Menu.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#Menu\obj\Debug\trabalhoFinalLogicaC#Menu.exe
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#Menu\obj\Debug\trabalhoFinalLogicaC#Menu.pdb

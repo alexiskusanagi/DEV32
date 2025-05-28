@@ -1,0 +1,10 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\bin\Debug\projetoWindowsFormsMediaCalculo.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\bin\Debug\projetoWindowsFormsMediaCalculo.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\bin\Debug\projetoWindowsFormsMediaCalculo.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\obj\Debug\projetoWindowsFormsMediaCalculo.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\obj\Debug\projetoWindowsFormsMediaCalculo.Form1.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\obj\Debug\projetoWindowsFormsMediaCalculo.Properties.Resources.resources
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\obj\Debug\projetoWindowsFormsMediaCalculo.csproj.GenerateResource.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\obj\Debug\projetoWindowsFormsMediaCalculo.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\obj\Debug\projetoWindowsFormsMediaCalculo.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoWindowsFormsMediaCalculo\obj\Debug\projetoWindowsFormsMediaCalculo.pdb

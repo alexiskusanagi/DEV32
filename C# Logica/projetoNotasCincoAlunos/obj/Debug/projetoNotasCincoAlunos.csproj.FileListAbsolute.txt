@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoNotasCincoAlunos\bin\Debug\projetoNotasCincoAlunos.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoNotasCincoAlunos\bin\Debug\projetoNotasCincoAlunos.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoNotasCincoAlunos\bin\Debug\projetoNotasCincoAlunos.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoNotasCincoAlunos\obj\Debug\projetoNotasCincoAlunos.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoNotasCincoAlunos\obj\Debug\projetoNotasCincoAlunos.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoNotasCincoAlunos\obj\Debug\projetoNotasCincoAlunos.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoNotasCincoAlunos\obj\Debug\projetoNotasCincoAlunos.pdb

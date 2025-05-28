@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#GameRpg\bin\Debug\trabalhoFinalLogicaC#GameRpg.exe.config
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#GameRpg\bin\Debug\trabalhoFinalLogicaC#GameRpg.exe
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#GameRpg\bin\Debug\trabalhoFinalLogicaC#GameRpg.pdb
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#GameRpg\obj\Debug\trabalhoFinalLogicaC#GameRpg.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#GameRpg\obj\Debug\trabalhoFinalLogicaC#GameRpg.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#GameRpg\obj\Debug\trabalhoFinalLogicaC#GameRpg.exe
+C:\Users\alexis.hskamizaki\source\repos\trabalhoFinalLogicaC#GameRpg\obj\Debug\trabalhoFinalLogicaC#GameRpg.pdb

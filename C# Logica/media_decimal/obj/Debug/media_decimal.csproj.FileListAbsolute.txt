@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\media_decimal\bin\Debug\media_decimal.exe.config
+C:\Users\alexis.hskamizaki\source\repos\media_decimal\bin\Debug\media_decimal.exe
+C:\Users\alexis.hskamizaki\source\repos\media_decimal\bin\Debug\media_decimal.pdb
+C:\Users\alexis.hskamizaki\source\repos\media_decimal\obj\Debug\media_decimal.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\media_decimal\obj\Debug\media_decimal.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\media_decimal\obj\Debug\media_decimal.exe
+C:\Users\alexis.hskamizaki\source\repos\media_decimal\obj\Debug\media_decimal.pdb

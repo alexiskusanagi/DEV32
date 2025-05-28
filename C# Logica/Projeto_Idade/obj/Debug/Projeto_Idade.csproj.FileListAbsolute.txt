@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Idade\obj\Debug\Projeto_Idade.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Idade\obj\Debug\Projeto_Idade.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Idade\bin\Debug\Projeto_Idade.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Idade\bin\Debug\Projeto_Idade.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Idade\bin\Debug\Projeto_Idade.pdb
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Idade\obj\Debug\Projeto_Idade.exe
+C:\Users\alexis.hskamizaki\source\repos\Projeto_Idade\obj\Debug\Projeto_Idade.pdb

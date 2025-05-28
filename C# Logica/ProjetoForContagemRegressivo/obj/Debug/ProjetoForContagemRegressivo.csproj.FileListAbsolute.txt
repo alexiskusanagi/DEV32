@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForContagemRegressivo\bin\Debug\ProjetoForContagemRegressivo.exe.config
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForContagemRegressivo\bin\Debug\ProjetoForContagemRegressivo.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForContagemRegressivo\bin\Debug\ProjetoForContagemRegressivo.pdb
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForContagemRegressivo\obj\Debug\ProjetoForContagemRegressivo.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForContagemRegressivo\obj\Debug\ProjetoForContagemRegressivo.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForContagemRegressivo\obj\Debug\ProjetoForContagemRegressivo.exe
+C:\Users\alexis.hskamizaki\source\repos\ProjetoForContagemRegressivo\obj\Debug\ProjetoForContagemRegressivo.pdb

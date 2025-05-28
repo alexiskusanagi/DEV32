@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\CalculaFrete\obj\Debug\CalculaFrete.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\CalculaFrete\obj\Debug\CalculaFrete.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\CalculaFrete\bin\Debug\CalculaFrete.exe.config
+C:\Users\alexis.hskamizaki\source\repos\CalculaFrete\bin\Debug\CalculaFrete.exe
+C:\Users\alexis.hskamizaki\source\repos\CalculaFrete\bin\Debug\CalculaFrete.pdb
+C:\Users\alexis.hskamizaki\source\repos\CalculaFrete\obj\Debug\CalculaFrete.exe
+C:\Users\alexis.hskamizaki\source\repos\CalculaFrete\obj\Debug\CalculaFrete.pdb

@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\projetoPositivoNegativoZero\bin\Debug\projetoPositivoNegativoZero.exe.config
+C:\Users\alexis.hskamizaki\source\repos\projetoPositivoNegativoZero\bin\Debug\projetoPositivoNegativoZero.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoPositivoNegativoZero\bin\Debug\projetoPositivoNegativoZero.pdb
+C:\Users\alexis.hskamizaki\source\repos\projetoPositivoNegativoZero\obj\Debug\projetoPositivoNegativoZero.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoPositivoNegativoZero\obj\Debug\projetoPositivoNegativoZero.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\projetoPositivoNegativoZero\obj\Debug\projetoPositivoNegativoZero.exe
+C:\Users\alexis.hskamizaki\source\repos\projetoPositivoNegativoZero\obj\Debug\projetoPositivoNegativoZero.pdb

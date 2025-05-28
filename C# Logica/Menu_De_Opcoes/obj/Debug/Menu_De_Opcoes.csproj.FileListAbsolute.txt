@@ -1,0 +1,7 @@
+C:\Users\alexis.hskamizaki\source\repos\Menu_De_Opcoes\obj\Debug\Menu_De_Opcoes.csproj.AssemblyReference.cache
+C:\Users\alexis.hskamizaki\source\repos\Menu_De_Opcoes\obj\Debug\Menu_De_Opcoes.csproj.CoreCompileInputs.cache
+C:\Users\alexis.hskamizaki\source\repos\Menu_De_Opcoes\bin\Debug\Menu_De_Opcoes.exe.config
+C:\Users\alexis.hskamizaki\source\repos\Menu_De_Opcoes\bin\Debug\Menu_De_Opcoes.exe
+C:\Users\alexis.hskamizaki\source\repos\Menu_De_Opcoes\bin\Debug\Menu_De_Opcoes.pdb
+C:\Users\alexis.hskamizaki\source\repos\Menu_De_Opcoes\obj\Debug\Menu_De_Opcoes.exe
+C:\Users\alexis.hskamizaki\source\repos\Menu_De_Opcoes\obj\Debug\Menu_De_Opcoes.pdb
