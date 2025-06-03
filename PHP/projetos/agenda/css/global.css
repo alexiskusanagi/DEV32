@@ -1,0 +1,21 @@
+body{
+
+    background-color: #4facfe;
+}
+
+/* ajuste e organização dos conteúdos */
+
+.topo{
+display: flex;
+flex-flow: row;
+justify-content: space-between;
+
+}
+
+
+.menus{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+
+}
