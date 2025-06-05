@@ -56,7 +56,7 @@ body {
         height: 300px;
         display: flex;
         justify-content: center;
-        background-color: blue;
+        background-color: black;
         margin: 30px;
         border-radius: 20px;
         flex-flow: column;

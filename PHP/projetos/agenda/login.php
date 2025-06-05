@@ -1,6 +1,6 @@
 <?php
 //conexão com o banco de dados
-include("<utils>conectadb.php");
+include("utils/conectadb.php");
 
 //ativa a variável de uso da sessão
 session_start();
@@ -13,10 +13,10 @@ $senha = $_POST['txtsenha'];
 // coleta de nome de funcionário
 $sqlfun ="SELECT FK_FUN_ID FROM usuarios WHERE usu_login = '$login' AND usu_senha = '$senha'";
 
-/enviando a query para o banco
-$enviaquery2 = mysqli_query ($link, $sqlfun);
+//enviando a query para o banco
+$enviaquery2 = mysqli_query($link, $sqlfun);
 // retorno do que vem do banco
-$idfuncionario =mysqli_fetch_array($enviaquery2)[0];
+$idfuncionario =mysqli_fetch_array($enviaquery2) [0];
 // fim coleta nome funcionário
 
 // para amanhã, sanitizar o erro flick no erro de usu e senha(subindo variavel vazia de id)
@@ -44,7 +44,7 @@ if ($retorno ==1){
 }
 else {
     echo("<script>window.alert('LOGIN ou USUARIO INCORRETOS'); </script>");
-    echo("<script>window.alert('LOGIN ou USUARIO INCORRETOS'); </script>")
+    //echo("<script>window.alert('LOGIN ou USUARIO INCORRETOS'); </script>");
 }
 
 
@@ -62,8 +62,9 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel ="stylesheet" href ="css/formulario.css">
-    <link rel ="stylesheet" href ="css/global.css">
+    <link rel ="stylesheet" href ="css/testeform.css">
+    <link rel ="stylesheet" href ="css/testeglobal.css">
+    <link href="https://fonts.cdnfonts.com/css/schuboisehandwrite" rel="stylesheet">
     <title>LOGIN</title>
 </head>
 <body>
@@ -78,7 +79,7 @@ else {
                     
                     <input type = 'password' name ="txtsenha" placeholder = 'Digite sua senha' required>
 
-                    <br>
+                    <br> 
                     <input type ='submit' value = 'FAZER LOGIN'>
 
                 </form>

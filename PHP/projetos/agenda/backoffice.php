@@ -1,9 +1,53 @@
+<?php 
+
+// conexão com banco
+include("utils/conectadb.php");
+
+//inicia variaveis de sessão
+
+session_start();
+//mecanismo de segurança anti variavel de sessao vazia
+if(isset($_SESSION['idfuncionario'])){
+
+    //preenche a variavel idfuncionario com variavel de sessao
+    $idfuncionario =$_SESSION ["idfuncionario"];
+
+    //query para buscar nome do funcionario
+
+    $sql ="SELECT FUN_NOME FROM funcionarios WHERE FUN_ID =$idfuncionario";
+
+    $enviaquery= mysqli_query($link, $sql);
+    
+    $nomeusuario =mysqli_fetch_array($enviaquery) [0]; 
+    
+
+}
+
+else{
+
+    echo"<script>window.alert('NÃO LOGADO'); </script>";
+    echo"<script>window.location.href='login.php'; </script>";
+}
+
+
+
+
+?>
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel = "stylesheet" href = css/global.css> 
+    <link rel = "stylesheet" href = css/testeglobal.css> 
     <title>BACKOFFICE</title>
 </head>
 <body>
@@ -11,7 +55,7 @@
 <div class ="global"> 
         <div class="topo">   <!-- abrindo o class topo -->
             <!-- aqui vai trazer o nome do usuario logado -->
-            <h1>BEM VINDO </h1>
+            <h1>BEM VINDO, <?php echo strtoupper($nomeusuario)?></h1>
             <!-- botao de encerramento de sessão -->
             <div class = "logout"> 
                 <form action ='logout.php'> <input type ="submit" value = 'SAIR'> </form>
