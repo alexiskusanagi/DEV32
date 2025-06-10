@@ -28,3 +28,28 @@ padding: 20px;
 
 }
 
+
+.login input[type='submit']{
+
+    background-color:  whitesmoke;
+    border-radius: 20px;
+    color: bisque;
+    border: none;
+    height:50px;
+    cursor: pointer; /*pra virar a mãozinha que aponta */
+    
+}
+
+
+
+.login input[type='submit']:hover{
+
+    background-color:  whitesmoke;
+    border-radius: 20px;
+    color: bisque;
+    border: none;
+    height:50px;
+    cursor: pointer; /*pra virar a mãozinha que aponta */
+
+}
+

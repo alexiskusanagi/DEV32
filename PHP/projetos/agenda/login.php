@@ -44,7 +44,7 @@ if ($retorno ==1){
 }
 else {
     echo("<script>window.alert('LOGIN ou USUARIO INCORRETOS'); </script>");
-    //echo("<script>window.alert('LOGIN ou USUARIO INCORRETOS'); </script>");
+    echo("<script>window.location.href='logn.php;</script>");
 }
 
 
