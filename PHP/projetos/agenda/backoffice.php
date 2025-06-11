@@ -57,9 +57,7 @@ else{
             <!-- aqui vai trazer o nome do usuario logado -->
             <h1>BEM VINDO, <?php echo strtoupper($nomeusuario)?></h1>
             <!-- botao de encerramento de sessão -->
-            <div class = "logout"> 
-                <form action ='logout.php'> <input type ="submit" value = 'SAIR'> </form>
-            </div>
+            <div class = "logout" method='post'><a href ='logout.php'><img src='icons/backspace.png' width=50 height=45></a></div>
         </div>  <!-- fechando o class topo -->
     
 

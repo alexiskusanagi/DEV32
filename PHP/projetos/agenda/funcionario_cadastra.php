@@ -51,7 +51,7 @@ else {
 
         //AGORA SALVAMOS TUDO NA TABELA DO USUARIO
         $sqlusu = "INSERT INTO usuarios (USU_LOGIN, USU_SENHA, FK_FUN_ID, USU_ATIVO) VALUES('$usulogin', '$ususenha', $retorno, $ativofun)";
-        $enviaquery = mysqli_query ($link, $sql);
+        $enviaquery = mysqli_query ($link, $sqlusu);
 
     }
     echo("<script>window.alert('FUNCIONÁRIO CADASTRADO COM SUCESSO'); </script>");
@@ -71,14 +71,15 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel ="stylesheet" href ="css/formmaisum.css">
+    <link rel ="stylesheet" href ="css/formulario.css">
     <link rel ="stylesheet" href ="css/testeglobal.css">
     <link href="https://fonts.cdnfonts.com/css/schuboisehandwrite" rel="stylesheet">
     <title>Cadastro de Funcionario</title>
 </head>
 <body>
     <div class = "global"> 
-        <div class ="formulario">
+        
+        <div class ="formulario"><a href="backoffice.php"><img src='icons/arrow47.png' width=50 height=50></a>
                 <form class='login' action ="funcionario_cadastra.php" method ="post"  > 
                     <label>NOME DO FUNCIONÁRIO</label>
                     
@@ -98,7 +99,9 @@ else {
                     <label>CONTATO</label> 
                     
                     <input type = 'number' name ="txtcontato" placeholder = 'Digite seu telefone' required>
-
+                    <br>
+                    <br>
+                    <br>
                     <!-- agora cadastramos o usuario -->
 
                     
@@ -111,10 +114,14 @@ else {
                     <input type = 'password' name ="txtsenha" placeholder = 'Digite sua senha'>
                     <br>
 
-                    <input type ="radio" name="ativo" id="ativo" value="1" checked><label>ATIVO</label>
-                    <br> 
+                    <label>INICIAR USUÁRIO COMO</label>
+                    <div class='rbativo'>
+                        
+                        <input type ="radio" name="ativo" id="ativo" value="1" checked><label>ATIVO</label>
+                        <br> 
 
-                    <input type ="radio" name="ativo" id="inativo" value="0" ><label>INATIVO</label>
+                        <input type ="radio" name="ativo" id="inativo" value="0" ><label>INATIVO</label>
+                    </div>  
                     <br> 
 
                     <input type ='submit' value = 'CADASTRAR'>

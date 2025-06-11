@@ -3,6 +3,7 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
     background-color: #4facfe;
+    /*background-image:url*/
 }
  
  
@@ -15,7 +16,13 @@ body {
     background-color: rgb(20, 133, 185);
     border-radius: 30 px;
     height: 75 px;
+    /* font-family: 'SchuboiseHandwrite', sans-serif; */
      
+    }
+
+    .topo h1{
+        margin-left: 20px;
+        /* font-family: 'SchuboiseHandwrite', sans-serif; */
     }
      
     .logout{
@@ -56,11 +63,21 @@ body {
         height: 300px;
         display: flex;
         justify-content: center;
-        background-color: blue;
+        background-color: black;
         margin: 30px;
         border-radius: 20px;
         flex-flow: column;
      
+    }
+
+    .menu1 a:hover,.menu2 a:hover,.menu3 a:hover,.menu4 a:hover,.menu5 a:hover,.menu6 a:hover{
+        transform: scale(1.109); /*efeito alterado pela escala em 1x1*/
+        background-color: blue;
+    }
+
+    .menu1,.menu2,.menu3,.menu4,.menu5,.menu6{
+
+        transition: transform 0.4; /* tempo para a conclusao do efeito */
     }
  
 .menus a{

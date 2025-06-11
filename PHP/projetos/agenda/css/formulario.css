@@ -16,6 +16,24 @@ justify-self: center;
 
 }
 
+.formulario img{
+    width: 50px;
+    height: 45px;
+    background-color:#4facfec9 ;
+    margin-top: 10px;
+    margin-left: 2px;
+    border-radius: 10px;
+    margin-bottom:  -30px;
+
+}
+
+.formulario{
+height: auto;
+background-color: whitesmoke;
+border-radius: 20px;
+border: blue solid 2px;
+}
+
 .login{
     
 display: flex;
@@ -28,10 +46,27 @@ padding: 20px;
 
 }
 
+.login label{
+    color: blue;
+    font-family: 'SchuboiseHandwrite', sans-serif;
+   
+   
+   }
+   
+   .login input[type ='text'], input[type ='password'], input[type ='number']{
+   
+       font-family: 'SchuboiseHandwrite', sans-serif;
+       height: 40px;
+       border-radius: 20px;
+       border:3px solid rgb(9, 152, 247)
+   
+   }
+   
+
 
 .login input[type='submit']{
 
-    background-color:  whitesmoke;
+    background-color: midnightblue;
     border-radius: 20px;
     color: bisque;
     border: none;
@@ -44,12 +79,32 @@ padding: 20px;
 
 .login input[type='submit']:hover{
 
-    background-color:  whitesmoke;
+    background-color:  lightblue;
     border-radius: 20px;
-    color: bisque;
+    color: black;
     border: none;
     height:50px;
     cursor: pointer; /*pra virar a mãozinha que aponta */
 
 }
+
+
+/*ajustar os radios buttons juntamente com o label*/
+
+.rbativo{
+
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+
+}
+
+
+.rbativo input[type ='radio'], label{
+  padding: 5px;
+  
+
+}
+
+
 

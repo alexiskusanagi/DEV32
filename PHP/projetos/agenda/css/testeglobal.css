@@ -24,6 +24,8 @@ body {
     margin-right:20px ;
     margin-top: 20px;
     display: flex;
+    align-self: center;
+  
     }
 
 
@@ -61,6 +63,16 @@ body {
         border-radius: 20px;
         flex-flow: column;
      
+    }
+
+    .menu1:hover,.menu2:hover,.menu3:hover,.menu4:hover,.menu5:hover,.menu6:hover{
+        transform: scale(1.109); /*efeito alterado pela escala em 1x1*/
+        background-color: blue;
+    }
+
+    .menu1,.menu2,.menu3,.menu4,.menu5,.menu6{
+
+        transition: transform 0.2; /* tempo para a conclusao do efeito */
     }
  
 .menus a{
