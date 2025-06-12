@@ -1,6 +1,7 @@
 <?php
 //conexão com o banco de dados
 include("utils/conectadb.php");
+include("utils/verificalogin.php");
 
 // apos fvamos cadastrar usuario e funcionario ao mesmo tempo
 if($_SERVER['REQUEST_METHOD']== 'POST'){
