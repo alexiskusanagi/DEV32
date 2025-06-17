@@ -70,7 +70,7 @@ body {
      
     }
 
-    .menu1 a:hover,.menu2 a:hover,.menu3 a:hover,.menu4 a:hover,.menu5 a:hover,.menu6 a:hover{
+    .menu1:hover,.menu2:hover,.menu3:hover,.menu4:hover,.menu5:hover,.menu6:hover{
         transform: scale(1.109); /*efeito alterado pela escala em 1x1*/
         background-color: blue;
     }

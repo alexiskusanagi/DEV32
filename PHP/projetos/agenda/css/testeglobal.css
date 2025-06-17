@@ -72,7 +72,7 @@ body {
 
     .menu1,.menu2,.menu3,.menu4,.menu5,.menu6{
 
-        transition: transform 0.2; /* tempo para a conclusao do efeito */
+        transition: transform 1.5; /* tempo para a conclusao do efeito */
     }
  
 .menus a{

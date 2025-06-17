@@ -1,0 +1,22 @@
+.lista{
+    background-color: whitesmoke;
+    border-radius: 20px;
+    padding: 5px;
+    width: auto;
+    height: auto;
+}
+
+/* propriedades básicas de tabela */
+table{
+border-collapse: collapse;
+width: 100%;
+
+}
+
+td, th{
+    background-color: beige;
+border: 1px solid black;
+text-align: center;
+
+
+}
