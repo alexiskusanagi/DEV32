@@ -33,11 +33,13 @@ $enviaquery =mysqli_query($link, $sqlfun);
                 <th>ID FUNCIONARIO</th>
                 <th>NOME</th>
                 <th>CPF</th>
-                <th>FUNCAO</th>
+                <th>FUNÇÃO</th>
                 <th>CONTATO</th>
-                <th>ATIVO</th>
+                <th>STATUS</th>
                 <!-- DADOS DO USUÁRIO -->
                 <th>LOGIN</th>
+                <th>CADASTRO NO SISTEMA</th>
+                <th>ALTERAÇÃO</th>
 
             </tr>
             <!-- COMEÇANDO O PHP -->
@@ -52,9 +54,11 @@ $enviaquery =mysqli_query($link, $sqlfun);
                     <td><?=$tbl[2]?></td>  <!-- Coleta cpf do fun[2] -->
                     <td><?=$tbl[3]?></td>  <!-- Coleta função do fun[3] -->
                     <td><?=$tbl[4]?></td>  <!-- Coleta contato do fun[4] -->
-                    <td><?=$tbl[5]?></td>  <!-- Coleta ativo do fun[5] -->
-
-                    <td><?=$tbl[7]?></td>  <!-- Coleta ativo do fun[1] -->
+                    <td><?=$tbl[5]==1? 'ATIVO':'INATIVO'?></td>  <!-- Coleta ativo do fun[5] -->
+                                <!-- dados do usuário  -->
+                    <td><?=$tbl[7]?></td>  <!-- Coleta login do usu[7] -->
+                    <td><?=$tbl[10]==1? 'SIM': 'NÃO'?></td>  <!-- Coleta status do usu (se ativo ou inativo)[10] -->
+                    <td><a href='funcionario_altera.php?id=<?=$tbl[0]?>'><button>ALTERAR</button></a></td>  <!-- Botao Altera dados do fun[7] -->
                     
 
             </tr>
