@@ -6,7 +6,7 @@ include("utils/verificalogin.php");
 // apos fvamos cadastrar usuario e funcionario ao mesmo tempo
 if($_SERVER['REQUEST_METHOD']== 'POST'){
 
-// colar campos dos inputs por names para variáveis PHPs
+// coletar campos dos inputs por names para variáveis PHPs
 $nomefun = $_POST['txtnome'];
 $cpffun = $_POST['txtcpf'];
 $funcaofun = $_POST['txtfuncao'];
