@@ -44,7 +44,7 @@ $enviaquery =mysqli_query($link, $sqlcli);
                 // while($tbl2 = mysqli_fetch_array($enviaquery2)){
 
             ?>
-            <tr>
+            <tr class='linha'>
                     <td><?=$tbl[0]?></td>  <!-- Coleta codigo do cliente[0] -->
                     <td><?=$tbl[1]?></td>  <!-- Coleta nome do cliente[1] -->
                     <td><?=$tbl[2]?></td>  <!-- Coleta cpf do cliente[2] -->
@@ -53,7 +53,7 @@ $enviaquery =mysqli_query($link, $sqlcli);
                     <td><?=$tbl[5]?></td>  <!-- Coleta data de nascimento do cliente[5] -->
 
                     <!-- USANDO GET BRABO pro botao alterar -->
-                    <td><a href='cliente_altera.php?id=<?= $tbl[0]?>'><img src='icons/pencil1.png' width=20 height=20 style='border: 2px solid #fff ; border-radius: 1px; margin: 2px;'></a></td>
+                    <td><a href='cliente_altera.php?id=<?= $tbl[0]?>'><img src='icons/pencil1.png' width=20 height=20 style='border: 2px solid rgb(20, 133, 185) ; border-radius: 1px; margin: 2px;'></a></td>
 
 
             </tr>

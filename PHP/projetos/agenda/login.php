@@ -79,8 +79,29 @@ else {
                     
                     <input type = 'password' name ="txtsenha" placeholder = 'Digite sua senha' required>
 
+                      <!-- FAZ PARTE DO OLINHO -->
+                <!-- <span class='togglePassword' id='togglePassword' style="margin: -35px 0px 0px 90%;">👀</span>
+                 -->
+
                     <br> 
                     <input type ='submit' value = 'FAZER LOGIN'>
+
+                    <!-- JS DO OLHINHO -->
+                <!-- <script>
+                    const passwordInput = document.getElementById('password');
+                    const togglePassword = document.getElementById('togglePassword');
+                    togglePassword.addEventListener('click', 
+                        function(){
+                            const type = passwordInput.getAttribute('type') === 'password'?'text':'password';
+                            passwordInput.setAttribute('type',type);;
+
+                        this.textContent = type === 'password'?'👀':'🫣';
+                        
+                    });
+                </script> -->
+                <!-- FIM JS DO OLHINHO -->
+
+
 
                 </form>
                 <br>

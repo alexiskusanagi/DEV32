@@ -20,3 +20,12 @@ text-align: center;
 
 
 }
+/* não vai funcionar por causa do td,th beige;
+tr:hover {
+    background-color: blue;
+} */
+
+td:hover{
+background-color: rgb(140, 197, 235);
+
+}
