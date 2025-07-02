@@ -4,6 +4,35 @@
 include("utils/conectadb.php");
 include("utils/verificalogin.php");
 
+//APÓS ALTERAÇÕES FAZER O SAVE NO BANCO
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    
+    // COLETAR CAMPOS DOS INPUTS POR NAMES PARA VARIÁVEIS PHPs
+    $id = $_POST['id'];
+
+    $nomefun = $_POST['txtnome'];
+    // $cpffun = $_POST['txtcpf'];
+    $funcaofun = $_POST['txtfuncao'];
+    $contatofun = $_POST['txtcontato'];
+    $ativofun = $_POST['ativofun'];
+    
+    // COLETA PARA O USUARIO
+    $ususenha = $_POST['txtsenha'];
+    $usuativo = $_POST['ativousu'];
+
+    //INICIANDO QUERIES DE BANCO
+    $sqlfun = "UPDATE funcionarios SET FUN_NOME = '$nomefun', FUN_FUNCAO = '$funcaofun', FUN_TEL = '$contatofun', FUN_ATIVO = $ativofun WHERE FUN_ID = $id";
+    mysqli_query($link, $sqlfun);
+    
+    // //ATUALIZANDO OS DADOS DO USUARIO
+    $sqlusu = "UPDATE usuarios SET USU_SENHA = '$ususenha', USU_ATIVO = $usuativo WHERE FK_FUN_ID = $id";
+    mysqli_query ($link, $sqlusu);
+
+
+    echo "<script>window.alert('$nomefun ALTERADO');</script>";
+    echo "<script>window.location.href='funcionario_lista.php'</script>";
+    
+}
 
 //coletando e preecnhendo os dados nos campos
 $id = $_GET['id']; //coletando id via get na url
@@ -24,41 +53,10 @@ while($tbl = mysqli_fetch_array($enviaquery)){
 
     $usulogin = $tbl[6];
     $ususenha = $tbl[7];
+    $usuativo = $tbl[10];
 
 }
 
-
-// apos vamos salvar o usuario e funcionario ao mesmo tempo
-if($_SERVER['REQUEST_METHOD']== 'POST'){
-
-// coletar campos dos inputs por names para variáveis PHPs
-$id = $_POST ['txtid'];
-
-$nomefun = $_POST['txtnome'];
-$cpffun = $_POST['txtcpf'];
-$funcaofun = $_POST['txtfuncao'];
-$contatofun = $_POST['txtcontato'];
-$ativofun = $_POST['ativofun'];
-
-// coleta para o usuário
-$usulogin = $_POST['txtusuario'];
-$ususenha = $_POST['txtsenha'];
-$usuativo = $_POST ['ativousu'];
-
-
-// iniciando queries de banco de dados
-$sql = "UPDATE funcionario SET fun_nome = '$nomefun', FUN_FUNCAO = '$funcaofun', FUN_CONTATO ='$contatofun', FUN_ATIVO = '$ativofun' WHERE FUN_ID = $id";
-mysqli_query($link, $sql);
-
-$sqlusu = "UPDATE usuario SET USU_SENHA = '$ususenha', USU_ATIVO = '$usuativo' WHERE FK_FUN_ID =$id";
-
-mysqli_query($link, $sqlusu);
-
-echo ("<script>window.alert('Salvo com Sucesso');</script>");
-
-
-
-}
 
 ?>
 
@@ -81,7 +79,7 @@ echo ("<script>window.alert('Salvo com Sucesso');</script>");
                 <form class='login' action ="funcionario_altera.php" method ="post"  > 
                      <!-- PARA GRAVARMOS REALMENTE O ID DO FUNCIONÁRIO -->
 
-                    <input type ="hidden" name= "txtid" value =<?>$id?> >
+                     <input type ='hidden' name='txtid' value ='<?=$id?>' >
                     <label>NOME DO FUNCIONÁRIO</label>
                     
                     <input type ='text' name = "txtnome" value ='<?= $nomefun?>' required>

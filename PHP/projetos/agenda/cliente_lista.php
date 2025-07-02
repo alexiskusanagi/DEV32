@@ -34,6 +34,7 @@ $enviaquery =mysqli_query($link, $sqlcli);
                 <th>CONTATO</th>
                 <th>STATUS</th>
                 <th>DATA DE NASCIMENTO</th>
+                <th>ALTERAÇÃO</th>
               
 
             </tr>
@@ -49,7 +50,11 @@ $enviaquery =mysqli_query($link, $sqlcli);
                     <td><?=$tbl[2]?></td>  <!-- Coleta cpf do cliente[2] -->
                     <td><?=$tbl[3]?></td>  <!-- Coleta contato do cliente[3] -->
                     <td><?=$tbl[4]==1? 'ATIVO':'INATIVO'?></td>  <!-- Coleta ativo do cliente[4] -->
-                    <td><?=$tbl[5]?></td>  <!-- Coleta data de nascimento do cliente[7] -->
+                    <td><?=$tbl[5]?></td>  <!-- Coleta data de nascimento do cliente[5] -->
+
+                    <!-- USANDO GET BRABO pro botao alterar -->
+                    <td><a href='cliente_altera.php?id=<?= $tbl[0]?>'><img src='icons/pencil1.png' width=20 height=20 style='border: 2px solid #fff ; border-radius: 1px; margin: 2px;'></a></td>
+
 
             </tr>
             <?php
