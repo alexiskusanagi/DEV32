@@ -10,6 +10,30 @@ $enviaquery =mysqli_query($link, $sqlfun);
 // $sqlusu = "SELECT * FROM usuarios";
 // $enviaquery2 =mysqli_query($link, $sqlusu);
 
+//Aqui se filtram minhas escolhas
+$ativo = 1;
+
+// agora funções de cada click
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $ativo =$_POST['filtro'];
+
+    if($ativo ==1){
+        $sql = "SELECT * FROM funcionarios INNER JOIN usuarios ON FK_FUN_ID = FUN_ID WHERE FUN_ATIVO = 1";
+        $enviaquery = mysqli_query($link, $sql);
+    }
+
+    else if ($ativo ==2){
+        $sql = "SELECT * FROM funcionarios INNER JOIN usuarios ON FK_FUN_ID = FUN_ID";
+        $enviaquery = mysqli_query($link, $sql);
+    }
+
+    else{
+        $sql = "SELECT * FROM funcionarios INNER JOIN usuarios ON FK_FUN_ID = FUN_ID WHERE FUN_ATIVO = 0";
+        $enviaquery = mysqli_query($link, $sql);
+    }
+
+}
+
 
 ?>
 
@@ -28,6 +52,21 @@ $enviaquery =mysqli_query($link, $sqlfun);
     <div class='tabela'> 
         <!-- botao voltar -->
     <a href="backoffice.php"><img src='icons/arrow47.png' width=50 height=50></a>
+<h1>LISTA DE FUNCIONÁRIOS</h1>
+
+<!-- CRIAÇÃO DE FILTRO DE TABLE -->
+ <form action="funcionario_lista.php" method="post">
+    <div class='filtro'>
+         <input type="radio" name="filtro" value="1" required onclick="submit()" <?=$ativo == "1"? "checked":""?> >ATIVOS
+            
+         <input type="radio" name="filtro" value="0" required onclick="submit()" <?=$ativo == "0"? "checked":""?> >INATIVOS
+           
+         <input type="radio" name="filtro" value="2" required onclick="submit()" <?=$ativo == "2"? "checked":""?> >TODOS
+
+
+    </div>
+ </form>
+
         <table>
             <tr>
                 <th>ID FUNCIONARIO</th>

@@ -55,6 +55,22 @@ else {
         $enviaquery = mysqli_query ($link, $sqlusu);
 
     }
+
+    else{
+        $sql ="SELECT FUN_ID FROM funcionarios WHERE FUN_CPF = '$cpffun'";
+        //enviando a query para o banco
+        $enviaquery = mysqli_query ($link, $sql);
+        // retorno do que vem do banco
+        $retorno =mysqli_fetch_array($enviaquery)[0];
+
+        $usulogin = "Sem Cadastro";
+        $ususenha = "Sem Cadastro";
+        $usuativo = "0";
+
+        //AGORA SALVAMOS TUDO NA TABELA DO USUARIO
+        $sqlusu = "INSERT INTO usuarios (USU_LOGIN, USU_SENHA, FK_FUN_ID, USU_ATIVO) VALUES('$usulogin', '$ususenha', $retorno, $ativofun)";
+        $enviaquery = mysqli_query ($link, $sqlusu);
+    }
     echo("<script>window.alert('FUNCIONÁRIO CADASTRADO COM SUCESSO'); </script>");
 
 

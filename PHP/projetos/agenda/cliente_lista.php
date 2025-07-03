@@ -7,7 +7,28 @@ include("utils/verificalogin.php");
 $sqlcli = "SELECT * FROM clientes";
 $enviaquery =mysqli_query($link, $sqlcli);
 
+//Aqui se filtram minhas escolhas
+$ativo = 1;
 
+// agora funções de cada click
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $ativo =$_POST['filtro'];
+
+    if($ativo ==1){
+        $sql = "SELECT * FROM clientes  WHERE CLI_ATIVO = 1";
+        $enviaquery = mysqli_query($link, $sql);
+    }
+
+    else if ($ativo ==2){
+        $sql = "SELECT * FROM clientes";
+        $enviaquery = mysqli_query($link, $sql);
+    }
+
+    else{
+        $sql = "SELECT * FROM clientes  WHERE CLI_ATIVO = 0";
+        $enviaquery = mysqli_query($link, $sql);
+    }
+}
 
 ?>
 
@@ -26,6 +47,20 @@ $enviaquery =mysqli_query($link, $sqlcli);
     <div class='tabela'> 
         <!-- botao voltar -->
     <a href="backoffice.php"><img src='icons/arrow47.png' width=50 height=50></a>
+
+<!-- CRIAÇÃO DE FILTRO DE TABLE -->
+<form action="cliente_lista.php" method="post">
+    <div class='filtro'>
+         <input type="radio" name="filtro" value="1" required onclick="submit()" <?=$ativo == "1"? "checked":""?> >ATIVOS
+            
+         <input type="radio" name="filtro" value="0" required onclick="submit()" <?=$ativo == "0"? "checked":""?> >INATIVOS
+            
+         <input type="radio" name="filtro" value="2" required onclick="submit()" <?=$ativo == "2"? "checked":""?> >TODOS
+
+    </div>
+ </form>
+
+
         <table>
             <tr>
                 <th>ID CLIENTE</th>

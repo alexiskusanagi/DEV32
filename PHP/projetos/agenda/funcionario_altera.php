@@ -79,7 +79,7 @@ while($tbl = mysqli_fetch_array($enviaquery)){
                 <form class='login' action ="funcionario_altera.php" method ="post"  > 
                      <!-- PARA GRAVARMOS REALMENTE O ID DO FUNCIONÁRIO -->
 
-                     <input type ='hidden' name='txtid' value ='<?=$id?>' >
+                     <input type ='hidden' name='id' value ='<?=$id?>' >
                     <label>NOME DO FUNCIONÁRIO</label>
                     
                     <input type ='text' name = "txtnome" value ='<?= $nomefun?>' required>
