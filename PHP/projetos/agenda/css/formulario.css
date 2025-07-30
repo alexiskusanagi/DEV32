@@ -20,7 +20,7 @@ justify-self: center;
     width: 50px;
     height: 45px;
     background-color:#4facfec9 ;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-left: 2px;
     border-radius: 10px;
     margin-bottom:  -30px;
@@ -32,6 +32,7 @@ height: auto;
 background-color: whitesmoke;
 border-radius: 20px;
 border: blue solid 2px;
+
 }
 
 .login{
@@ -53,7 +54,7 @@ padding: 20px;
    
    }
    
-   .login input[type ='text'], input[type ='password'], input[type ='number']{
+   .login input[type ='text'], input[type ='password'], input[type ='number'], textarea, input[type ='decimal'] {
    
        font-family: 'SchuboiseHandwrite', sans-serif;
        height: 40px;

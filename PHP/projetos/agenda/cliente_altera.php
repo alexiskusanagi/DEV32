@@ -17,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $funcaocli = $_POST['txtfuncao'];
     $contatocli = $_POST['txtcontato'];
     $ativocli = $_POST['ativofun'];
-    $datanasccli = $_POST['dtdata'];
+    $datanasccli = sha1 $_POST['dtdata'];
     
     // COLETA PARA O USUARIO
     $senhacli = md5($_POST['txtsenha']);

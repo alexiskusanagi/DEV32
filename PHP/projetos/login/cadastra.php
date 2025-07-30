@@ -9,7 +9,7 @@ $login =$_POST['txtlogin'];
 $senha = $_POST['txtsenha'];
 
 //pesquisa no banco contando usuários - não precisa da senha, pois é só o login.
-$sql ="SELECT COUNT(usu_id) FROM usuarios where USU_LOGIN ='$login' ";
+$sql ="SELECT COUNT(USU_ID) FROM usuarios where USU_LOGIN ='$login' ";
 
 //insert no banco montando as querries
 //$sql ="INSERT INTO usuario (USU_LOGIN, USU_SENHA) VALUES ('$login','$senha')";
@@ -67,11 +67,11 @@ else {
                 <form id='cadastra' action ="cadastra.php" method ="post"  > 
                     <label>LOGIN</label>
                     
-                    <input type ='text' placeholder ='Crie seu login de acesso' required>
+                    <input type ='text' name = "txtlogin" placeholder ='Crie seu login de acesso' required>
                     <br>
                     <label>SENHA</label>
                     
-                    <input type = 'password' placeholder = 'Crie sua senha de acesso' required>
+                    <input type = 'password' name ="txtsenha" placeholder = 'Crie sua senha de acesso' required>
 
                     <br>
                     <input type ='submit' value = 'CADASTRAR'>

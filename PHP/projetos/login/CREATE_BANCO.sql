@@ -1,4 +1,4 @@
-CREATE DATABASE login;
+CREATE DATABASE loginTI32;
 USE login;
 
 CREATE TABLE usuarios(

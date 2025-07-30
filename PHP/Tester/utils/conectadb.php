@@ -2,7 +2,7 @@
 // localização do servidor de banco
 $servidor = "localhost";
 //nome da base
-$banco = "loginti32";
+$banco = "crashtest";
 //usuario do banco
 $usuario = "root";
 //senha do banco
