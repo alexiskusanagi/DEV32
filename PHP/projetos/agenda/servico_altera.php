@@ -4,20 +4,21 @@ include("utils/verificalogin.php");
 
 
 // click na alteração do serviço
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $id = $_POST['id'];
     $nomeservico = $_POST['txtnome'];
     $descricaoservico = $_POST['txtdescricao'];
     $precoservico = $_POST['txtpreco'];
     $temposervico = $_POST['txttempo'];
     $ativo = $_POST['ativo'];
-    $imagem_base64 = $_POST['imagem'];
-    $imagem_atual = $_POST['imagem_atual'];
+    // $imagem_base64 = $_POST['imagem'];
+    // $imagem_atual = $_POST['imagem_atual'];
 
 
 
     //imagem rolê
 
-    if(isset($_FILES['imagem']) && $_FILES['imagem']['error']=== UPLOAD_ERR_OK){
+    if(isset($_FILES['imagem']) && $_FILES['imagem']['error']== UPLOAD_ERR_OK){
         $imagem_temp =$_FILES['imagem']['tmp_name'];
         $imagem = file_get_contents($imagem_temp);
         $imagem_base64 = base64_encode($imagem); 
@@ -28,19 +29,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     // valida se imagem foi alterada
     if($imagem_atual== $imagem_base64){
         $sql = "UPDATE catalogo SET CAT_NOME = '$nomeservico', CAT_DESCRICAO = '$descricaoservico', CAT_PRECO = '$precoservico', CAT_TEMPO = '$temposervico', CAT_ATIVO = '$ativo' WHERE CAT_ID =$id";
-        mysqli_query($link, $sql);
+        $enviaquery = mysqli_query($link, $sql);
 
-        echo("<script>window.alert('SERVIÇO ALTERADO COM SUCESSO');</script>");
-        echo("<script>window.location.href('servico_lista.php');</script>");
+        echo"<script>window.alert('SERVIÇO ALTERADO COM SUCESSO');</script>";
+        echo"<script>window.location.href='servico_lista.php';</script>";
     }
 
     else{
 
         $sql = "UPDATE catalogo SET CAT_NOME = '$nomeservico', CAT_DESCRICAO = '$descricaoservico', CAT_PRECO = '$precoservico', CAT_TEMPO = '$temposervico', CAT_ATIVO = '$ativo', CAT_IMAGEM = '$imagem_base64' WHERE CAT_ID =$id";
-        mysqli_query($link, $sql);
+        $enviaquery = mysqli_query($link, $sql);
 
-        echo("<script>window.alert('SERVIÇO ALTERADO COM SUCESSO');</script>");
-        echo("<script>window.location.href('servico_lista.php');</script>");
+        echo"<script>window.alert('SERVIÇO ALTERADO COM SUCESSO');</script>";
+        echo"<script>window.location.href='servico_lista.php';</script>";
     }
 
    
@@ -66,9 +67,6 @@ while($tbl = mysqli_fetch_array($enviaquery)){
 
 }
 
-$retorno
-
-
 
 ?>
 
@@ -78,15 +76,21 @@ $retorno
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel ="stylesheet" href ="css/formulario.css">
+    <link rel ="stylesheet" href ="css/catalogo.css">
     <link rel ="stylesheet" href ="css/testeglobal.css">
     <link href="https://fonts.cdnfonts.com/css/schuboisehandwrite" rel="stylesheet">
     <title>CADASTRO DE SERVIÇOS</title>
 </head>
 <body>
     <div class = "global"> 
+        <!-- ajuste da imagem a parte -->
+         <label>IMAGEM</label>
+         
+         <img name='imagem_atual' src="data:image/jpeg;base64,<?= $imagem_atual?>">
         
-        <div class ="formulario"><a href="backoffice.php"><img src='icons/arrow47.png' width=50 height=50 ></a>
+    </div>
+
+        <div class ="formulario"><a href="servico_lista.php"><img src='icons/arrow47.png' width=50 height=50 ></a>
                 <form class='login' action ="servico_altera.php" method ="post" enctype='multipart/form-data' > 
                     
 
@@ -100,8 +104,6 @@ $retorno
                     <label>DESCRIÇÃO</label>
                     
                     <textarea name ='txtdescricao' <?= $descricaoservico?>></textarea>
-
-                    
                     <br>
                    
                     <label>PREÇO</label> 
@@ -138,7 +140,7 @@ $retorno
 
                      
 
-                    <input type ='submit' value = 'CADASTRAR'>
+                    <input type ='submit' value = 'ALTERAR'>
 
                 </form>
                 <br>

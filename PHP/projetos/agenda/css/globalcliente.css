@@ -1,0 +1,103 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #4facfe;
+    /*background-image:url*/
+}
+ 
+ 
+ 
+ 
+.topo{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    background-color: rgb(20, 133, 185);
+    border-radius: 30 px;
+    height: 75 px;
+    /* font-family: 'SchuboiseHandwrite', sans-serif; */
+     
+    }
+
+    .topo h1{
+        margin-left: 20px;
+        /* font-family: 'SchuboiseHandwrite', sans-serif; */
+    }
+     
+    .logout{
+    width: 100px;
+    height: auto;
+    margin-right:20px ;
+    margin-top: 20px;
+    display: flex;
+    }
+
+
+     /* personalizando apenas o input do botao de logout */
+     .logout input[type=submit]{
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        border: 2px solid rgb(red, green, blue);
+     }
+
+    /* .logout input[type="submit"]{
+        width: 100%;
+        height: 100%;
+        background-color: red;
+        color: rgb(255, 255, 255);
+        border-radius: 20px;
+        border: none;
+        font-size: 20px;
+    } */
+    .menus{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+     
+    }
+     
+    /* menu pode ser renomeado para .card */
+    .menu1, .menu2, .menu3, .menu4, .menu5, .menu6{ 
+        width: 300px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        background-color: black;
+        margin: 20px;
+        border-radius: 20px;
+        flex-flow: column;
+     
+    }
+
+    .menu1:hover,.menu2:hover,.menu3:hover,.menu4:hover,.menu5:hover,.menu6:hover{
+        transform: scale(1.109); /*efeito alterado pela escala em 1x1*/
+        background-color: blue;
+    }
+
+    .menu1,.menu2,.menu3,.menu4,.menu5,.menu6{
+
+        transition: transform 0.4; /* tempo para a conclusao do efeito */
+    }
+ 
+.menus a{
+    width: 300px ;
+    height: 50px ;
+    
+}
+
+.menus p{
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    font-size:  15px;
+    border-radius: 5px;
+    
+}
+ 
+.menu1 a, .menu2 a, .menu3 a, .menu4 a, .menu5 a, .menu6 a {
+display: flex;
+justify-content: center;
+/* margin-top: 40px; */
+
+}
