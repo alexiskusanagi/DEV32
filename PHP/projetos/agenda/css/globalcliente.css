@@ -42,36 +42,80 @@ body {
         border: 2px solid rgb(red, green, blue);
      }
 
-    /* .logout input[type="submit"]{
-        width: 100%;
-        height: 100%;
-        background-color: red;
-        color: rgb(255, 255, 255);
-        border-radius: 20px;
-        border: none;
-        font-size: 20px;
-    } */
+    
     .menus{
         display: flex;
         flex-flow: row wrap;
         justify-content: space-around;
+        margin-top: 10px;
      
     }
      
     /* menu pode ser renomeado para .card */
-    .menu1, .menu2, .menu3, .menu4, .menu5, .menu6{ 
+     .menu1 
+    /*.menu2, .menu3, .menu4, .menu5, .menu6*/{  
         width: 300px;
-        height: 300px;
+        height: auto;
         display: flex;
         justify-content: center;
         background-color: black;
+       
         margin: 20px;
         border-radius: 20px;
-        flex-flow: column;
+        flex-flow: row wrap;
+        align-items: center;
      
     }
 
-    .menu1:hover,.menu2:hover,.menu3:hover,.menu4:hover,.menu5:hover,.menu6:hover{
+    
+ 
+.menus a{
+    width: 300px ;
+    height: 50px ;
+    
+}
+
+/* .menus p{
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    font-size:  15px;
+    border-radius: 5px;
+    
+} */
+
+.texto-card{
+    
+    background-color: #4facfe; 
+    border: blue solid 2px;
+    width: 300px;
+    border-radius: 10px;
+    margin: 20px;
+    border-color: whitesmoke;
+    font-size: 20px;
+    text-align: center;
+    padding: 2px ;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+ 
+.menu1 text, label{
+    margin-top: 20px;
+    color: whitesmoke;
+    font-size: 25px;
+    text-align: center;
+    padding: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.menu1 a, .menu2 a, .menu3 a, .menu4 a, .menu5 a, .menu6 a {
+display: flex;
+justify-content: center;
+/* margin-top: 40px; */
+
+}
+
+/* EFEITO DE MOUSE HOVER */
+.menu1:hover,.menu2:hover,.menu3:hover,.menu4:hover,.menu5:hover,.menu6:hover{
         transform: scale(1.109); /*efeito alterado pela escala em 1x1*/
         background-color: blue;
     }
@@ -80,24 +124,8 @@ body {
 
         transition: transform 0.4; /* tempo para a conclusao do efeito */
     }
- 
-.menus a{
-    width: 300px ;
-    height: 50px ;
-    
-}
 
-.menus p{
-    font-family: Arial, Helvetica, sans-serif;
-    color: black;
-    font-size:  15px;
-    border-radius: 5px;
-    
-}
- 
-.menu1 a, .menu2 a, .menu3 a, .menu4 a, .menu5 a, .menu6 a {
-display: flex;
-justify-content: center;
-/* margin-top: 40px; */
+    /* LABELS DOS MENUS */
 
-}
+
+    

@@ -10,10 +10,11 @@ include("../utils/conectadb.php");
 
 session_start();
 //mecanismo de segurança anti variavel de sessao vazia
-if(isset($_SESSION['idfuncionario'])){
+// talvez apagar o if e else
+// if(isset($_SESSION['idfuncionario'])){
 
-    //preenche a variavel idfuncionario com variavel de sessao
-    $idfuncionario =$_SESSION ["idfuncionario"];
+//     //preenche a variavel idfuncionario com variavel de sessao
+//     $idfuncionario =$_SESSION ["idfuncionario"];
 
     //query para buscar nome do funcionario
 
@@ -22,16 +23,13 @@ if(isset($_SESSION['idfuncionario'])){
     $enviaquery= mysqli_query($link, $sql);
 
     
-    
-    
+// }
 
-}
+// else{
 
-else{
-
-    echo"<script>window.alert('NÃO LOGADO'); </script>";
-    echo"<script>window.location.href='login.php'; </script>";
-}
+//     echo"<script>window.alert('NÃO LOGADO'); </script>";
+//     echo"<script>window.location.href='login.php'; </script>";
+// }
 
 
 
@@ -40,18 +38,12 @@ else{
 
 
 
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel = "stylesheet" href = ../css/catalogo.css> 
+    <link rel = "stylesheet" href = ../css/globalcliente.css> 
     <title>CATALOGO SALOONCCINA</title>
 </head>
 <body>
@@ -83,32 +75,45 @@ else{
 
         ?>  
             <!-- os cards de menu -->
-            <p><?= $retorno[1]?> </p> <!-- coleta o nome do serviço posição 1 -->
+           
             
-             <div class= "menu1"> <img src = "data:image.jpeg;base64, <?$retorno[6]?>" width = "200" height = "200">   </a> </div> 
+            <div class= "menu1"> 
+                    <label><?= $retorno[1]?></label> <!-- coleta o nome do serviço posição 1 -->   
+                     <img src ='data:image/jpeg;base64,<?=$retorno[6]?>' width ="200" height ="200">
+                     
+                        <div class ='texto-card'> 
+                           
+                                 <label>DESCRIÇÃO</label>
+                                 <br>
+                                 <text><?= $retorno[2]?> </text> <!-- coleta a descrição do serviço poição 2 -->
+                                 <br>
+                                 <br>
+                                 <label>TEMPO DE CORTE </label>
+                                 <br>
+                                 <text> <?= $retorno[4] <=59? $retorno[4]." Minutos":($retorno[4] / 60)." Hora(s)"?></td>  <!-- Coleta tempo do serviço[4] -->  </text>
+                       
+                        </div>
+                                <label>PREÇO DO SERVIÇO</label>
+                                <text>R$ <?= $retorno[3]?></text> <!--COLETA A PREÇO DO SERVIÇO POS 3 -->
+                                <!-- <div class= "menu2"> <a href= "servico_lista.php"> <img src = "icons/th2.png" width = "200" height = "200"> </a> </div> 
 
-             <p><?= $retorno[2]?> </p> <!-- coleta a descrição do serviço poição 2 -->
-             <p> <?= $retorno[4] <=59? $retorno[4]." Minutos":($retorno[4] / 60)." Hora(s)"?></td>  <!-- Coleta tempo do serviço[4] -->  </p>
+                                <div class= "menu3">  <a href= "funcionario_cadastra.php"> <img src = "icons/business.png" width = "200" height = "200"> </a> </div>
 
-            <!-- <div class= "menu2"> <a href= "servico_lista.php"> <img src = "icons/th2.png" width = "200" height = "200"> </a> </div> 
+                                <div class= "menu4">  <a href= "funcionario_lista.php"> <img src = "icons/group1.png" width = "200" height = "200"> </a> </div>
 
-            <div class= "menu3">  <a href= "funcionario_cadastra.php"> <img src = "icons/business.png" width = "200" height = "200"> </a> </div>
+                                <div class= "menu5">  <a href= "cliente_cadastra.php"> <img src = "icons/add10.png" width = "200" height = "200"> </a> </div>
 
-            <div class= "menu4">  <a href= "funcionario_lista.php"> <img src = "icons/group1.png" width = "200" height = "200"> </a> </div>
+                                <div class= "menu6">  <a href= "cliente_lista.php"> <img src = "icons/clipboard1.png" width = "200" height = "200"> </a> </div> -->
 
-            <div class= "menu5">  <a href= "cliente_cadastra.php"> <img src = "icons/add10.png" width = "200" height = "200"> </a> </div>
+                                <!-- USANDO GET BRABO pro botao alterar -->
+                                        <td><a href='verservico.php?id=<?= $retorno[0]?>'><img src='../icons/pencil1.png' width=20 height=20 style='border: 2px solid rgba(224, 229, 231, 1) ; border-radius: 1px; margin: 2px;'></a></td>
 
-            <div class= "menu6">  <a href= "cliente_lista.php"> <img src = "icons/clipboard1.png" width = "200" height = "200"> </a> </div> -->
-
-              <!-- USANDO GET BRABO pro botao alterar -->
-                    <td><a href='servico_altera.php?id=<?= $tbl[0]?>'><img src='icons/pencil1.png' width=20 height=20 style='border: 2px solid rgb(20, 133, 185) ; border-radius: 1px; margin: 2px;'></a></td>
-
-        </div>
+            </div>
 
          <?php
          }
          ?>
-
+            <!-- fim do portal - o html não pode ficar dentro do php -->
 
 
 
