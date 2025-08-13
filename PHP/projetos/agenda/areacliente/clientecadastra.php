@@ -1,7 +1,7 @@
 <?php
 //conexão com o banco de dados
 include("utils/conectadb.php");
-include("utils/verificalogin.php");
+// include("utils/verificalogin.php");
 
 // apos fvamos cadastrar usuario e funcionario ao mesmo tempo
 if($_SERVER['REQUEST_METHOD']== 'POST'){
@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 $nomecli = $_POST['txtnome'];
 $cpfcli = $_POST['txtcpf'];
 $contatocli = $_POST['txtcontato'];
-$ativocli = $_POST['ativo'];
+// $ativocli = $_POST['ativo'];
 $datanasccli = $_POST['txtdatanasc'];
  // COLETA SENHA DE USUARIO
 $senhacli = md5($_POST['txtsenha']);
@@ -33,7 +33,7 @@ if ($retorno ==1){
 }
 else {
     //caso funcionario não esteja  cadastrado
-    $sql ="INSERT INTO clientes (CLI_NOME, CLI_CPF, CLI_TEL, CLI_ATIVO, CLI_DATANASC, CLI_SENHA) VALUES ('$nomecli', '$cpfcli', '$contatocli', $ativocli, '$datanasccli', '$senhacli')";
+    $sql ="INSERT INTO clientes (CLI_NOME, CLI_CPF, CLI_TEL, CLI_ATIVO, CLI_DATANASC, CLI_SENHA) VALUES ('$nomecli', '$cpfcli', '$contatocli', 1, '$datanasccli', '$senhacli')";
 
     //conecta com o banco e manda a query
     $enviaquery = mysqli_query ($link, $sql);
@@ -55,16 +55,16 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel ="stylesheet" href ="css/formulario.css">
-    <link rel ="stylesheet" href ="css/testeglobal.css">
+    <link rel ="stylesheet" href ="../css/formulario.css">
+    <link rel ="stylesheet" href ="../css/testeglobal.css">
     <link href="https://fonts.cdnfonts.com/css/schuboisehandwrite" rel="stylesheet">
     <title>Cadastro de Cliente</title>
 </head>
 <body>
     <div class = "global"> 
         
-        <div class ="formulario"><a href="backoffice.php"><img src='icons/arrow47.png' width=50 height=50></a>
-                <form class='login' action ="cliente_cadastra.php" method ="post"  > 
+        <div class ="formulario"><a href="logincliente.php"><img src='../icons/arrow47.png' width=50 height=50></a>
+                <form class='login' action ="clientecadastra.php" method ="post"  > 
                     <label>NOME DO CLIENTE</label>
                     
                     <input type ='text' name = "txtnome" placeholder ='Digite seu nome completo' required>
@@ -88,7 +88,7 @@ else {
                     <input type = 'password' name ="txtsenha" placeholder = 'Digite sua senha'>
                     <br> 
 
-                    <label>INICIAR CLIENTE COMO</label>
+                    <!-- <label>INICIAR CLIENTE COMO</label>
                     <div class='rbativo'>
                         
                         <input type ="radio" name="ativo" id="ativo" value="1" checked><label>ATIVO</label>
@@ -96,7 +96,7 @@ else {
 
                         <input type ="radio" name="ativo" id="inativo" value="0" ><label>INATIVO</label>
                     </div>  
-                    <br> 
+                    <br>  -->
 
                      <label>DATA DE NASCIMENTO</label> 
                     
@@ -112,6 +112,6 @@ else {
         </div>
 
     </div>
-    <script src= 'scripts/script.js'> </script>
+    <script src= '../scripts/script.js'> </script>
 </body>
 </html>

@@ -2,6 +2,11 @@
 
 // conexão com banco
 include("../utils/conectadb.php");
+include("../utilsvalidacliente.php");
+
+
+
+
 // fazer o include do validacliente
 
 
@@ -51,17 +56,37 @@ session_start();
 <div class ="global"> 
 
     <!-- FAZER A ANALISE DE LOGIN  -->
+  <!-- abertura do php -->
+     <!-- ABERTURA DO PORTAL  -->
+<?php if(!isset($idcliente)){?>
 
-        <!-- <div class="topo">   abrindo o class topo -->
+        <!-- AQUI O CLIENTE NÃO FEZ LOGIN -->
+        <div class='topo'>
+            <h1>BEM VINDO AO SALÃO SALLONCCINA</h1>
+            <!-- BOTÃO DE FAZER LOGIN -->
+            <div class='login'>
+                <a href='logincliente.php'>
+                    <img src='../icons/user2.png'width=50 height=50>
+                </a>
+            </div>
+        </div>
+<!-- FECHA PRA ABRIR -->
+<?php }
+
+
+else{?>
+        <div class="topo">    <!--abrindo o class topo -->
             <!-- aqui vai trazer o nome do usuario logado -->
-            <!-- <h1>BEM VINDO,   <?php echo strtoupper($nomeusuario)?></h1> -->
+            <h1>BEM VINDO,   <?php echo strtoupper($nomecliente)?></h1>
             <!-- botao de encerramento de sessão -->
-            <!-- <div class = "logout" method='post'><a href ='logout.php'><img src='icons/backspace.png' width=50 height=45></a></div> -->
-        <!-- </div>   -->
+            <div class = "logout" method='post'><a href ='logoutcliente.php'><img src='../icons/backspace.png' width=50 height=45></a></div>
+        </div>  
         <!-- fechando o class topo -->
     
 
-        
+        <?php
+     } ?>
+<!-- FECHA PRA FECHAR -->
 
             
          
