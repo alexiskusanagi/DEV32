@@ -2,18 +2,19 @@
 
 // conexão com banco
 include("../utils/conectadb.php");
-include("../utilsvalidacliente.php");
-
-
-
-
 // fazer o include do validacliente
+include("../utils/validacliente.php");
+
+
+
+
+
 
 
 
 //inicia variaveis de sessão
 
-session_start();
+// session_start();
 //mecanismo de segurança anti variavel de sessao vazia
 // talvez apagar o if e else
 // if(isset($_SESSION['idfuncionario'])){

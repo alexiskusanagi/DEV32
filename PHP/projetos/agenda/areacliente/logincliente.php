@@ -7,20 +7,20 @@ session_start();
 
 if($_SERVER['REQUEST_METHOD']== 'POST'){
 //COLETA OS DADOS DO CAMPO DE TEXTO DO HTML
-$cpf =$_POST['txtcpf'];
-$senha = sha1($_POST['txtsenha']);
+$clientecpf =$_POST['txtcpf'];
+$senha = md5($_POST['txtsenha']);
 
 // VERIFICAR de nome de cliente EXISTE
-$sqlcli ="SELECT COUNT (CLI_ID) FROM clientes WHERE cli_cpf = '$clientecpf' AND cli_senha = '$senha' AND CLI_ATIVO = 1";
+$sqlcli ="SELECT COUNT(CLI_ID) FROM clientes WHERE CLI_CPF = '$clientecpf' AND CLI_SENHA = '$senha' AND CLI_ATIVO = 1";
 
 //enviando a query para o banco
 $enviaquery = mysqli_query($link, $sqlcli);
 $retorno = mysqli_fetch_array($enviaquery) [0];
 
 // COLETANDO O NOME DO NOSSO CILENTE
-$sqlnome = "SELECT CLI_ID FROM clientes WHERE CLI_CPF = $clientecpf AND CLI_SENHA = $senha"; 
+$sqlnome = "SELECT CLI_ID FROM clientes WHERE CLI_CPF = $clientecpf AND CLI_SENHA = '$senha'"; 
 
-$enviaquery2 = mysqli_query($link,$sqlnome);
+$enviaquery2 = mysqli_query($link, $sqlnome);
 // retorno do que vem do banco
 $idcliente =mysqli_fetch_array($enviaquery) [0];
 // fim coleta nome cliente

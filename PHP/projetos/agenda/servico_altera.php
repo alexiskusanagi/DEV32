@@ -117,6 +117,19 @@ while($tbl = mysqli_fetch_array($enviaquery)){
 
                     <input type = 'number' name ="txttempo" placeholder = 'Digite o tempo em minutos' value =<?=$temposervico?> required>
 
+                    <select name='txttempo' class ='opt'>
+                        <option value='<?php= $temposervico?>'><?= $temposervico?></option>
+                        <option value='0'>INDISPONÍVEL</option>
+                        <option value='30'>30 MINUTOS</option>
+                        <option value='60'>1 HORA</option>
+                        <option value='90'>1 HORA E 30 MINUTOS</option>
+                        <option value='120'>2 HORAS</option>
+                        <option value='150'>2 HORAS E 30 MINUTOS</option>
+                        <option value='180'>3 HORAS</option>
+                        <option value='210'>3 HORAS E 30 MINUTOS</option>
+                        <option value='240'>4 HORAS</option>
+                     </select>
+
                     <!-- input de imagem para o banco de dados -->
                     <br>
                     <label>FAÇA O UPLOAD DA IMAGEM</label>

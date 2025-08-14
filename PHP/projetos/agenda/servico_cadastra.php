@@ -84,9 +84,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     
                     
                     <!-- agora cadastramos o usuario -->
-                    <label>DURAÇÃO</label>
+                    <!-- <label>DURAÇÃO</label>
 
-                    <input type = 'number' name ="txttempo" placeholder = 'Digite o tempo em minutos' required>
+                    <input type = 'number' name ="txttempo" placeholder = 'Digite o tempo em minutos' required> -->
+
+                    <!-- SELECT OPTION LISTA DE OPÇÕES/ A.K.A. COMBO BOX- variável chamará txttempo, mesmo nao sendo um txt e sim cb - cbtempo seria o mais correto -->
+                     <select name='txttempo'>
+                        <option value='<?php= $temposervico?>'><?= $temposervico?></option>
+                        <option value='0'>INDISPONÍVEL</option>
+                        <option value='30'>30 MINUTOS</option>
+                        <option value='60'>1 HORA</option>
+                        <option value='90'>1 HORA E 30 MINUTOS</option>
+                        <option value='120'>2 HORAS</option>
+                        <option value='150'>2 HORAS E 30 MINUTOS</option>
+                        <option value='180'>3 HORAS</option>
+                        <option value='210'>3 HORAS E 30 MINUTOS</option>
+                        <option value='240'>4 HORAS</option>
+                     </select>
 
                     <!-- input de imagem para o banco de dados -->
                     <br>
