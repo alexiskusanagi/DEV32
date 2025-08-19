@@ -1,44 +1,14 @@
-<?php 
-
-// conexão com banco
+<?php
 include("../utils/conectadb.php");
-// fazer o include do validacliente
+// FAZER O INCLUDE DO VALIDACLIENTE
 include("../utils/validacliente.php");
 
 
 
 
 
-
-
-
-//inicia variaveis de sessão
-
-// session_start();
-//mecanismo de segurança anti variavel de sessao vazia
-// talvez apagar o if e else
-// if(isset($_SESSION['idfuncionario'])){
-
-//     //preenche a variavel idfuncionario com variavel de sessao
-//     $idfuncionario =$_SESSION ["idfuncionario"];
-
-    //query para buscar nome do funcionario
-
-    $sql ="SELECT * FROM catalogo WHERE CAT_ATIVO = 1";
-
-    $enviaquery= mysqli_query($link, $sql);
-
-    
-// }
-
-// else{
-
-//     echo"<script>window.alert('NÃO LOGADO'); </script>";
-//     echo"<script>window.location.href='login.php'; </script>";
-// }
-
-
-
+$sql = "SELECT * FROM catalogo WHERE CAT_ATIVO = 1";
+$enviaquery = mysqli_query($link, $sql);
 
 ?>
 
@@ -132,7 +102,7 @@ else{?>
                                 <div class= "menu6">  <a href= "cliente_lista.php"> <img src = "icons/clipboard1.png" width = "200" height = "200"> </a> </div> -->
 
                                 <!-- USANDO GET BRABO pro botao alterar -->
-                                        <td><a href='verservico.php?id=<?= $retorno[0]?>'><img src='../icons/pencil1.png' width=20 height=20 style='border: 2px solid rgba(224, 229, 231, 1) ; border-radius: 1px; margin: 2px;'></a></td>
+                                        <a href='verservico.php?id=<?= $retorno[0]?>'><img src='../icons/zoom1.png' width=40 height=40 style='border: 2px solid rgba(224, 229, 231, 1) ; border-radius: 1px; margin: 2px;'></a>
 
             </div>
 

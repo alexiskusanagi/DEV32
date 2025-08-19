@@ -71,14 +71,14 @@ else {
                     <br>
                     <label>CPF</label>
                     
-                    <input type = 'number' name ="txtcpf" placeholder = 'Digite seu CPF' required>
+                    <input type = 'number' name ="txtcpf" placeholder="000.000.000-00" maxlength='14' required>
 
                     
                     <br>
                     <!-- Telefone = contato -->
                     <label>CONTATO</label> 
                     
-                    <input type = 'number' name ="txtcontato" placeholder = 'Digite seu telefone' required>
+                    <input type = 'number' name ="txtcontato" placeholder="(00) 00000-0000" maxlength='15' required>
                     <br>
                     
                     
@@ -100,7 +100,7 @@ else {
 
                      <label>DATA DE NASCIMENTO</label> 
                     
-                    <input type = 'date' name ="txtdatanasc" placeholder = 'Digite sua data de Nascimento' required>
+                    <input type = 'date' name ="dtdatanasc" placeholder='DD/MM/AAAA' required>
                     <br>
 
                     <input type ='submit' value = 'CADASTRAR'>

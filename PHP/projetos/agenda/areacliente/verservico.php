@@ -1,6 +1,6 @@
 <?php
 include("../utils/conectadb.php");
-include("../utils/verificausuario.php");
+include("../utils/validacliente.php");
 
 
 // click na alteração do serviço
@@ -24,6 +24,13 @@ while($tbl = mysqli_fetch_array($enviaquery)){
     $imagem_atual = $tbl[6];
 
 }
+
+// coleta cabelereiro
+$sqlfuncionario = "SELECT FUN_ID, FUN_NOME FROM funcionarios WHERE FUN_NOME != 'Administrador'";
+$enviaqueryfun= mysqli_query($link,$sqlfuncionario);
+
+
+// verifica agenda
 
 
 ?>
@@ -100,8 +107,51 @@ while($tbl = mysqli_fetch_array($enviaquery)){
                      <!-- TODO TELA DE VERSERVIÇO PARA AGENDAMENTO -->
                 <!-- SELECT PARA VER DATA DISPONÍVEL PARA CABELEIREIRO  -->
                 <!-- SELECT PARA VER QUAL CABELEIREIRO DISPONÍVEL NESSA DATA -->
+                    <br>
 
-                    <input type ='submit' value = 'ALTERAR'>
+                    <!-- SELECIONA A DATA -->
+
+                    <!-- seleciona cabelereiro -->
+
+                    <!-- criar form de verifivcar horario -->
+
+                    <form action='verificahorario.php' method='post'>;
+
+                    <select class='opt' name='funcionario'>
+
+                    <!-- listando funcionario portal -->
+
+                    <?php while($funcionario = mysqli_fetch_array($enviaqueryfun)){
+                        ?>
+
+                    <option value='<?=$funcionario[0]?>'><?=$funcionario[1]?> </option>
+
+                    <?php } ?>
+                    </select>
+
+                    <br>
+
+                    <input type='date' name='data'>
+
+                    <br>
+
+                    <!-- hora -->
+                     <select name='txttempo'>
+                        <option value='<?php= $temposervico?>'><?= $temposervico?></option>
+                        <option value='0'>INDISPONÍVEL</option>
+                        <option value='30'>30 MINUTOS</option>
+                        <option value='60'>1 HORA</option>
+                        <option value='90'>1 HORA E 30 MINUTOS</option>
+                        <option value='120'>2 HORAS</option>
+                        <option value='150'>2 HORAS E 30 MINUTOS</option>
+                        <option value='180'>3 HORAS</option>
+                        <option value='210'>3 HORAS E 30 MINUTOS</option>
+                        <option value='240'>4 HORAS</option>
+                     </select>
+                     <input type ='submit' value = 'AGENDAR'>
+                     <br>
+
+                    <input type ='submit' value = 'AGENDAR'>
 
                 </form>
                 <br>
