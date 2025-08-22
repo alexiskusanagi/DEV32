@@ -78,6 +78,7 @@ while($tbl = mysqli_fetch_array($enviaquery)){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel ="stylesheet" href ="css/catalogo.css">
     <link rel ="stylesheet" href ="css/testeglobal.css">
+    <link rel ="stylesheet" href ="css/alteraservico.css">
     <link href="https://fonts.cdnfonts.com/css/schuboisehandwrite" rel="stylesheet">
     <title>CADASTRO DE SERVIÇOS</title>
 </head>
@@ -99,25 +100,25 @@ while($tbl = mysqli_fetch_array($enviaquery)){
                 
                 <label>NOME DO SERVIÇO</label>
                     
-                    <input type ='text' name = "txtnome" placeholder ='Digite nome do serviço' value =<?=$nomeservico?> required>
+                    <input type='text' name ="txtnome" placeholder='Digite nome do serviço' value=<?=$nomeservico?> required>
                     <br>
                     <label>DESCRIÇÃO</label>
                     
-                    <textarea name ='txtdescricao' <?= $descricaoservico?>></textarea>
+                    <textarea name='txtdescricao'<?=$descricaoservico?>></textarea>
                     <br>
                    
                     <label>PREÇO</label> 
                     
-                    <input type = 'decimal' name ="txtpreco" placeholder = 'HUE$' value = 'R$' <?=$precoservico?> >
+                    <input type='decimal' name="txtpreco" placeholder='HUE$' value=<?=$precoservico?> >
                     <br>
                     
                     
                     <!-- agora cadastramos o usuario -->
                     <label>DURAÇÃO</label>
 
-                    <input type = 'number' name ="txttempo" placeholder = 'Digite o tempo em minutos' value =<?=$temposervico?> required>
+                    <input type ='number' name="txttempo" placeholder='Digite o tempo em minutos' value=<?=$temposervico?> required>
 
-                    <select name='txttempo' class ='opt'>
+                    <!-- <select name='txttempo' class ='opt'>
                         <option value='<?php= $temposervico?>'><?= $temposervico?></option>
                         <option value='0'>INDISPONÍVEL</option>
                         <option value='30'>30 MINUTOS</option>
@@ -128,7 +129,7 @@ while($tbl = mysqli_fetch_array($enviaquery)){
                         <option value='180'>3 HORAS</option>
                         <option value='210'>3 HORAS E 30 MINUTOS</option>
                         <option value='240'>4 HORAS</option>
-                     </select>
+                     </select> -->
 
                     <!-- input de imagem para o banco de dados -->
                     <br>

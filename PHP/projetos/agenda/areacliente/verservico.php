@@ -15,7 +15,7 @@ $enviaquery = mysqli_query($link, $sql);
 
 while($tbl = mysqli_fetch_array($enviaquery)){
 
-    $id= $tbl[0];
+    $id = $tbl[0];
     $nomeservico = $tbl[1];
     $descricaoservico = $tbl[2];
     $precoservico = $tbl[3];
@@ -27,7 +27,7 @@ while($tbl = mysqli_fetch_array($enviaquery)){
 
 // coleta cabelereiro
 $sqlfuncionario = "SELECT FUN_ID, FUN_NOME FROM funcionarios WHERE FUN_NOME != 'Administrador'";
-$enviaqueryfun= mysqli_query($link,$sqlfuncionario);
+$enviaqueryfun= mysqli_query($link, $sqlfuncionario);
 
 
 // verifica agenda
@@ -43,8 +43,9 @@ $enviaqueryfun= mysqli_query($link,$sqlfuncionario);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel ="stylesheet" href ="../css/catalogo.css">
     <link rel ="stylesheet" href ="../css/testeglobal.css">
+    <link rel ="stylesheet" href ="../css/verservico.css">
     <link href="https://fonts.cdnfonts.com/css/schuboisehandwrite" rel="stylesheet">
-    <title>CADASTRO DE SERVIÇOS</title>
+    <title>AGENDAMENTO DE SERVIÇOS</title>
 </head>
 <body>
     <div class = "global"> 
@@ -55,54 +56,52 @@ $enviaqueryfun= mysqli_query($link,$sqlfuncionario);
         
     </div>
 
-        <div class ="formulario"><a href="catalogo.php"><img src='icons/arrow47.png' width=50 height=50 ></a>
+        <div class ="formulario"><a href="catalogo.php"><img src='../icons/arrow47.png' width=50 height=50 ></a>
                 <form class='login' action ="servico_altera.php" method ="post" enctype='multipart/form-data' > 
                     
 
                 <!-- quando gravar ele coleta o que veio do banco para fazer o update -->
                 <input type = 'hidden' name = 'id' value= '$id'>
                 
+                <!-- name="txtnome", name="txtdescricao e name = "txtpreco" não pe usado e nem válido para LABEL -->
+
                 <label>NOME DO SERVIÇO</label>
                     
-                    <input type ='text' name = "txtnome" placeholder ='Digite nome do serviço' value =<?=$nomeservico?> required>
+                    <label name="txtnome"><?=$nomeservico?></label>
                     <br>
                     <label>DESCRIÇÃO</label>
                     
-                    <textarea name ='txtdescricao' <?= $descricaoservico?>> </textarea>
+                    <label name='txtdescricao'><?= $descricaoservico?></label>
                     <br>
                    
                     <label>PREÇO</label> 
                     
-                    <input type = 'decimal' name ="txtpreco" placeholder = 'HUE$' value = 'R$' <?=$precoservico?> >
+                    <label name="txtpreco"><?=$precoservico?></label>
                     <br>
+                    
+<!--                 
+                <label>NOME DO SERVIÇO</label>
+                    
+                    <label><?=$nomeservico?></label>
+                    <br>
+                    <label>DESCRIÇÃO</label>
+                    
+                    <label ><?= $descricaoservico?></label>
+                    <br>
+                   
+                    <label>PREÇO</label> 
+                    
+                    <label><?=$precoservico?></label>
+                    <br> -->
                     
                     
                     <!-- agora cadastramos o usuario -->
-                    <label>DURAÇÃO</label>
+                    <label>DURAÇÃO EM MINUTOS</label>
 
-                    <input type = 'number' name ="txttempo" placeholder = 'Digite o tempo em minutos' value =<?=$temposervico?> required>
-                    <label><?= $temposervico <= 59? $temposervico." Minutos": ($temposervico / 60)." Hora(s)"?> </label> <!--COLETA TEMPO DO CAT [4]-->
-
-                    <!-- input de imagem para o banco de dados -->
-                    <br>
-                    <label>FAÇA O UPLOAD DA IMAGEM</label>
-                    <input type ='file' name='imagem' >
-
-                    <br> 
-
-                    <!-- <label>STATUS DO SERVIÇO</label>
-                    <div class='rbativo'>
-                        
-                        <input type ="radio" name="ativo" id="ativo" value="1" checked><label>ATIVO</label>
-                        <br> 
-
-                        <input type ="radio" name="ativo" id="inativo" value="0" ><label>INATIVO</label>
-                    </div>   -->
+                    <!-- <input type = 'number' name ="txttempo" placeholder = 'Digite o tempo em minutos' value =<?=$temposervico?> required> -->
+                    <label><?= $temposervico <= 59? $temposervico." Minutos": ($temposervico / 60)." Hora(s)"?> </label> <!--COLETA TEMPO DO CATALOGO [4]-->
 
 
-                    <!-- APRESENTAÇÃO DA IMAGEM -->
-                     <!-- <div id = 'cat_imagem'> <img src= 'data:image/jpeg;base64, <?=$imagem_atual?>' width=100 height=100> </div> -->
-                    <br> 
 
                      <!-- TODO TELA DE VERSERVIÇO PARA AGENDAMENTO -->
                 <!-- SELECT PARA VER DATA DISPONÍVEL PARA CABELEIREIRO  -->
@@ -115,9 +114,11 @@ $enviaqueryfun= mysqli_query($link,$sqlfuncionario);
 
                     <!-- criar form de verifivcar horario -->
 
-                    <form action='verificahorario.php' method='post'>;
-
-                    <select class='opt' name='funcionario'>
+                
+                    <form class='login' action='../utils/verificaagenda.php' method="post" onchange="this.form.submit()">
+                    <select class='opt' name='idfuncionario' >
+                        <option value='sem funcionario'>SELECIONE UM BARBEIRO/ CABELEIREIRO(A)</option>
+                        
 
                     <!-- listando funcionario portal -->
 
@@ -135,27 +136,41 @@ $enviaqueryfun= mysqli_query($link,$sqlfuncionario);
 
                     <br>
 
-                    <!-- hora -->
-                     <select name='txttempo'>
-                        <option value='<?php= $temposervico?>'><?= $temposervico?></option>
-                        <option value='0'>INDISPONÍVEL</option>
-                        <option value='30'>30 MINUTOS</option>
-                        <option value='60'>1 HORA</option>
-                        <option value='90'>1 HORA E 30 MINUTOS</option>
-                        <option value='120'>2 HORAS</option>
-                        <option value='150'>2 HORAS E 30 MINUTOS</option>
-                        <option value='180'>3 HORAS</option>
-                        <option value='210'>3 HORAS E 30 MINUTOS</option>
-                        <option value='240'>4 HORAS</option>
-                     </select>
-                     <input type ='submit' value = 'AGENDAR'>
-                     <br>
-
-                    <input type ='submit' value = 'AGENDAR'>
-
+                   <!-- SELECT OPTION LISTA DE OPÇÕES  -->
+                    <!-- RESPEITA O FORMATO DE HORA 00:00:00 -->
+                    <select class='opt' name="horario">
+                        <option value="08:00:00">08:00</option>
+                        <option value="08:30:00">08:30</option>
+                        <option value="09:00:00">09:00</option>
+                        <option value="09:30:00">09:30</option>
+                        <option value="10:00:00">10:00</option>
+                        <option value="10:30:00">10:30</option>
+                        <option value="11:00:00">11:00</option>
+                        <option value="11:30:00">11:30</option>
+                        <option value="12:00:00">12:00</option>
+                        <option value="12:30:00">12:30</option>
+                        <option value="13:00:00">13:00</option>
+                        <option value="13:30:00">13:30</option>
+                        <option value="14:00:00">14:00</option>
+                        <option value="14:30:00">14:30</option>
+                        <option value="15:00:00">15:00</option>
+                        <option value="15:30:00">15:30</option>
+                        <option value="16:00:00">16:00</option>
+                        <option value="16:30:00">16:30</option>
+                        <option value="17:00:00">17:00</option>
+                        <option value="17:30:00">17:30</option>
+                        <option value="18:00:00">18:00</option>
+                        
+                    </select>
+                            <input type='submit' value='VERIFICAR HORÁRIO'>
+                            <br>
+                            <br>
+                            <br>
+                             <input type='submit' value='AGENDAR'>
                 </form>
                 <br>
                 
+                   
 
         </div>
 

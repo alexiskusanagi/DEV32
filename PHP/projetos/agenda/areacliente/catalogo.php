@@ -3,10 +3,6 @@ include("../utils/conectadb.php");
 // FAZER O INCLUDE DO VALIDACLIENTE
 include("../utils/validacliente.php");
 
-
-
-
-
 $sql = "SELECT * FROM catalogo WHERE CAT_ATIVO = 1";
 $enviaquery = mysqli_query($link, $sql);
 
@@ -49,8 +45,13 @@ else{?>
         <div class="topo">    <!--abrindo o class topo -->
             <!-- aqui vai trazer o nome do usuario logado -->
             <h1>BEM VINDO,   <?php echo strtoupper($nomecliente)?></h1>
+             <div class='login'>
+                <a href='verperfil.php'>
+                    <img src='../icons/user2.png'width=50 height=50>
+                </a>
+            </div>
             <!-- botao de encerramento de sessão -->
-            <div class = "logout" method='post'><a href ='logoutcliente.php'><img src='../icons/backspace.png' width=50 height=45></a></div>
+            <div class = "logout" method='post'><a href ='logoutcliente.php'><img src='../icons/backspace.png' width=50 height=45 ></a></div>
         </div>  
         <!-- fechando o class topo -->
     

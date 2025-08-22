@@ -1,0 +1,137 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #4facfe;
+    color: #fff;
+    padding: 20px;
+}
+
+/* Container principal */
+.global {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background-color: rgb(20, 133, 185); */
+    border-radius: 20px;
+    padding: 20px;
+    margin: auto;
+    width: 90%;
+}
+
+/* Rótulo e imagem */
+.global label {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.global img {
+    max-width: 300px;
+    border-radius: 15px;
+    border: 2px solid white;
+    margin-bottom: 20px;
+    background-color: #4facfe;
+}
+
+/* Container do formulário */
+.formulario {
+    background-color: #ffffff22;
+    padding: 25px;
+    border-radius: 20px;
+    margin-top: 20px;
+    width: 90%;
+    margin: 0 auto;
+    /* box-shadow: 0 4px 10px rgba(0,0,0,0.2); */
+}
+
+/* Botão voltar */
+.formulario a img {
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.formulario a img:hover {
+    transform: scale(1.1);
+}
+
+/* Informações do serviço */
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.login label {
+    font-size: 18px;
+    font-weight: bold;
+    color: whitesmoke;
+}
+
+.login label[name] {
+    background-color: #ffffff1a;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: normal;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Campos de formulário */
+.login select,
+.login input[type="date"],
+.login input[type="submit"] {
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid white;
+    background-color: #fff;
+    color: #333;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.login select:focus,
+.login input[type="date"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px #ffffff88;
+    border-color: #ffffffcc;
+}
+
+/* Select específico */
+.opt {
+    width: 100%;
+}
+
+/* Botões */
+.login input[type="submit"] {
+    background-color: whitesmoke;
+    color: #000;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login input[type="submit"]:hover {
+    background-color: #e0e0e0;
+    color: rgb(20, 133, 185);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .global,
+    .formulario {
+        width: 100%;
+    }
+
+    .global img {
+        width: 100%;
+    }
+}

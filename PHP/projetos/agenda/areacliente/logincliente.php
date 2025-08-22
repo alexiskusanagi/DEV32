@@ -22,18 +22,17 @@ $sqlnome = "SELECT CLI_ID FROM clientes WHERE CLI_CPF = $clientecpf AND CLI_SENH
 
 $enviaquery2 = mysqli_query($link, $sqlnome);
 // retorno do que vem do banco
-$idcliente =mysqli_fetch_array($enviaquery) [0];
+$idcliente = mysqli_fetch_array($enviaquery2) [0];
 // fim coleta nome cliente
 
 
 
 //validação de retorno
-if ($retorno ==1){
+if ($retorno == 1){
 
     $_SESSION ['idcliente'] = $idcliente;
 
     Header ("Location: catalogo.php");
-
     // echo("<script>window.alert('LOGADO'); </script>");
 
 
