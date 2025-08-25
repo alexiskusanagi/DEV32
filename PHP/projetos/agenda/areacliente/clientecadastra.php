@@ -63,7 +63,7 @@ else {
 <body>
     <div class = "global"> 
         
-        <div class ="formulario"><a href="logincliente.php"><img src='../icons/arrow47.png' width=50 height=50></a>
+        <div class ="formulario"><a href="logincliente.php"><img src='../icons/arrow477.png' width=50 height=50></a>
                 <form class='login' action ="clientecadastra.php" method ="post"  > 
                     <label>NOME DO CLIENTE</label>
                     

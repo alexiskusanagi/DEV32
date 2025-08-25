@@ -51,7 +51,7 @@ else{?>
                 </a>
             </div>
             <!-- botao de encerramento de sessão -->
-            <div class = "logout" method='post'><a href ='logoutcliente.php'><img src='../icons/backspace.png' width=50 height=45 ></a></div>
+            <div class = "logout" method='post'><a href ='../logoutcliente.php'><img src='../icons/backspace.png' width=50 height=45 ></a></div>
         </div>  
         <!-- fechando o class topo -->
     

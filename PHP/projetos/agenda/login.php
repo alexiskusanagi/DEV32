@@ -62,7 +62,7 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel ="stylesheet" href ="css/testeform.css">
+    <link rel ="stylesheet" href ="css/formulario.css">
     <link rel ="stylesheet" href ="css/testeglobal.css">
     <link href="https://fonts.cdnfonts.com/css/schuboisehandwrite" rel="stylesheet">
     <title>LOGIN</title>

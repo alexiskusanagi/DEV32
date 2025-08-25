@@ -4,5 +4,5 @@ session_start();
 session_destroy();
 
     echo"<script>window.alert('Saindo da Aplicação'); </script>";
-    echo"<script>window.location.href='areacliente/logincliente.php'; </script>";
+    echo"<script>window.location.href='areacliente/catalogo.php'; </script>";
 ?>

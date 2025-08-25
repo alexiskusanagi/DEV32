@@ -5,11 +5,12 @@ body{
 }
 
 .global{
+margin-top: 15px;
 display:flex;
 flex-flow: column;
 background-color: whitesmoke;
 width: 400px;
-height: 500px;
+height: auto;
 border-radius: 20px;
 justify-self: center;
 
@@ -40,6 +41,11 @@ background-color: whitesmoke;
 border-radius: 20px;
 border: blue solid 2px;
 
+
+}
+
+.a{
+    font-family: 'SchuboiseHandwrite', sans-serif;
 }
 
 .login{
@@ -54,7 +60,7 @@ padding: 20px;
 
 }
 
-.login label{
+/* .login label{
     color: blue;
     font-family: 'SchuboiseHandwrite', sans-serif;
    
@@ -68,7 +74,7 @@ padding: 20px;
        border-radius: 20px;
        border:3px solid rgb(9, 152, 247)
    
-   }
+   } */
    
    .opt{
     appearance: none;           /* Remove o estilo padrão */
@@ -94,7 +100,7 @@ padding: 20px;
     }
 
 
-.login input[type='submit']{
+/* .login input[type='submit']{
 
     background-color: midnightblue;
     border-radius: 20px;
@@ -103,20 +109,73 @@ padding: 20px;
     height:50px;
     cursor: pointer; /*pra virar a mãozinha que aponta */
     
-}
+/* } */ 
 
 
 
-.login input[type='submit']:hover{
+/* .login input[type='submit']:hover{
 
     background-color:  lightblue;
     border-radius: 20px;
     color: black;
     border: none;
     height:50px;
-    cursor: pointer; /*pra virar a mãozinha que aponta */
+    cursor: pointer; pra virar a mãozinha que aponta */
 
-}
+/* } */
+
+/*  comentando login antigo - login novo abaixo*/
+
+ .login {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        margin-top: 30px;
+        padding: 20px;
+    }
+    
+    .login label {
+        color: blue;
+        font-family: 'SchuboiseHandwrite', sans-serif;
+        margin-top: 10px;
+    }
+    
+    .login input[type='text'],
+    .login input[type='password'],
+    .login input[type='number'] {
+        font-family: 'SchuboiseHandwrite', sans-serif;
+        height: 40px;
+        border-radius: 20px;
+        border: 3px solid rgb(9, 152, 247);
+        padding-left: 10px;
+        margin-top: 5px;
+    }
+    
+    .login input[type='radio'] {
+        margin-top: 10px;
+        margin-right: 5px;
+        accent-color: rgb(9, 152, 247); /* cor do botão de rádio */
+    }
+    
+    .login input[type='submit'] {
+        background-color: rgb(135, 215, 240);
+        border-radius: 20px;
+        font-family: 'SchuboiseHandwrite', sans-serif;
+        color: blue;
+        border: none;
+        height: 40px;
+        margin-top: 20px;
+    }
+    
+    .login input[type='submit']:hover {
+        background-color: blue;
+        border-radius: 20px;
+        color: rgb(135, 215, 240);
+        border: none;
+        height: 50px;
+        cursor: pointer;
+    }
+
 
 
 /*ajustar os radios buttons juntamente com o label*/

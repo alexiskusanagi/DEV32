@@ -64,7 +64,7 @@ while($tbl = mysqli_fetch_array($enviaquery)){
 <body>
     <div class = "global"> 
         
-        <div class ="formulario"><a href="catalogo.php"><img src='../icons/arrow47.png' width=50 height=50></a>
+        <div class ="formulario"><a href="catalogo.php"><img src='../icons/arrow477.png' background-color=#4facfe width=50 height=50></a>
                 <form class='login' action ="verperfil.php" method ="post"  > 
                      <!-- PARA GRAVARMOS REALMENTE O ID DO FUNCIONÁRIO -->
 
