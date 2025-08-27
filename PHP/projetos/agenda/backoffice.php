@@ -66,6 +66,9 @@ else{
         <div class ="menus">
             <!-- os cards de menu -->
 
+              <!-- VERIFICA E MOSTRA TODOS OS CARDS PARA ADMINISTRADOR -->
+                <?php if($idfuncionario == 1){
+                    ?>
              <div class= "menu1"><a href= "servico_cadastra.php"> <img src = "icons/add9.png" width = "200" height = "200">   </a> </div> 
 
             <div class= "menu2"> <a href= "servico_lista.php"> <img src = "icons/th2.png" width = "200" height = "200"> </a> </div> 
@@ -77,6 +80,19 @@ else{
             <div class= "menu5">  <a href= "cliente_cadastra.php"> <img src = "icons/add10.png" width = "200" height = "200"> </a> </div>
 
             <div class= "menu6">  <a href= "cliente_lista.php"> <img src = "icons/clipboard1.png" width = "200" height = "200"> </a> </div>
+
+             <!-- AQUI SÓ MOSTRA 3 CARDS PARA QUEM NÃO É ADMIN -->
+                <?php }
+                 else {?>
+
+                    <div class= "menu2"> <a href= "servico_lista.php"> <img src = "icons/th2.png" width = "200" height = "200"> </a> </div> 
+
+                     <div class= "menu5">  <a href= "cliente_cadastra.php"> <img src = "icons/add10.png" width = "200" height = "200"> </a> </div>
+
+                    <div class= "menu6">  <a href= "cliente_lista.php"> <img src = "icons/clipboard1.png" width = "200" height = "200"> </a> </div>
+
+                    <?php } ?>
+
         </div>
 
 

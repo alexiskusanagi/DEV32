@@ -1,5 +1,5 @@
 <?php
-include("../utils/conectadb.php");
+include("conectadb.php");
 session_start();
 //mecanismo de segurança anti variavel de sessao vazia
 if(isset($_SESSION['idcliente'])){

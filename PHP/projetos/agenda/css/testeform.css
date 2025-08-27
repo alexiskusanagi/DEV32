@@ -105,6 +105,7 @@ padding: 20px;
         border: 3px solid rgb(9, 152, 247);
         padding-left: 10px;
         margin-top: 5px;
+        
     }
     
     .login input[type='radio'] {
@@ -114,7 +115,7 @@ padding: 20px;
     }
     
     .login input[type='submit'] {
-        background-color: rgb(135, 215, 240);
+        background-color:rgb(135, 215, 240);
         border-radius: 20px;
         font-family: 'SchuboiseHandwrite', sans-serif;
         color: blue;
@@ -131,4 +132,5 @@ padding: 20px;
         height: 50px;
         cursor: pointer;
     }
+    
     
