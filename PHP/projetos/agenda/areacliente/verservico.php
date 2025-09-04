@@ -128,7 +128,7 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 
       <label for="data"><b>Data</b></label>
       <input type="date" name="data" id="data" required>
-      <div class="hint">Os horários passados de hoje não serão exibidos.</div>
+      <!-- <div class="hint">Os horários passados de hoje não serão exibidos.</div> -->
 
       <label for="horario"><b>Horário disponível</b></label>
       <select class="opt" name="horario" id="horario" required>

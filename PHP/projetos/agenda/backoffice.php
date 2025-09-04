@@ -81,6 +81,8 @@ else{
 
             <div class= "menu6">  <a href= "cliente_lista.php"> <img src = "icons/clipboard1.png" width = "200" height = "200"> </a> </div>
 
+            <div class= "menu6">  <a href= "ver_agenda.php"> <img src = "icons/complete1.png" width = "200" height = "200"> </a> </div>
+
              <!-- AQUI SÓ MOSTRA 3 CARDS PARA QUEM NÃO É ADMIN -->
                 <?php }
                  else {?>
@@ -91,7 +93,14 @@ else{
 
                     <div class= "menu6">  <a href= "cliente_lista.php"> <img src = "icons/clipboard1.png" width = "200" height = "200"> </a> </div>
 
+                    <div class= "menu6">  <a href= "ver_agenda.php"> <img src = "icons/complete1.png" width = "200" height = "200"> </a> </div>
+
                     <?php } ?>
+
+                    <br>
+                    <br>
+                    <!-- aqui tabela agendamento -->
+                     <!--  -->
 
         </div>
 
