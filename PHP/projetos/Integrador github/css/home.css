@@ -1,0 +1,208 @@
+/* estilo do todo */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+
+body{
+    
+        height: 100vh;
+        /* background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/508037540.jpg?k=9a2355459f953ad562a18209f2134bcdb620d5a665f8db0a6da21094b561acea&o=&hp=1'); */
+       background-image: url('../img/banner-opt3-edit-AI-3.jpg');
+        background-size: cover; /* Makes the image cover the entire element */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center center; /* Centers the image */
+        background-attachment: fixed; /* Keeps the image fixed when scrolling */
+   
+}
+
+.content {
+    margin-top: 250px;
+    min-height: 100vh;
+        /* background-color: whitesmoke; */
+
+        background-color: rgba(255, 255, 255, 0.2); /* fundo claro e translúcido */
+         backdrop-filter: blur(10px); /* aplica o desfoque no fundo */
+
+        /* background-color: rgba(255, 255, 255, 0.6); branco com 60% de opacidade */
+        /* color: black; Ajuste a cor do texto para melhor contraste */
+        
+        color: white; /* Example: Adjust text color for readability */
+        text-align: center;
+        padding: 50px;
+        min-height: 100vh; /* Ensure content area is tall enough to see background */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+}
+
+.fundo-translucido {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
+/* 
+.topo{
+    background-color: transparent;
+    display: flex;
+    background-color: wheat;
+    justify-content: space-between;
+    border-radius: 10px;
+} */
+
+/* .menutopo{
+    background-color: wheat;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px;
+    border: 15%;
+    
+} */
+.login{
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+    border-radius: 20px;
+    /* border:#B17871 solid 4px; */
+    flex-flow: column;
+
+    align-items: center;
+
+}
+
+.login label{
+    border-radius: 10px;
+    margin-bottom: 5px;
+    /* color: #B17871; */
+    font-size: 20px;
+    text-align: center;
+    padding: 2px;
+}
+
+.login a{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+
+    flex-flow: row wrap;
+    justify-content: space-around; 
+
+     height: 80px;
+    width: 100px;
+}
+
+#container{
+    background-color: #f5f5f5;
+    /* border: 2px solid black); */
+    display: flex;
+    /* coloca uma direção na estrutura dos elementos do site */
+    flex-direction: column;
+    /* justify center alinha o conteudo ao centro */
+    justify-self: center;
+    /* width define a largura do container */
+    width: 1300px;
+    /* height deixa altura automatica conforme o conteudo */
+    height: auto;
+}
+
+.banner{
+/* ativa flexbox */
+display: flex;
+/* define direção do conteúdo */
+flex-direction: row wrap ;
+/* alinha o conteúdo */
+justify-content: space-between;
+
+
+}
+
+.banner-texto{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgb(29, 26, 26);
+    font-size: larger;
+    text-align: start;
+    padding: 30px;
+
+}
+.banner-texto i{
+    display: block; /* Faz ele ser um bloco, ficando no topo */
+  align-items: center;  /* alinha o conteúdo interno verticalmente, se tiver */
+  /* margin-right: 10px; */
+}
+
+.menus{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly; 
+}
+
+.menu1{
+  width: 250px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    /* background-color: rgb(238, 223, 196); quase um cinza*/ 
+    background-color: rgb(248, 193, 193);
+
+    margin: 30px;
+    border-radius: 20px;
+    border: #3b5e47 solid 4px;
+    /* border:rgba(255, 255, 255, 0.2) solid 4px; */
+    flex-flow: column;
+
+    align-items: center;
+    
+}
+
+.menu1 label{
+    border-radius: 10px;
+    margin-bottom: 5px;
+    color: #000000;
+    font-size: 20px;
+    text-align: center;
+    padding: 2px;
+}
+
+.menu333{
+  width: 250px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    /* background-color: rgb(238, 223, 196); quase um cinza*/ 
+    background-color: #3A5F9A;
+    /* background: linear-gradient(145deg, #1A2A3A, #4F6D8C); */
+    margin: 30px;
+    border-radius: 20px;
+    border: #3B3B3B solid 4px;
+    /* border:rgba(255, 255, 255, 0.2) solid 4px; */
+    flex-flow: column;
+
+    align-items: center;
+    
+}
+
+.menu333 label{
+    border-radius: 10px;
+    margin-bottom: 5px;
+    color: #C0C0C0;
+    font-size: 20px;
+    text-align: center;
+    padding: 2px;
+}

@@ -1,0 +1,89 @@
+body {
+  background-color: black;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  padding: 20px;
+}
+
+.console-box {
+  border: 2px solid #00ff00;
+  padding: 20px;
+  width: fit-content;
+  margin: auto;
+  font-size: 16px;
+}
+
+.centralizado {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.retangulo {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid #00ff00;
+  background-color: black;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  margin-top: 5px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+p{
+    text-align: center;
+}
+.resposta-bloco {
+  margin-top: 8px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+input[type="number"] {
+  background-color: black;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  font-family: 'Courier New', monospace;
+  padding: 5px;
+  width: 80px;
+}
+
+input[type="submit"] {
+  background-color: black;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  font-family: 'Courier New', monospace;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+input[type="text"] {
+  background-color: black;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  font-family: 'Courier New', monospace;
+  padding: 5px;
+  width: 50px;
+}
+
+.resultado {
+  margin-top: 6px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.comando-bloco {
+  margin-top: 15px;
+  text-align: center;
+}
+
+pre {
+  color: #00ff00;
+  background-color: black;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  text-align: center;
+}

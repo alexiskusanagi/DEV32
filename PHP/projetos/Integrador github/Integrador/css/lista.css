@@ -1,0 +1,60 @@
+.body{
+background-color:#4facfe ;
+}
+
+.lista{
+    background-color: whitesmoke;
+    border-radius: 20px;
+    padding: 5px;
+    width: auto;
+    height: auto;
+}
+
+/* propriedades básicas de tabela */
+table{
+border-collapse: collapse;
+width: 100%;
+
+}
+
+td, th{
+    background-color: beige;
+border: 1px solid black;
+text-align: center;
+
+
+}
+/* não vai funcionar por causa do td,th beige;
+tr:hover {
+    background-color: blue;
+} */
+
+td:hover{
+background-color: rgb(140, 197, 235);
+
+}
+
+.filtro{
+background-color: rgb(207, 203, 203);
+width: 280px;
+border: 2px;
+padding: 5px;
+border-radius: 2px;
+}
+
+#cat_imagem{
+border-radius: 5px;
+border: 5px;
+
+
+}
+
+.listabkoffice
+input[type='date']
+{
+    height: 40px;
+    border-radius: 10px;
+    border: solid 2px #B17871	;
+    background-color: #FFF	;
+    color: rgb(101, 101, 101);
+}

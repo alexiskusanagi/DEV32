@@ -1,0 +1,124 @@
+body{
+    width: auto;
+}
+.global{
+    display: flex;
+    flex-flow: row;
+    width: 90%;
+    height: auto;
+    border-radius: 20px;
+    justify-self: center;
+}
+
+.global h1{
+    margin-top: 50px;
+    color: whitesmoke;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.formulario{
+    height: auto;
+    margin-top: 20px;
+    background-color: #4facfe;
+    width: 90%;
+    border-radius: 20px;
+    background-color: rgb(20, 133, 185);
+}
+
+.login{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 15px;
+}
+
+.login label{
+    color: whitesmoke	;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.login input[type='text'],
+input[type='password'],
+input[type='number'], 
+input[type='date'],
+textarea,
+input[type='decimal']{
+    height: 40px;
+    border-radius: 10px;
+    border: solid 2px rgb(20, 133, 185);	;
+    background-color: #FFF	;
+    color: rgb(101, 101, 101);
+}
+
+.opt{
+    height: 40px;
+    border-radius: 10px;
+    border: solid 2px #B17871	;
+    background-color: #FFF	;
+    color: rgb(101, 101, 101);
+}
+
+.opt:focus{
+        border-radius: 10px;
+        border-color: #c5dcf5;
+        outline: none;
+        box-shadow: 0 0 3px #007bff80;
+    }
+
+.opt option::checkmark{
+    background-color: #B17871;
+}
+
+.login input[type='submit']{
+    background-color: whitesmoke	;
+    border-radius: 20px;
+    font-family: Arial, sans-serif;
+    color: rgb(9, 57, 99);
+    border: none;
+    height: 50px;
+}
+
+.login input[type='submit']:hover {
+    background-color: rgb(20, 133, 185);;
+    border-radius: 20px;
+    font-family: Arial, sans-serif;
+    color: rgb(28, 29, 30);
+    border: none;
+    height: 50px;
+    
+    cursor: pointer; /* SUGESTÃO DE PONTEIRO GUILHERME (PONTEIRO MÃOZINHA) */
+}
+
+
+/* AJUSTAR OS RADIOS BUTTONS JUNTAMENTE COM O LABEL */
+.rbativo{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+.rbativo input[type='radio'], label{
+    padding: 5px;
+}
+
+
+.imagem{
+    height: auto;
+    margin-top: 20px;
+    background-color: #4facfe;
+    width: 90%;
+    border-radius: 20px;
+    border: rgb(20, 133, 185) solid 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+}
+
+.imagem img{
+    width: 70%;
+    height: auto;
+    border-radius: 10px;
+}

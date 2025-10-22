@@ -1,0 +1,199 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #4facfe;
+    /*background-image:url*/
+}
+ 
+ 
+ 
+ 
+.topo{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    background-color: rgb(20, 133, 185);
+    border-radius: 30 px;
+    height: 75 px;
+    /* font-family: 'SchuboiseHandwrite', sans-serif; */
+     
+    }
+
+    .topo h1{
+        margin-left: 20px;
+        /* font-family: 'SchuboiseHandwrite', sans-serif; */
+    }
+     
+    .logout{
+    width: 100px;
+    height: auto;
+    margin-right:20px ;
+    margin-top: 20px;
+    display: flex;
+    }
+
+
+     /* personalizando apenas o input do botao de logout */
+     .logout input[type=submit]{
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        border: 2px solid rgb(red, green, blue);
+     }
+
+    
+    .menus{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        margin-top: 10px;
+     
+    }
+     
+    /* menu pode ser renomeado para .card */
+     .menu1 
+    /*.menu2, .menu3, .menu4, .menu5, .menu6*/{  
+        width: 400px;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        background-color: black;
+       
+        margin: 20px;
+        border-radius: 20px;
+        flex-flow: row wrap;
+        align-items: center;
+     
+    }
+
+    
+ 
+.menus a{
+    width: 300px ;
+    height: 50px ;
+    
+}
+
+/* .menus p{
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    font-size:  15px;
+    border-radius: 5px;
+    
+} */
+
+.texto-card{
+    
+    background-color: #4facfe; 
+    border: blue solid 2px;
+    width: 300px;
+    border-radius: 10px;
+    margin: 20px;
+    border-color: whitesmoke;
+    font-size: 20px;
+    text-align: center;
+    padding: 2px ;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+ 
+.menu1 text, label{
+    margin-top: 20px;
+    color: whitesmoke;
+    font-size: 25px;
+    text-align: center;
+    padding: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.menu1 a, .menu2 a, .menu3 a, .menu4 a, .menu5 a, .menu6 a {
+display: flex;
+justify-content: center;
+/* margin-top: 40px; */
+
+}
+
+
+
+/* Tabela de agendamentos */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  text-align: center;
+  font-size: 16px;
+  color: #000;
+}
+
+th {
+  background-color: wheat;
+  font-weight: bold;
+}
+
+/* Botão de alterar (amarelo suave, sem hover) */
+.alterar {
+  background-color: #fff176;
+  color: #000;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Botão de cancelar (vermelho suave, sem hover) */
+.cancelar {
+  background-color: #ef5350;
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Mensagem de bloqueio */
+.bloqueado {
+  color: #333;
+  font-style: italic;
+  font-size: 14px;
+}
+
+/* Título da página */
+.global h2 {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 28px;
+  color: #000;
+}
+
+.status-confirmado {
+  color: green;
+  font-weight: bold;
+}
+
+.status-cancelado {
+  color: red;
+  font-weight: bold;
+}
+
+.cancelada {
+  color: #242323;
+  font-style: italic;
+  font-size: 14px;
+}
+
+td.id, th.id {
+  display: none;
+}
+

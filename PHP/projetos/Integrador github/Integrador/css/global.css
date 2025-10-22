@@ -1,0 +1,106 @@
+/* estilo do todo */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #4facfe;
+    /*background-image:url*/
+}
+ 
+ 
+ 
+ 
+.topo{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    background-color: wheat;
+    border-radius: 30 px;
+    height: 75 px;
+    /* font-family: 'SchuboiseHandwrite', sans-serif; */
+     
+    }
+
+    .topo h1{
+        margin-left: 20px;
+        /* font-family: 'SchuboiseHandwrite', sans-serif; */
+    }
+     
+    .logout{
+    width: 100px;
+    height: auto;
+    margin-right:20px ;
+    margin-top: 20px;
+    display: flex;
+    }
+
+
+     /* personalizando apenas o input do botao de logout */
+     .logout input[type=submit]{
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        border: 2px solid rgb(red, green, blue);
+     }
+
+    /* .logout input[type="submit"]{
+        width: 100%;
+        height: 100%;
+        background-color: red;
+        color: rgb(255, 255, 255);
+        border-radius: 20px;
+        border: none;
+        font-size: 20px;
+    } */
+    .menus{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+     
+    }
+     
+    .menu1{
+  width: 250px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 30px;
+    border-radius: 20px;
+    border:rgba(255, 255, 255, 0.2) solid 4px;
+    flex-flow: column;
+
+    align-items: center;
+    
+}
+
+.menu1 label{
+    border-radius: 10px;
+    margin-bottom: 5px;
+    color: #000000;
+    font-size: 20px;
+    text-align: center;
+    padding: 2px;
+}
+
+.login label{
+    border-radius: 10px;
+    margin-bottom: 5px;
+    /* color: #B17871; */
+    font-size: 20px;
+    text-align: center;
+    padding: 2px;
+}
+
+.login a{
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+
+    flex-flow: row wrap;
+    justify-content: space-around; 
+
+     height: 80px;
+    width: 100px;
+}

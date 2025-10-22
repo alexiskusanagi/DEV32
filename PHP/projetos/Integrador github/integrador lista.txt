@@ -1,0 +1,19 @@
+integrador lista
+
+-fazer o banco de dados SQL
+-fazer a tela de cadastro do funcionário
+-fazer tela de login e logout do funcionário
+-fazer a tela de cadastro do cliente
+-fazer tela de login e logout do cliente
+-fazer o BackOffice
+-fazer a tela de agendamento
+-fazer a tela de catalogo (seleção) de serviços atrelada ao agendamento
+-fazer cadastro de serviço? creio que sim.
+-fazer as listas para backoffice
+-terminar os cards e textos das páginas html
+-ajustes finais no css
+
+
+
+logo de ia site
+https://deepai.org/machine-learning-model/text2img

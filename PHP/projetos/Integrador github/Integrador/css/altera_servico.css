@@ -1,0 +1,140 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #4facfe;
+    width: auto;
+    padding: 20px;
+}
+
+/* Container geral */
+.global {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+/* Imagem exibida no topo */
+.global label {
+    font-size: 18px;
+    color: whitesmoke;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.global img {
+    max-width: 300px;
+    height: auto;
+    border-radius: 15px;
+    border: 3px solid white;
+    margin-bottom: 20px;
+}
+
+/* Formulário principal */
+.formulario {
+    background-color: rgb(20, 133, 185);
+    border-radius: 20px;
+    width: 90%;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Link de voltar */
+.formulario a img {
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.formulario a img:hover {
+    transform: scale(1.1);
+}
+
+/* Form interno */
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login label {
+    color: whitesmoke;
+    font-size: 18px;
+}
+
+.login input[type='text'],
+.login input[type='number'],
+.login input[type='date'],
+.login input[type='decimal'],
+.login input[type='file'],
+.login textarea,
+.login select {
+    height: 40px;
+    border-radius: 10px;
+    border: solid 2px rgb(20, 133, 185);
+    background-color: #fff;
+    color: rgb(51, 51, 51);
+    padding: 8px;
+    font-size: 16px;
+}
+
+.login textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.login select {
+    width: 100%;
+}
+
+.login input[type='submit'] {
+    background-color: whitesmoke;
+    border-radius: 20px;
+    border: none;
+    color: black;
+    font-size: 16px;
+    height: 45px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login input[type='submit']:hover {
+    background-color: #ffffffcc;
+    color: rgb(20, 133, 185);
+}
+
+/* Radio buttons agrupados */
+.rbativo {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.rbativo input[type='radio'] {
+    margin-right: 5px;
+}
+
+/* Select de horário */
+.login select[name='txttempo'] {
+    height: 40px;
+}
+
+/* Responsividade simples */
+@media (max-width: 768px) {
+    .global,
+    .formulario {
+        width: 100%;
+    }
+
+    .global img {
+        max-width: 100%;
+    }
+}

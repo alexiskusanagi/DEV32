@@ -1,0 +1,44 @@
+integrador lista
+
+-fazer o banco de dados SQL
+-fazer a tela de cadastro do funcionário
+-fazer tela de login e logout do funcionário
+-fazer a tela de cadastro do cliente
+-fazer tela de login e logout do cliente
+-fazer o BackOffice
+-fazer a tela de agendamento
+-fazer a tela de catalogo (seleção) de serviços atrelada ao agendamento
+-fazer cadastro de serviço? creio que sim.
+-fazer as listas para backoffice
+-terminar os cards e textos das páginas html
+-ajustes finais no css
+
+
+
+logo de ia site
+https://deepai.org/machine-learning-model/text2img
+
+instrução e contexto para ia
+
+contexto do projeto em php/html os arquivos css são sempre separados
+estou criando um site de hospedagem/hotel e vou explicar um pouco da estrutura do projeto (tudo o que já foi feito e não precisa de alteração nenhuma)
+dentro da pasta raiz há o backoffice.php (somente o administrador tem acesso total a essa página, funcionários tem acesso parcial e clientes não tem acesso)
+dentro do backoffice o administrador tem acesso a:
+-cadastrar serviços
+-exibir uma lista de serviços
+-cadastrar funcionários
+-exibir uma lista de funcionários
+-cadastrar clientes
+-exibir uma lista de clientes
+-ver agendamentos
+-acessar catálogo de produtos 
+já o funcionário somente tem acesso a:
+-exibir uma lista de serviços
+-cadastrar clientes
+-exibir uma lista de clientes
+-ver agendamentos
+-acessar catálogo de produtos (observação. catalogo.php está numa outra pasta chamada areacliente, mais informações sobre essa pasta mais abaixo)
+
+também dentro da pasta raiz há uma pasta chamada areacliente. Aqui é onde os arquivos pertinentes ao cliente estão.
+lembrando que há dois arquivos cadastra cliente. Um para o administrador/funcionário (na pasta raiz) e outro para o próprio cliente (pasta areacliente)
+
