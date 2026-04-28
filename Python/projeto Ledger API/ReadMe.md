@@ -17,7 +17,6 @@ bash
 # Configurar o banco de dados via Docker
 docker-compose up -d
 
-Use o código com cuidado.
 2. Ambiente Python
 bash
 
