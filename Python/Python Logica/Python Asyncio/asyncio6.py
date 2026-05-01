@@ -26,3 +26,38 @@ o tempo total esperado que deve aparecer no seu terminal?
 ( ) 20 segundos
 ( ) 6.6 segundos
 ( ) 8 segundos (Dica: Pense em quantas "viagens" o robô fará para ler grupos de 3)."""
+
+import asyncio
+import time
+
+semaforo = asyncio.Semaphore(3)
+
+async def ler_sensor(id):
+    async with semaforo:
+        try:
+            print(f"Lendo sensor {id}...")
+            
+            resultado = await asyncio.wait_for(asyncio.sleep(2), timeout=2.01)
+            return f"Sensor {id} lido com sucesso"
+
+        except asyncio.TimeoutError:
+            return f"O sensor {id} não foi lido pois demorou mais de 2.01 segundos pra responder"
+
+async def main():
+    inicio = time.perf_counter()
+    tarefas = []
+    for i in range (1,11):
+        tarefas.append(ler_sensor(i))
+    
+    resultados = await asyncio.gather(*tarefas)
+    
+    print("\nRelatório Final\n")
+    for r in resultados:
+        print (r)
+
+
+    fim = time.perf_counter()
+
+    print(f"Tempo total: {fim - inicio:.2f} segundos\n")
+
+asyncio.run(main())

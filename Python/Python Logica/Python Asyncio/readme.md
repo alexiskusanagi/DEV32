@@ -43,3 +43,28 @@ Este repositório contém uma série de exercícios práticos para dominar a pro
 
 ---
 
+Desafio: O Monitor de Sensores
+Objetivo: Ler dados de 10 sensores de temperatura simultaneamente.
+As Regras do Jogo:
+
+    A Função do Sensor: Crie uma função assíncrona chamada ler_sensor(id_sensor).
+        Ela deve simular uma leitura que demora 2 segundos (Dica: use await asyncio.sleep(2)).
+        Ela deve retornar uma string: "Sensor {id_sensor}: 25°C".
+    O Semáforo: A fábrica tem uma rede limitada. Você só pode ler 3 sensores por vez. Configure um asyncio.Semaphore(3) para controlar isso dentro da função ler_sensor.
+    O Timeout: O sistema não pode esperar para sempre. Se um sensor demorar mais que 2.1 segundos para responder, ele deve ser descartado (Dica: use asyncio.wait_for).
+    O Disparo Principal: No main(), você deve:
+        Criar uma lista com 10 chamadas da função ler_sensor.
+        Usar o asyncio.gather para disparar todas e capturar os resultados.
+        Imprimir o tempo total que o programa levou para rodar (Dica: use time.perf_counter() antes e depois).
+
+O que você vai precisar no topo do código:
+python
+
+import asyncio
+import time
+
+# Seu código começa aqui...
+
+Use o código com cuidado.
+Dica de Ouro: Lembre-se que para rodar a função principal, você usa asyncio.run(main()) no final do arquivo.
+Quer tentar escrever esse código no seu VS Code e me avisar se travar em algum erro ou quando terminar? Se quiser, posso te explicar como estruturar o try/except para o erro do Timeout antes de você começar!
