@@ -17,7 +17,6 @@ bash
 # Configurar o banco de dados via Docker
 docker-compose up -d
 
-Use o código com cuidado.
 2. Ambiente Python
 bash
 
@@ -27,11 +26,9 @@ python -m venv .venv
 # Instalação de dependências:
 pip install "fastapi[all]" sqlalchemy psycopg2-binary
 
-Use o código com cuidado.
 3. Inicialização
 bash
 
 uvicorn main:app --reload
 
-Use o código com cuidado.
 Acesse: http://localhost:8000/docs
