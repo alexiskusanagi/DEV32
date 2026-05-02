@@ -1,0 +1,20 @@
+
+Projeto Agente Autonomo Conversor de CV/dados_privados.py
+Projeto Agente Autonomo Conversor de CV/__pycache__/
+# Arquivos de dados sensíveis
+dados_privados.py
+
+# Pastas de cache do Python (geradas automaticamente)
+__pycache__/
+*.pyc
+
+# Arquivos de ambiente virtual (caso você crie um futuramente)
+venv/
+.env
+
+# Arquivos gerados pelo sistema
+.DS_Store
+Thumbs.db
+
+# PDFs gerados para teste (opcional, mas evita subir lixo para o GitHub)
+*.pdf
