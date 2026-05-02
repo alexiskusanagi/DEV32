@@ -1,4 +1,4 @@
-# Career Automation Agent: ATS Optimization Engine
+# Agente Automático de Carreira: Motor de Otimização ATS
 
 ## Descrição do Projeto
 Este projeto consiste em um sistema de automação de carreira desenvolvido para mitigar as barreiras impostas por sistemas de triagem automática de candidatos (Applicant Tracking Systems - ATS). O programa realiza o processamento de descrições de vagas de emprego, identifica competências críticas através de uma lógica de pareamento inteligente e gera automaticamente um currículo otimizado em formato PDF, priorizando informações relevantes e omitindo dados que possam diluir a qualificação do candidato para a oportunidade específica.
