@@ -65,23 +65,24 @@ def preparar_conteudo_pdf(skills_confirmadas):
             
     return conteudo_para_pdf
 
-# --- TESTE PRÁTICO ---
-vaga_linkedin = """Procuramos Dev .NET em Ribeirão Preto. 
-Necessário Inglês avançado para leitura de documentação técnica. 
-Desejável conhecimento em bancos relacionais e Docker."""
+if __name__ == "__main__":
+    # --- TESTE PRÁTICO ---
+    vaga_linkedin = """Procuramos Dev .NET em Ribeirão Preto. 
+    Necessário Inglês avançado para leitura de documentação técnica. 
+    Desejável conhecimento em bancos relacionais e Docker."""
 
-skills, score = analisar_match_inteligente(vaga_linkedin)
+    skills, score = analisar_match_inteligente(vaga_linkedin)
 
-# --- EXECUÇÃO ATUALIZADA ---
-skills, score = analisar_match_inteligente(vaga_linkedin)
-lista_para_escrever = preparar_conteudo_pdf(skills)
+    # --- EXECUÇÃO ATUALIZADA ---
+    skills, score = analisar_match_inteligente(vaga_linkedin)
+    lista_para_escrever = preparar_conteudo_pdf(skills)
 
 
-print(f"Match Score: {score}%")
-print(f"O bot encontrou: {skills}")
-print(f"\nConteúdo selecionado para o PDF baseado no Match de {score}%:")
-for linha in lista_para_escrever:
-    print(f"-> {linha}")
+    print(f"Match Score: {score}%")
+    print(f"O bot encontrou: {skills}")
+    print(f"\nConteúdo selecionado para o PDF baseado no Match de {score}%:")
+    for linha in lista_para_escrever:
+        print(f"-> {linha}")
 
 
 

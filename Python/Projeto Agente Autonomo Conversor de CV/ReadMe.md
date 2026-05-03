@@ -1,23 +1,27 @@
-# Agente Automático de Carreira: Motor de Otimização ATS
+# Career Automation Agent: ATS Optimization Engine (v1.0)
 
-## Descrição do Projeto
-Este projeto consiste em um sistema de automação de carreira desenvolvido para mitigar as barreiras impostas por sistemas de triagem automática de candidatos (Applicant Tracking Systems - ATS). O programa realiza o processamento de descrições de vagas de emprego, identifica competências críticas através de uma lógica de pareamento inteligente e gera automaticamente um currículo otimizado em formato PDF, priorizando informações relevantes e omitindo dados que possam diluir a qualificação do candidato para a oportunidade específica.
+## Status do Projeto
+A **Versão 1.0** foi concluída com sucesso, estabelecendo um Produto Mínimo Viável (MVP) funcional que automatiza a análise de aderência e a geração de documentos customizados.
 
-## Arquitetura e Funcionalidades
-O sistema é estruturado em módulos independentes para garantir a escalabilidade e manutenção do código:
+## Funcionalidades Implementadas
+*   **Análise Inteligente de Vagas:** Processamento de descrições de cargos (Job Descriptions) com identificação de palavras-chave e cálculo de *Match Score*.
+*   **Dicionário de Sinônimos Técnicos:** Motor preparado para identificar variações terminológicas (ex: .NET, C#, Asp.Net) garantindo precisão na detecção de competências.
+*   **Poda Dinâmica de Experiências (Pruning):** Filtro automático que seleciona apenas os blocos de texto do histórico profissional que possuem relevância direta para a vaga analisada.
+*   **Geração Automatizada de PDF:** Exportação de currículo otimizado com formatação técnica, utilizando a biblioteca `fpdf2`.
+*   **Arquitetura Modular:** Separação clara entre a lógica de análise (`analyser.py`), configurações de privacidade (`dados_privados.py`) e orquestração do sistema (`main.py`).
 
-*   **Processamento de Perfil Mestre:** O sistema mantém uma base de dados estruturada com o histórico profissional completo, competências técnicas (hard skills), habilidades interpessoais (soft skills) e idiomas.
-*   **Motor de Decisão (Match Engine):** Através de análise de strings e dicionários de sinônimos técnicos, o algoritmo identifica a compatibilidade entre o perfil do usuário e os requisitos da vaga, calculando um índice de relevância (Match Score).
-*   **Poda Dinâmica de Dados (Pruning):** Baseado no resultado do motor de decisão, o sistema seleciona blocos de texto específicos e descrições de experiências que possuem correlação direta com a vaga, garantindo que o documento final seja conciso e estratégico.
-*   **Geração de Documentação:** Utilização de bibliotecas de manipulação de documentos para a reconstrução do currículo em PDF, aplicando formatação profissional e garantindo a legibilidade tanto para algoritmos quanto para recrutadores humanos.
+## Tecnologias e Segurança
+*   **Linguagem:** Python 3.x
+*   **Bibliotecas:** FPDF2
+*   **Segurança:** Implementação de proteção de dados sensíveis via `.gitignore`, garantindo que informações pessoais não sejam expostas em repositórios públicos.
 
-## Tecnologias Utilizadas
-A solução foi implementada utilizando a linguagem **Python**, explorando recursos de programação orientada a objetos e estruturas de dados complexas. Foram aplicadas práticas de segurança da informação, como a separação de dados sensíveis em ambientes locais protegidos por arquivos de configuração e exclusões de rastreamento de versão via `.gitignore`.
-
-## Diferenciais Técnicos
-*   Lógica de tratamento de sinônimos para identificação de variações terminológicas no setor de tecnologia.
-*   Algoritmo de filtragem que evita a redundância e melhora o posicionamento do candidato em triagens automáticas.
-*   Arquitetura preparada para integração com APIs de busca de vagas e processamento de linguagem natural.
+## Próximos Passos (Roadmap Versão 2.0)
+1.  **Refinamento Estético:** Implementação de layout avançado para o PDF baseado em modelos profissionais.
+2.  **Parser de Entrada:** Leitura automatizada do currículo mestre em formato PDF para alimentação do motor de dados.
+3.  **Integração Web (Opcional):** Web scraping de agregadores de vagas para automação da coleta de requisitos.
 
 ---
-*Este projeto faz parte de um ecossistema de ferramentas de produtividade para desenvolvedores em transição de carreira.*
+*Desenvolvido como projeto de portfólio para demonstração de competências em Engenharia de Software e Automação. Este projeto faz parte de um ecossistema de ferramentas de produtividade para desenvolvedores em transição de carreira.*
+
+---
+
