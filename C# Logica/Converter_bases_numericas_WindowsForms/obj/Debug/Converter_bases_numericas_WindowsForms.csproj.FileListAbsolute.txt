@@ -1,0 +1,11 @@
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\bin\Debug\Converter_bases_numericas_WindowsForms.exe.config
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\bin\Debug\Converter_bases_numericas_WindowsForms.exe
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\bin\Debug\Converter_bases_numericas_WindowsForms.pdb
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.csproj.AssemblyReference.cache
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.Form1.resources
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.Properties.Resources.resources
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.csproj.GenerateResource.cache
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.csproj.CoreCompileInputs.cache
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.exe
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.pdb
+C:\Users\Alex\source\repos\Converter_bases_numericas_WindowsForms\obj\Debug\Converter_bases_numericas_WindowsForms.exe.config
