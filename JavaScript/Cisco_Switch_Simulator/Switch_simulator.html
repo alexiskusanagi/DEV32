@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cisco CLI Guided Simulator - Camada 3</title>
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --panel-bg: #2d2d2d;
+            --text-color: #f1f1f1;
+            --cli-bg: #000000;
+            --cli-text: #00ff00;
+            --accent: #007acc;
+            --warning: #ffcc00;
+            --success: #4ec9b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 320px 1fr 320px;
+            gap: 15px;
+            min-height: 95vh;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+        }
+
+        h3 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cli-container {
+            flex: 1;
+            background-color: var(--cli-bg);
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: inset 0 0 10px rgba(0,255,0,0.2);
+        }
+
+        #cli-screen {
+            flex: 1;
+            overflow-y: auto;
+            color: var(--cli-text);
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+
+        .cli-input-area {
+            display: flex;
+            align-items: center;
+        }
+
+        #cli-prompt {
+            color: var(--cli-text);
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        #cli-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--cli-text);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            outline: none;
+        }
+
+                /* ==========================================
+        🎛️ ESTILIZAÇÃO E FIXAÇÃO DA SCROLLBAR DOS PAINÉIS
+        ========================================== */
+        
+        /* Força a barra de rolagem a ficar SEMPRE visível nos painéis de rolagem */
+        .scrollable-list, #cli-screen {
+            overflow-y: scroll !important; /* Muda de auto para scroll permanente */
+        }
+
+        /* Define a largura da barra de rolagem (Design Moderno Dark) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        /* Estilo do fundo da canaleta por onde a barra corre */
+        ::-webkit-scrollbar-track {
+            background: #252526; 
+            border-radius: 4px;
+        }
+ 
+        /* Estilo do botão arrastável (a barra em si) */
+        ::-webkit-scrollbar-thumb {
+            background: #424242; 
+            border-radius: 4px;
+        }
+
+        /* Efeito de destaque quando você passa o mouse sobre a barra */
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent); 
+        }
+
+
+        .command-item {
+            margin-bottom: 8px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 4px;
+        }
+
+        .command-name { color: #569cd6; font-weight: bold; }
+        .warning-text { color: var(--warning); font-weight: bold; }
+
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+                /* ==========================================
+        🌲 ESTILOS ADICIONAIS PARA A COMMAND TREE (PASSO 4)
+        ========================================== */
+        
+        /* Ajuste do container principal do modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 85%;
+            border-radius: 10px;
+            z-index: 1000;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        /* Formatação das ramificações em árvore */
+        .tree-level {
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* Estilo para destacar os códigos de comando */
+        .tree-level code {
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #ce9178;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        /* Efeito de destaque ao passar o mouse sobre um nível da árvore */
+        .tree-level:hover {
+            border-left-color: var(--accent) !important;
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- PAINEL ESQUERDO: Ajuda Guiada (Requisito 1) -->
+    <div class="panel">
+        <h3>Menu Help (Comandos)</h3>
+        <div id="help-list" class="scrollable-list"></div>
+    </div>
+
+    <!-- CENTRO: CLI e Botão de Árvore (Design Original Limpo e Corrigido) -->
+    <div class="main-content">
+        <!-- Menu seletor de objetivos guiados -->
+        <div style="background-color: var(--panel-bg); padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; box-sizing: border-box;">
+            <label for="mission-selector" style="font-weight: bold; font-size: 14px; color: var(--accent); font-family: 'Segoe UI', sans-serif;">🎯 Escolha um Objetivo de Estudo:</label>
+            <select id="mission-selector" style="flex: 1; background-color: #1e1e1e; color: #fff; border: 1px solid var(--accent); padding: 6px; border-radius: 4px; cursor: pointer; outline: none; font-family: 'Segoe UI', sans-serif;" onchange="changeMissionObjective()">
+                <option value="welcome">-- Selecione um Objetivo para Iniciar --</option>
+                <option value="ip_svi">🔹 Objetivo 1: Configurar IP de Gerenciamento (VLAN 1) e Testar Ping</option>
+                <option value="security_line">🔹 Objetivo 2: Configurar Senhas de Acesso (Console e VTY)</option>
+                <option value="vlan_access">🔹 Objetivo 3: Criar VLANs Customizadas e Mover Portas</option>
+                <option value="port_security">🔹 Objetivo 4: Ativar Defesa Port-Security contra Hackers</option>
+            </select>
+        </div>
+
+        <!-- CLI CONTAINER ORIGINAL -->
+        <div class="cli-container">
+            <div id="cli-screen">--- Simulador Switch Cisco (Modo Guiado) ---
+
+Bem-vindo ao seu laboratório de estudos Cisco!
+
+Fique de olho no menu "Help" à esquerda e no status à direita para se orientar.
+Escolha um objetivo no menu superior para carregar o roteiro guiado passo a passo. Bons estudos!</div>
+            <div class="cli-input-area">
+                <span id="cli-prompt">Switch></span>
+                <input type="text" id="cli-input" autofocus autocomplete="off">
+            </div>
+        </div>
+        
+        <!-- BOTÕES FORMATADOS NO PADRÃO ORIGINAL EMBAIXO DA CLI -->
+        <div style="display: flex; gap: 10px;">
+            <button class="btn" style="flex: 1;" onclick="toggleModal()">Ver Mapa de Comandos (Command Tree)</button>
+            <button class="btn" style="flex: 1; background-color: #d9534f;" onclick="uiResetSwitch()">🟥 Reset Switch (Gráfico)</button>
+        </div>
+    </div>
+
+    <!-- PAINEL DIREITO: Histórico, Passwords e Laboratório (Requisitos 2, 3 e 8) -->
+    <div class="panel" style="gap: 15px;">
+        <div style="flex: 1; display: flex; flex-direction: column; max-height: 30%;">
+            <h3>Histórico de Comandos</h3>
+            <div id="history-list" class="scrollable-list"></div>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <h3>Configuração e Status</h3>
+            <div id="status-display" class="scrollable-list" style="color: #ff8c00; font-family: monospace;"></div>
+        </div>
+    </div>
+
+        <!-- MODAL: Command Tree (Passo 4 Completo e Gamificado) -->
+    <div id="tree-modal" class="modal" style="background-color: #252526; color: #d4d4d4; border: 2px solid var(--accent); padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+        <button class="btn" style="background-color: #d9534f; float: right; margin-top: -5px;" onclick="toggleModal()">❌ Fechar Mapa</button>
+        <h2 style="color: var(--accent); margin-top: 0; border-bottom: 2px solid #3e3e42; padding-bottom: 10px; font-family: 'Segoe UI', sans-serif;">🛡️ Command Tree - Mapa de Navegação da CLI</h2>
+        
+        <p style="font-size: 14px; color: #858585; margin-bottom: 20px;">Use este mapa mental para entender a hierarquia dos modos de acesso e submodos do Switch Cisco. Cada nível libera comandos específicos!</p>
+
+        <div class="tree-level" style="margin-left: 5px; border-left: 2px solid #3e3e42; padding-left: 15px;">
+            <strong style="color: #569cd6; font-size: 16px;">[Nível 1] Modo Usuário (Switch>)</strong>
+            <div style="margin: 5px 0 15px 10px; font-size: 13px; color: #b5cea8;">➔ Comandos livres: <code>ping</code>, <code>exit</code></div>
+            
+            <div class="tree-level" style="margin-left: 15px; border-left: 2px dashed #4ecc9b; padding-left: 15px;">
+                <div style="color: #4ecc9b; font-weight: bold; margin-bottom: 5px;">➔ Digite: <code>enable</code></div>
+                <strong style="color: #4ec9b0; font-size: 16px;">[Nível 15] Modo Privilegiado (Switch#)</strong>
+                <div style="margin: 5px 0 15px 10px; font-size: 13px; color: #b5cea8;">➔ Comandos de infraestrutura: <code>show mac address-table</code>, <code>show interfaces status</code>, <code>show vlan brief</code>, <code>show ip interface brief</code>, <code>show running-config</code>, <code>atacar</code>, <code>disable</code></div>
+                <div style="margin: 5px 0 15px 10px; font-size: 13px; color: #ce9178;">➔ Comandos de memória: <code>copy running-config startup-config</code> (ou <code>wr</code>), <code>erase startup-config</code>, <code>reload</code></div>
+                
+                <div class="tree-level" style="margin-left: 20px; border-left: 2px dashed #ffd700; padding-left: 15px;">
+                    <div style="color: #ffd700; font-weight: bold; margin-bottom: 5px;">➔ Digite: <code>configure terminal</code></div>
+                    <strong style="color: #ffd700; font-size: 16px;">Modo Configuração Global (Switch(config)#)</strong>
+                    <div style="margin: 5px 0 15px 10px; font-size: 13px; color: #b5cea8;">➔ Comandos globais: <code>hostname [nome]</code>, <code>banner motd #[msg]#</code>, <code>enable secret [senha]</code>, <code>service password-encryption</code>, <code>exit</code></div>
+                    
+                    <!-- Ramificação dos Submodos de Linha -->
+                    <div class="tree-level" style="margin-left: 25px; border-left: 2px dotted #ff8c00; padding-left: 15px; margin-bottom: 15px;">
+                        <div style="color: #ff8c00; font-weight: bold; margin-bottom: 3px;">➔ Digite: <code>line console 0</code></div>
+                        <span style="color: #ff8c00; font-weight: bold;">Submodo Linha Console (Switch(config-line)#)</span>
+                        <div style="margin: 3px 0 0 10px; font-size: 13px; color: #d4d4d4;">Comandos: <code>password [senha]</code>, <code>login</code>, <code>exit</code></div>
+                    </div>
+
+                    <div class="tree-level" style="margin-left: 25px; border-left: 2px dotted #ff8c00; padding-left: 15px; margin-bottom: 15px;">
+                        <div style="color: #ff8c00; font-weight: bold; margin-bottom: 3px;">➔ Digite: <code>line vty 0 15</code></div>
+                        <span style="color: #ff8c00; font-weight: bold;">Submodo Linha VTY (Switch(config-line)#)</span>
+                        <div style="margin: 3px 0 0 10px; font-size: 13px; color: #d4d4d4;">Comandos: <code>password [senha]</code>, <code>login</code>, <code>exit</code></div>
+                    </div>
+
+                    <!-- Ramificação do Submodo VLAN Customizada -->
+                    <div class="tree-level" style="margin-left: 25px; border-left: 2px dotted #9cdcfe; padding-left: 15px; margin-bottom: 15px;">
+                        <div style="color: #9cdcfe; font-weight: bold; margin-bottom: 3px;">➔ Digite: <code>vlan [número]</code></div>
+                        <span style="color: #9cdcfe; font-weight: bold;">Submodo Configuração de VLAN (Switch(config-vlan)#)</span>
+                        <div style="margin: 3px 0 0 10px; font-size: 13px; color: #d4d4d4;">Comandos: <code>name [nome]</code>, <code>exit</code></div>
+                    </div>
+
+                    <!-- Ramificação do Submodo Interface Virtual -->
+                    <div class="tree-level" style="margin-left: 25px; border-left: 2px dotted #c586c0; padding-left: 15px; margin-bottom: 15px;">
+                        <div style="color: #c586c0; font-weight: bold; margin-bottom: 3px;">➔ Digite: <code>interface vlan 1</code></div>
+                        <span style="color: #c586c0; font-weight: bold;">Submodo Interface Virtual SVI (Switch(config-if)#)</span>
+                        <div style="margin: 3px 0 0 10px; font-size: 13px; color: #d4d4d4;">Comandos: <code>ip address [ip] [máscara]</code>, <code>no shutdown</code>, <code>exit</code></div>
+                    </div>
+
+                    <!-- Ramificação do Submodo Interface Física (Access/Trunk/Port Security) -->
+                    <div class="tree-level" style="margin-left: 25px; border-left: 2px dotted #4ec9b0; padding-left: 15px; margin-bottom: 5px;">
+                        <div style="color: #4ec9b0; font-weight: bold; margin-bottom: 3px;">➔ Digite: <code>interface fastethernet 0/[1-5]</code> (ou <code>int fa [1-5]</code>)</div>
+                        <span style="color: #4ec9b0; font-weight: bold;">Submodo Interface Física (Switch(config-if)#)</span>
+                        <div style="margin: 3px 0 5px 10px; font-size: 13px; color: #d4d4d4;">Comandos de Camada 2: <code>switchport mode access</code>, <code>switchport mode trunk</code>, <code>switchport access vlan [número]</code>, <code>exit</code></div>
+                        <div style="margin: 0 0 0 10px; font-size: 13px; color: #d9534f; font-weight: bold;">Comandos de Segurança: <code>switchport port-security</code>, <code>switchport port-security mac-address sticky</code>, <code>shutdown</code>, <code>no shutdown</code></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+               // Banco de dados original elegante com comandos de memória inclusos
+               // Banco de dados original elegante com suporte a VLANs e Interfaces Físicas (Passo 3)
+        const commandDatabase = {
+            user: {
+                prompt: ">",
+                commands: {
+                    "enable": "Entra no Modo Privilegiado (avança para Switch#).",
+                    "exit": "Encerra a sessão no switch.",
+                    "ping <IP>": "Testa conectividade com um host da rede (Ex: ping 192.168.1.10)."
+                }
+            },
+            privileged: {
+                prompt: "#",
+                commands: {
+                    "configure terminal": "Entra no Modo de Configuração Global.",
+                    "disable": "Volta para o Modo Usuário.",
+                    "show running-config": "Exibe a configuração atual em RAM.",
+                    "show ip interface brief": "Mostra o resumo dos IPs e status das interfaces.",
+                    "ping <IP>": "Testa conectividade a partir do Switch.",
+                    "copy running-config startup-config": "Salva as configurações atuais na NVRAM.",
+                    "write memory": "Atalho para salvar as configurações na NVRAM.",
+                    "erase startup-config": "Apaga as configurações salvas na NVRAM.",
+                    "reload": "Reinicia o Switch fisicamente.",
+                    "show mac address-table": "Exibe a tabela de mapeamento de portas e endereços MAC.",
+                    "show interfaces status": "Exibe o status físico, velocidade e duplex das portas do switch.",
+                    "show vlan brief": "Exibe a tabela compactada de VLANs criadas e suas respectivas portas associadas."
+                }
+            },
+            global: {
+                prompt: "(config)#",
+                commands: {
+                    "exit": "Volta para o Modo Privilegiado (Switch#).",
+                    "hostname <nome>": "Altera o nome de identificação do Switch e do prompt.",
+                    "banner motd # <mensagem> #": "Configura uma mensagem de aviso exibida no login do switch.",
+                    "enable secret <senha>": "Cria uma senha secreta criptografada.",
+                    "service password-encryption": "Criptografa as senhas visualmente nas configurações.",
+                    "line console 0": "Entra na configuração da linha de Console.",
+                    "line vty 0 15": "Entra na configuração das linhas remotas VTY.",
+                    "interface vlan 1": "Entra na configuração de rede da Interface de Gerenciamento.",
+                    "vlan <numero>": "Cria ou entra no submodo de configuração de uma VLAN específica (Ex: vlan 10).",
+                    "interface fastethernet <numero>": "Entra na configuração de uma interface física (Ex: interface fastethernet 0/1)."
+                }
+            },
+            line_console: {
+                prompt: "(config-line)#",
+                commands: { "exit": "Volta para o Modo Global.", "password <senha>": "Define a senha da Console.", "login": "Ativa a exigência da senha." }
+            },
+            line_vty: {
+                prompt: "(config-line)#",
+                commands: { "exit": "Volta para o Modo Global.", "password <senha>": "Define a senha VTY.", "login": "Ativa a exigência da senha." }
+            },
+            interface_vlan: {
+                prompt: "(config-if)#",
+                commands: { "exit": "Volta para o Modo Global.", "ip address <IP> <MASCARA>": "Define o IP e Máscara Classe C.", "no shutdown": "Ativa a interface." }
+            },
+            // NOVO SUBMODO: Para configurar o nome das VLANs
+            sub_vlan: {
+                prompt: "(config-vlan)#",
+                commands: { "exit": "Volta para o Modo Global.", "name <nome>": "Define um nome amigável para identificar a VLAN." }
+            },
+            // NOVO SUBMODO: Para configurar portas físicas (Portas de Acesso)
+                        // Atualize apenas essa chave dentro do seu commandDatabase original:
+            interface_fisica: {
+                prompt: "(config-if)#",
+                commands: { 
+                    "exit": "Volta para o Modo Global.", 
+                    "switchport mode access": "Configura a interface no modo de acesso definitivo.", 
+                    "switchport mode trunk": "Configura a interface no modo Trunk (Super estrada para carregar todas as VLANs).", // NOVO
+                    "switchport access vlan <numero>": "Atribui e move a porta física para dentro de uma VLAN específica.",
+                    "switchport port-security": "Ativa o recurso de segurança de MAC nesta porta física.",
+                    "switchport port-security mac-address sticky": "Gruda e autoriza permanentemente o endereço MAC do computador atual.",
+                    "shutdown": "Desativa administrativamente a porta física.",
+                    "no shutdown": "Ativa ou remove o bloqueio de violação da porta física."
+                }
+            }
+        }
+
+
+               // Estado interno do Simulador em Cache (RAM) - Passo 4 Atualizado
+        let currentMode = 'user';
+        let commandHistory = [];
+        
+        let configMemory = {
+            hostname: "Switch",
+            bannerMotd: null,
+            enableSecret: null,
+            encryptionActive: false,
+            console: { password: null, hasLogin: false },
+            vty: { password: null, hasLogin: false },
+            vlan1: { ip: null, mask: null, isUp: false },
+            vlans: { 1: "default" },
+            activeVlanId: null,
+            activePhysicalPort: null,
+            
+            // NOVO: Controle individual de segurança para cada uma das 5 portas físicas
+            portSecurity: {
+                "fa0/1": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                "fa0/2": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                "fa0/3": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                "fa0/4": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                "fa0/5": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false }
+            }
+        };
+
+        let nvramMemory = null;
+        let simulatedPCs = [];
+
+        // Mapeamento dos elementos do HTML (Inalterado, mantido no topo conforme o seu)
+        const cliScreen = document.getElementById('cli-screen');
+        const cliInput = document.getElementById('cli-input');
+        const cliPrompt = document.getElementById('cli-prompt');
+        const helpList = document.getElementById('help-list');
+        const historyList = document.getElementById('history-list');
+        const statusDisplay = document.getElementById('status-display');
+
+        function generateNetworkHosts() {
+            const hostNumbers =[10,11,12,13,14];
+            const hex = "0123456789abcdef";
+            
+            simulatedPCs = hostNumbers.map((num, index) => {
+                let mac = "0060.2f";
+                for(let i=0; i<4; i++) {
+                    mac += "." + hex[Math.floor(Math.random()*16)] + hex[Math.floor(Math.random()*16)];
+                }
+                // AJUSTE: Cada PC agora nasce mapeado na porta física e inicialmente na VLAN 1 de fábrica
+                return { ip: `192.168.1.${num}`, mac: mac, port: `Fa0/${index + 1}`, vlan: 1 };
+            });
+        }
+        generateNetworkHosts();
+
+        // 🟢 AS TRÊS FUNÇÕES VISUAIS FORAM MOVIDAS PARA CÁ (RESOLVE O BLOQUEIO DO ENABLE)
+                // ==========================================
+        // 🟢 FUNÇÕES VISUAIS DA INTERFACE (MANTIDAS NO TOPO)
+        // ==========================================
+        
+        function updateHelpMenu() {
+            helpList.innerHTML = '';
+            const activeCmds = commandDatabase[currentMode].commands;
+            for (let cmd in activeCmds) {
+                helpList.innerHTML += `
+                    <div class="command-item">
+                        <div class="command-name">${cmd}</div>
+                        <div>${activeCmds[cmd]}</div>
+                    </div>`;
+            }
+        }
+
+        function renderPrompt() {
+            const host = configMemory.hostname || "Switch";
+            const suffix = commandDatabase[currentMode].prompt;
+            cliPrompt.innerText = host + suffix;
+        }
+
+                       function updateStatusDisplay() {
+            const enc = configMemory.encryptionActive ? "🔒 [Criptografada]" : "🔓 [Texto Claro]";
+            
+            let pcListHTML = simulatedPCs.map(pc => {
+                const portaChave = pc.port.toLowerCase();
+                const secConfig = configMemory.portSecurity[portaChave] || { isEnabled: false, isSticky: false, isViolated: false };
+                
+                let vlanVisual = pc.vlan === "trunk" 
+                    ? `<span style="color:#ffd700; font-weight:bold;">TRUNK (Todas)</span>` 
+                    : `<span style="color:#4ec9b0;">VLAN: ${pc.vlan}</span>`;
+                
+                let secVisual = secConfig.isEnabled 
+                    ? `<span style="color:#4ec9b0; font-weight:bold;">🔒 ON${secConfig.isSticky ? "-STICKY" : ""}</span>` 
+                    : `<span style="color:#888;">🔓 OFF</span>`;
+                
+                let saudeVisual = `<span style="color:#4ec9b0;">🟩 Ativa</span>`;
+                if (secConfig.isViolated) {
+                    saudeVisual = `<span style="color:#d9534f; font-weight:bold;">🚨 BLOQUEADA (Violation)</span>`;
+                }
+
+                return `<div style="margin-bottom: 6px;">💻 IP: ${pc.ip} | ${vlanVisual} <br>&nbsp;&nbsp;&nbsp;Porta: ${pc.port.toUpperCase()} | Sec: ${secVisual} | Status: ${saudeVisual}</div>`;
+            }).join('');
+
+             // 🟢 NOVO: Cria a variável que analisa se há dados na NVRAM para exibir o aviso correto
+            const nvramStatus = nvramMemory 
+                ? `<span style="color:#4ec9b0; font-weight:bold;">💾 SALVA (Em NVRAM)</span>` 
+                : `<span style="color:#ffcc00; font-weight:bold;">⚠️ NÃO SALVA (Apenas em RAM)</span>`;
+
+            statusDisplay.innerHTML = `
+<strong>--- INFRAESTRUTURA ---</strong><br>
+Hostname: <b>${configMemory.hostname}</b><br>
+Banner MOTD: ${configMemory.bannerMotd ? "✅ Configurado" : "❌ Nenhum"}<br>
+<hr style="border-color:#555;">
+<strong>--- ARQUIVOS DE SISTEMA ---</strong><br>
+Configuração: ${nvramStatus}<br>
+<hr style="border-color:#555;">
+<strong>--- CREDENCIAIS ---</strong><br>
+Secret: ${configMemory.enableSecret ? "✅ " + configMemory.enableSecret : "❌ Não definida"}<br>
+Con Pass: ${configMemory.console.password ? "✅ " + configMemory.console.password + " " + enc : "❌ Não definida"}<br>
+&nbsp;&nbsp;➔ Login: ${configMemory.console.hasLogin ? "🟢 OK" : "🔴 Falta 'login'"}<br>
+VTY Pass: ${configMemory.vty.password ? "✅ " + configMemory.vty.password + " " + enc : "❌ Não definida"}<br>
+&nbsp;&nbsp;➔ Login: ${configMemory.vty.hasLogin ? "🟢 OK" : "🔴 Falta 'login'"}<br>
+<hr style="border-color:#555;">
+<strong>--- SWITCH CAMADA 3 (VLAN 1) ---</strong><br>
+IP Configurado: ${configMemory.vlan1.ip ? "✅ " + configMemory.vlan1.ip : "❌ Nenhum"}<br>
+Máscara: ${configMemory.vlan1.mask ? configMemory.vlan1.mask : "❌ Nenhuma"}<br>
+Status Interface: ${configMemory.vlan1.isUp ? "🟩 UP (Ativa)" : "🟥 DOWN (Desativada)"}<br>
+<hr style="border-color:#555;">
+<strong>--- DISPOSITIVOS NA REDE (PINGÁVEIS) ---</strong><br>
+${pcListHTML}
+            `;
+        }
+
+
+
+        function addToHistory(commandText) {
+            commandHistory.push(`[${configMemory.hostname}${commandDatabase[currentMode].prompt}] ${commandText}`);
+            document.getElementById('history-list').innerHTML = commandHistory.map(cmd => `<div>${cmd}</div>`).join('');
+            const histList = document.getElementById('history-list');
+            histList.scrollTop = histList.scrollHeight;
+        }
+
+        // ==========================================
+        // 💾 FUNÇÕES DE GERENCIAMENTO DE MEMÓRIA (RAM / NVRAM)
+        // ==========================================
+
+        function saveConfigToNVRAM() {
+            nvramMemory = JSON.parse(JSON.stringify(configMemory));
+            cliScreen.innerHTML += `\nDestination filename [startup-config]? \nBuilding configuration...\n[OK]`;
+            updateStatusDisplay();
+        }
+
+        function eraseNVRAM() {
+            nvramMemory = null;
+            cliScreen.innerHTML += `\n[OK] Erase of nvram: complete`;
+            updateStatusDisplay();
+        }
+
+                function reloadSwitch() {
+            cliScreen.innerHTML += `\nProceed with reload? [confirm]\n\n*** System Bootstrap, Version 12.4(15)T ***\n`;
+            setTimeout(() => {
+                if (nvramMemory) {
+                    configMemory = JSON.parse(JSON.stringify(nvramMemory));
+                } else {
+                    configMemory = {
+                        hostname: "Switch", bannerMotd: null, enableSecret: null, encryptionActive: false,
+                        console: { password: null, hasLogin: false }, vty: { password: null, hasLogin: false },
+                        vlan1: { ip: null, mask: null, isUp: false }, vlans: { 1: "default" }, activeVlanId: null, activePhysicalPort: null,
+                        portSecurity: {
+                            "fa0/1": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                            "fa0/2": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                            "fa0/3": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                            "fa0/4": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                            "fa0/5": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false }
+                        }
+                    };
+                    simulatedPCs.forEach(pc => { pc.vlan = 1; });
+                }
+                currentMode = 'user';
+                document.getElementById('mission-selector').value = 'welcome'; // 🟢 Zera o menu superior primeiro
+                renderPrompt(); updateHelpMenu(); updateStatusDisplay();
+                cliScreen.innerHTML += `\n[BOOT COMPLETO]\n`;
+                cliScreen.scrollTop = cliScreen.scrollHeight;
+            }, 1000);
+        }
+
+                function uiResetSwitch() {
+            nvramMemory = null;
+            configMemory = {
+                hostname: "Switch", bannerMotd: null, enableSecret: null, encryptionActive: false,
+                console: { password: null, hasLogin: false }, vty: { password: null, hasLogin: false },
+                vlan1: { ip: null, mask: null, isUp: false }, vlans: { 1: "default" }, activeVlanId: null, activePhysicalPort: null,
+                portSecurity: {
+                    "fa0/1": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                    "fa0/2": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                    "fa0/3": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                    "fa0/4": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false },
+                    "fa0/5": { isEnabled: false, isSticky: false, authorizedMac: null, isViolated: false }
+                }
+            };
+            currentMode = 'user';
+            commandHistory = [];
+            generateNetworkHosts(); 
+            document.getElementById('mission-selector').value = 'welcome'; // 🟢 Zera o menu superior primeiro
+            cliScreen.innerHTML = `--- Switch Resetado com Sucesso via Painel Gráfico ---`;
+            renderPrompt(); updateHelpMenu(); updateStatusDisplay();
+        }
+
+
+        // ==========================================
+        // 🌐 FUNÇÃO DE DIAGNÓSTICO (PING)
+        // ==========================================
+
+               // FUNÇÃO DE DIAGNÓSTICO (PING) - ATUALIZADA COM TRAVA DE SEGURANÇA PORT-SECURITY
+        function executePing(targetIP) {
+            cliScreen.innerHTML += `\nType escape sequence to abort.\nSending 5, 100-byte ICMP Echos to ${targetIP}, timeout is 2 seconds:`;
+            
+            // Validações de Camada 3 existentes
+            if (!configMemory.vlan1.ip) {
+                cliScreen.innerHTML += `\n.....\n<span class="warning-text">% ERRO: O Switch não tem um IP configurado na VLAN 1. Ele não consegue enviar pacotes!</span>`;
+                return;
+            }
+            if (!configMemory.vlan1.isUp) {
+                cliScreen.innerHTML += `\n.....\n<span class="warning-text">% ERRO: A interface VLAN 1 está DOWN. Esqueceu do comando 'no shutdown'?</span>`;
+                return;
+            }
+
+            // Busca o PC de destino correspondente ao IP digitado
+            const targetPC = simulatedPCs.find(pc => pc.ip === targetIP);
+            
+            if (targetPC) {
+                const portaChave = targetPC.port.toLowerCase();
+                const secConfig = configMemory.portSecurity[portaChave];
+
+                // 🛑 CORREÇÃO/NOVO: Se a porta do PC alvo sofreu uma violação de segurança, o pacote morre aqui!
+                if (secConfig && secConfig.isViolated) {
+                    cliScreen.innerHTML += `\n.....\nSuccess rate is 0 percent (0/5) - [Porta ${targetPC.port.toUpperCase()} Bloqueada por Violação de Segurança]`;
+                    return;
+                }
+
+                cliScreen.innerHTML += `\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 1/3/8 ms`;
+            } else {
+                cliScreen.innerHTML += `\n.....\nSuccess rate is 0 percent (0/5)`;
+            }
+        }
+
+
+                // FUNÇÃO DE MISSÕES GUIADAS (OPCIONAIS - NÃO TRAVA A CLI)
+        function changeMissionObjective() {
+            const selector = document.getElementById('mission-selector');
+            const objetivo = selector.value;
+            
+            // Limpa o terminal e redesenha a mensagem de boas-vindas com o roteiro escolhido
+            cliScreen.innerHTML = `--- Simulador Switch Cisco (Modo Guiado) ---\n\n`;
+
+            if (objetivo === 'welcome') {
+                cliScreen.innerHTML += `Bem-vindo ao seu laboratório de estudos Cisco!\n\nFique de olho no menu "Help" à esquerda e no status à direita para se orientar.\nEscolha uma missão no menu superior para carregar o roteiro guiado passo a passo. Bons estudos!`;
+            } 
+            else if (objetivo === 'ip_svi') {
+                cliScreen.innerHTML += `🎯 OBJETIVO: Configurar IP de Gerenciamento (VLAN 1)\n------------------------------------------------\n` +
+                    `1. Digite 'enable' para entrar no Modo Privilegiado (Switch#).\n` +
+                    `2. Digite 'configure terminal' para entrar no Modo Global.\n` +
+                    `3. Digite 'interface vlan 1' para entrar na interface virtual.\n` +
+                    `4. Digite 'ip address 192.168.1.254 255.255.255.0' para atribuir o IP.\n` +
+                    `5. Digite 'no shutdown' para ativar a interface física/lógica.\n` +
+                    `6. Volte ao prompt privilegiado com 'exit' e teste: 'ping 192.168.1.10'.`;
+            } 
+            else if (objetivo === 'security_line') {
+                cliScreen.innerHTML += `🎯 OBJETIVO: Configurar Senhas de Acesso (Console e VTY)\n-----------------------------------------------------\n` +
+                    `1. Entre no Modo Global ('enable' -> 'configure terminal').\n` +
+                    `2. Digite 'enable secret cisco123' para proteger o modo privilegiado.\n` +
+                    `3. Acesse a console física: digite 'line console 0'.\n` +
+                    `4. Defina a senha com 'password cisco' e ative-a obrigatoriamente com o comando 'login'.\n` +
+                    `5. Saia com 'exit' e faça o mesmo para o acesso de rede: 'line vty 0 15'.\n` +
+                    `6. Ative a criptografia visual de todas as senhas simples com: 'service password-encryption'.`;
+            } 
+            else if (objetivo === 'vlan_access') {
+                cliScreen.innerHTML += `🎯 OBJETIVO: Criar VLANs Customizadas e Mover Portas\n----------------------------------------------------\n` +
+                    `1. Entre no Modo Global ('enable' -> 'configure terminal').\n` +
+                    `2. Crie a rede de Vendas digitando 'vlan 10'.\n` +
+                    `3. Dê um nome amigável para ela digitando 'name Vendas' e saia com 'exit'.\n` +
+                    `4. Acesse a porta do primeiro computador: 'interface fastethernet 0/1'.\n` +
+                    `5. Defina o tipo da porta: 'switchport mode access'.\n` +
+                    `6. Mova a porta para a rede nova: 'switchport access vlan 10' e olhe o painel da direita!\n` +
+                    `7. Dica extra: Acesse a porta 2 ('int fa 0/2') e mude-a para super estrada com 'switchport mode trunk'.`;
+            } 
+            else if (objetivo === 'port_security') {
+                cliScreen.innerHTML += `🎯 OBJETIVO: Ativar Defesa Port-Security contra Hackers\n-----------------------------------------------------\n` +
+                    `1. Acesse a porta física 1: ('enable' -> 'conf t' -> 'interface fastethernet 0/1').\n` +
+                    `2. Certifique-se de que ela está em modo access ('switchport mode access').\n` +
+                    `3. Ative o guarda da porta: digite 'switchport port-security' (veja o cadeado fechar à direita).\n` +
+                    `4. Amarre o MAC bom do computador atual: 'switchport port-security mac-address sticky'.\n` +
+                    `5. Volte para o prompt inicial ('exit' até o 'Switch>') e simule uma invasão: digite 'atacar fa0/1'.\n` +
+                    `6. Veja o switch travar a porta! Para recuperar, volte na interface e dê 'shutdown' seguido de 'no shutdown'.`;
+            }
+
+            cliScreen.innerHTML += `\n\n[DICA]: Você é livre para ignorar este roteiro e programar outros comandos fora da ordem sugerida!`;
+            cliScreen.scrollTop = cliScreen.scrollHeight;
+        }
+
+        
+                // Processador de comandos principal - PASSO 3 (PARTE 1 DE 2)
+        function processCommand(input) {
+            const cleanInput = input.trim();
+            if(!cleanInput) return;
+
+            addToHistory(cleanInput);
+            
+            const host = configMemory.hostname || "Switch";
+            const suffix = commandDatabase[currentMode].prompt;
+            cliScreen.innerHTML += `\n${host}${suffix} ${cleanInput}`;
+
+            const lowerInput = cleanInput.toLowerCase();
+
+                        // --- MODO USER (Switch>) ---
+            if (currentMode === 'user') {
+                if (lowerInput === 'enable') { currentMode = 'privileged'; }
+                // NOVO: Comando de ataque hacker simulado
+                else if (lowerInput.startsWith('atacar ')) {
+                    const portaAlvo = cleanInput.substring(7).trim().toLowerCase();
+                    const secConfig = configMemory.portSecurity[portaAlvo];
+                    
+                    if (secConfig) {
+                        cliScreen.innerHTML += `\n[ATAQUE] Desconectando PC legítimo e plugando notebook hacker na porta ${portaAlvo.toUpperCase()}...`;
+                        
+                        // Se o port-security estiver ativo na porta do switch, ela sofre a punição da Cisco!
+                        if (secConfig.isEnabled) {
+                            secConfig.isViolated = true;
+                            cliScreen.innerHTML += `\n\n%PORT_SECURITY-2-VIOLATION: Security violation occurred, caused by MAC address 00e0.bc11.2233 on port FastEthernet${portaAlvo.replace('fa', '')}. Interface FastEthernet${portaAlvo.replace('fa', '')} is down (err-disabled)`;
+                        } else {
+                            cliScreen.innerHTML += `\n[OK] Ataque bem-sucedido! Como a segurança estava desligada (🔓 OFF), o hacker ganhou acesso sem travar a porta.`;
+                        }
+                    } else { cliScreen.innerHTML += `\n% Porta inválida para ataque (Use fa0/1 até fa0/5).`; }
+                }
+                else if (lowerInput.startsWith('ping ')) { executePing(cleanInput.substring(5).trim()); }
+                else if (lowerInput === 'exit') { cliScreen.innerHTML += `\nSessão encerrada.`; }
+                else { cliScreen.innerHTML += `\n% Comando inválido.`; }
+            } 
+            // --- MODO PRIVILEGED (Switch#) ---
+            else if (currentMode === 'privileged') {
+                if (lowerInput === 'configure terminal') { currentMode = 'global'; }
+                else if (lowerInput === 'disable' || lowerInput === 'exit') { currentMode = 'user'; }
+                // NOVO: Comando de ataque também disponível no modo privilegiado para testes rápidos
+                else if (lowerInput.startsWith('atacar ')) {
+                    const portaAlvo = cleanInput.substring(7).trim().toLowerCase();
+                    const secConfig = configMemory.portSecurity[portaAlvo];
+                    if (secConfig) {
+                        cliScreen.innerHTML += `\n[ATAQUE] Desconectando PC legítimo e plugando notebook hacker na porta ${portaAlvo.toUpperCase()}...`;
+                        if (secConfig.isEnabled) {
+                            secConfig.isViolated = true;
+                            cliScreen.innerHTML += `\n\n%PORT_SECURITY-2-VIOLATION: Security violation occurred, caused by MAC address 00e0.bc11.2233 on port FastEthernet${portaAlvo.replace('fa', '')}. Interface FastEthernet${portaAlvo.replace('fa', '')} is down (err-disabled)`;
+                        } else { cliScreen.innerHTML += `\n[OK] Ataque bem-sucedido! Porta sem segurança.`; }
+                    } else { cliScreen.innerHTML += `\n% Porta inválida.`; }
+                }
+                else if (lowerInput.startsWith('ping ')) { executePing(cleanInput.substring(5).trim()); }
+                else if (lowerInput === 'copy running-config startup-config' || lowerInput === 'write memory' || lowerInput === 'wr') { saveConfigToNVRAM(); }
+                else if (lowerInput === 'erase startup-config') { eraseNVRAM(); }
+                else if (lowerInput === 'reload') { reloadSwitch(); } 
+                else if (lowerInput === 'show mac address-table') {
+                    cliScreen.innerHTML += `\n          Mac Address Table\n-------------------------------------------\nVlan    Mac Address       Type        Ports\n----    -----------       ----        -----\n`;
+                    // AJUSTE: Agora exibe a VLAN real que o PC pertence dinamicamente na tabela
+                    simulatedPCs.forEach(pc => { cliScreen.innerHTML += `   ${pc.vlan}    ${pc.mac.padEnd(18)}DYNAMIC     ${pc.port}\n`; });
+                } 
+                else if (lowerInput === 'show interfaces status') {
+                    cliScreen.innerHTML += `\nPort      Name               Status       Vlan       Duplex  Speed Type\n`;
+                    // AJUSTE: O relatório de status de portas agora reflete a VLAN dinâmica configurada
+                    simulatedPCs.forEach(pc => { cliScreen.innerHTML += `${pc.port.padEnd(10)}connected          connected    ${pc.vlan.toString().padEnd(13)}auto    auto  10/100BaseTX\n`; });
+                } 
+                // NOVO COMANDO: Exibe o relatório clássico de VLANs ativas e suas portas associadas
+                else if (lowerInput === 'show vlan brief') {
+                    cliScreen.innerHTML += `\nVLAN Name                             Status    Ports\n---- -------------------------------- --------- -------------------------------\n`;
+                    for (let id in configMemory.vlans) {
+                        let nomeVlan = configMemory.vlans[id].padEnd(32);
+                        let portasDaVlan = simulatedPCs.filter(pc => pc.vlan == id).map(pc => pc.port).join(', ');
+                        cliScreen.innerHTML += `${id.padEnd(4)} ${nomeVlan} active    ${portasDaVlan}\n`;
+                    }
+                }
+                else if (lowerInput === 'show ip interface brief') {
+                    const statusStr = configMemory.vlan1.isUp ? "up                  up" : "administratively down down";
+                    const ipStr = configMemory.vlan1.ip ? configMemory.vlan1.ip.padEnd(20) : "unassigned          ";
+                    cliScreen.innerHTML += `\nInterface              Interface_IP        OK? Method Status                Protocol\nVlan1                  ${ipStr}YES manual ${statusStr}`;
+                } 
+                else if (lowerInput === 'show running-config') {
+                    const pCon = configMemory.encryptionActive ? "0822GH5" : configMemory.console.password;
+                    const pVty = configMemory.encryptionActive ? "0822GH5" : configMemory.vty.password;
+                    // AJUSTE: O show run agora lista as VLANs customizadas criadas e seus nomes!
+                    let vlanConfigText = "";
+                    for(let id in configMemory.vlans) { if(id != 1) vlanConfigText += `\nvlan ${id}\n name ${configMemory.vlans[id]}`; }
+                    cliScreen.innerHTML += `\nBuilding configuration...\n!\nhostname ${configMemory.hostname}\n${configMemory.bannerMotd ? "banner motd # " + configMemory.bannerMotd + " #" : "!"}${vlanConfigText}\n!\ninterface Vlan1\n ${configMemory.vlan1.ip ? "ip address " + configMemory.vlan1.ip + " " + configMemory.vlan1.mask : "no ip address"}\n ${configMemory.vlan1.isUp ? "no shutdown" : "shutdown"}\n!\nline con 0\n password ${pCon || "não definida"}\n ${configMemory.console.hasLogin ? "login" : "!"}\nline vty 0 15\n password ${pVty || "não definida"}\n ${configMemory.vty.hasLogin ? "login" : "!"}`;
+                } else { cliScreen.innerHTML += `\n% Comando inválido.`; }
+            } 
+            // --- MODO GLOBAL (Switch(config)#) ---
+            else if (currentMode === 'global') {
+                if (lowerInput === 'exit') { currentMode = 'privileged'; } 
+                else if (lowerInput.startsWith('hostname ')) {
+                    configMemory.hostname = cleanInput.substring(9).trim();
+                    cliScreen.innerHTML += `\n[OK] Nome alterado para '${configMemory.hostname}'.`;
+                } 
+                else if (lowerInput.startsWith('banner motd ')) {
+                    configMemory.bannerMotd = cleanInput.substring(12).replace(/#/g, '').trim();
+                    cliScreen.innerHTML += `\n[OK] Banner MOTD configurado.`;
+                }
+                else if (lowerInput.startsWith('enable secret ')) { configMemory.enableSecret = cleanInput.substring(14).trim(); } 
+                else if (lowerInput === 'service password-encryption') { configMemory.encryptionActive = true; } 
+                else if (lowerInput === 'line console 0') { currentMode = 'line_console'; } 
+                else if (lowerInput === 'line vty 0 15') { currentMode = 'line_vty'; } 
+                else if (lowerInput === 'interface vlan 1') { currentMode = 'interface_vlan'; } 
+                // NOVO COMANDO GLOBAL: Cria ou entra no modo VLAN (Ex: vlan 10)
+                else if (lowerInput.startsWith('vlan ')) {
+                    const idVlan = parseInt(cleanInput.substring(5).trim());
+                    if (idVlan >= 2 && idVlan <= 4094) {
+                        configMemory.activeVlanId = idVlan;
+                        if (!configMemory.vlans[idVlan]) { configMemory.vlans[idVlan] = "VLAN" + idVlan; }
+                        currentMode = 'sub_vlan';
+                    } else { cliScreen.innerHTML += `\n% VLAN inválida. Escolha um número entre 2 e 4094.`; }
+                }
+                                // NOVO COMANDO GLOBAL CORRIGIDO: Captura a interface física aceitando qualquer variação de espaço
+                else if (lowerInput.includes('interface fastethernet ') || lowerInput.includes('int fa ')) {
+                    // Extrai o número da porta pegando tudo o que vem depois da palavra "fastethernet" ou "fa"
+                    let portaDigitada = cleanInput.toLowerCase();
+                    if (portaDigitada.includes('fastethernet')) {
+                        portaDigitada = portaDigitada.substring(portaDigitada.indexOf('fastethernet') + 12).trim();
+                    } else {
+                        portaDigitada = portaDigitada.substring(portaDigitada.indexOf('fa') + 2).trim();
+                    }
+
+                    // Se o usuário digitou apenas o número (ex: "1"), normaliza para o padrão "0/1"
+                    if (!portaDigitada.includes('/')) {
+                        portaDigitada = "0/" + portaDigitada;
+                    }
+
+                    // Valida se a porta existe no ecossistema (fa0/1 até fa0/5)
+                    const portaExiste = simulatedPCs.some(pc => pc.port.toLowerCase() === portaDigitada || pc.port.toLowerCase() === "fa" + portaDigitada);
+                    
+                    if (portaExiste) {
+                        configMemory.activePhysicalPort = portaDigitada.startsWith('0/') ? "fa" + portaDigitada : portaDigitada;
+                        currentMode = 'interface_fisica';
+                        cliScreen.innerHTML += `\nEntrou na configuração da interface física ${configMemory.activePhysicalPort.toUpperCase()}.`;
+                    } else { 
+                        cliScreen.innerHTML += `\n% Interface inválida ou não conectada (Use de fa0/1 até fa0/5).`; 
+                    }
+                }}
+
+
+            // --- SUBMODO LINE CONSOLE (Switch(config-line)#) ---
+                        else if (currentMode === 'line_console') {
+                if (lowerInput === 'exit') {
+                    // ALERTA: Configurou senha na Console mas esqueceu o login
+                    if (configMemory.console.password && !configMemory.console.hasLogin) {
+                        cliScreen.innerHTML += `\n<span class="warning-text">% AVISO GUIADO: Você configurou uma senha para a Console, mas esqueceu do comando 'login'. Sem ele, o switch não exigirá a senha ao conectar!</span>`;
+                    }
+                    currentMode = 'global';
+                } 
+                else if (lowerInput.startsWith('password ')) { configMemory.console.password = cleanInput.substring(9).trim(); } 
+                else if (lowerInput === 'login') { configMemory.console.hasLogin = true; cliScreen.innerHTML += `\n[OK] Autenticação ativada para esta linha.`; } 
+                else { cliScreen.innerHTML += `\n% Erro na linha.`; }
+            }
+ 
+            // --- SUBMODO LINE VTY (Switch(config-line)#) ---
+                        else if (currentMode === 'line_vty') {
+                if (lowerInput === 'exit') {
+                    // ALERTA: Configurou senha no VTY mas esqueceu o login
+                    if (configMemory.vty.password && !configMemory.vty.hasLogin) {
+                        cliScreen.innerHTML += `\n<span class="warning-text">% AVISO GUIADO: Você configurou uma senha para as linhas virtuais (VTY), mas não aplicou o comando 'login'. Usuários remotos conseguirão logar sem senha!</span>`;
+                    }
+                    currentMode = 'global';
+                } 
+                else if (lowerInput.startsWith('password ')) { configMemory.vty.password = cleanInput.substring(9).trim(); } 
+                else if (lowerInput === 'login') { configMemory.vty.hasLogin = true; cliScreen.innerHTML += `\n[OK] Autenticação remota ativada para VTY.`; } 
+                else { cliScreen.innerHTML += `\n% Erro na linha vty.`; }
+            }
+ 
+            // --- SUBMODO INTERFACE VLAN (Switch(config-if)#) ---
+                        else if (currentMode === 'interface_vlan') {
+                if (lowerInput === 'exit') {
+                    // ALERTA: Colocou IP na VLAN mas esqueceu o no shutdown
+                    if (configMemory.vlan1.ip && !configMemory.vlan1.isUp) {
+                        cliScreen.innerHTML += `\n<span class="warning-text">% AVISO GUIADO: O IP foi adicionado à VLAN 1, mas a interface continua inativa (shutdown). Lembre-se do comando 'no shutdown' para ativá-la administrativamente!</span>`;
+                    }
+                    currentMode = 'global';
+                } 
+                else if (lowerInput.startsWith('ip address ')) {
+                    const args = cleanInput.substring(11).trim().split(/\s+/);
+                    if (args.length === 2) {
+                        configMemory.vlan1.ip = args[0]; configMemory.vlan1.mask = args[1];
+                        cliScreen.innerHTML += `\n[OK] Interface Vlan1 configurada com o IP ${args[0]}.`;
+                    } else { cliScreen.innerHTML += `\n% Sintaxe errada.`; }
+                } 
+                else if (lowerInput === 'no shutdown') {
+                    configMemory.vlan1.isUp = true;
+                    cliScreen.innerHTML += `\n%LINK-5-CHANGED: Interface Vlan1, changed state to up\n%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up`;
+                } else { cliScreen.innerHTML += `\n% Erro de parâmetro.`; }
+            }
+
+            // --- NOVO SUBMODO: CONFIGURAÇÃO DE VLAN (Switch(config-vlan)#) ---
+            else if (currentMode === 'sub_vlan') {
+                if (lowerInput === 'exit') {
+                    currentMode = 'global';
+                    configMemory.activeVlanId = null;
+                } 
+                else if (lowerInput.startsWith('name ')) {
+                    const nomeEscolhido = cleanInput.substring(5).trim();
+                    if(nomeEscolhido.length > 0) {
+                        configMemory.vlans[configMemory.activeVlanId] = nomeEscolhido;
+                        cliScreen.innerHTML += `\n[OK] VLAN ${configMemory.activeVlanId} nomeada como "${nomeEscolhido}".`;
+                    } else {
+                        cliScreen.innerHTML += `\n% Nome de VLAN inválido.`;
+                    }
+                } 
+                else { cliScreen.innerHTML += `\n% Comando inválido no submodo VLAN.`; }
+            }
+                      // --- SUBMODO: CONFIGURAÇÃO DE INTERFACE FÍSICA (Switch(config-if)#) ---
+            else if (currentMode === 'interface_fisica') {
+                const portaAlvo = configMemory.activePhysicalPort.toLowerCase().replace('fa', '');
+                const portaChave = "fa" + portaAlvo;
+                const secConfig = configMemory.portSecurity[portaChave];
+
+                if (lowerInput === 'exit') {
+                    currentMode = 'global';
+                    configMemory.activePhysicalPort = null;
+                } 
+                else if (lowerInput === 'switchport mode access') {
+                    simulatedPCs.forEach(pc => {
+                        const portaPC = pc.port.toLowerCase().replace('fa', '');
+                        if (portaPC === portaAlvo && pc.vlan === "trunk") { pc.vlan = 1; }
+                    });
+                    cliScreen.innerHTML += `\n[OK] Porta ${configMemory.activePhysicalPort.toUpperCase().replace('FA', 'Fa')} configurada em modo Access.`;
+                } 
+                else if (lowerInput === 'switchport mode trunk') {
+                    // REGRA CISCO: Não permite Trunk se o Port Security estiver ativado na porta!
+                    if (secConfig && secConfig.isEnabled) {
+                        cliScreen.innerHTML += `\n% Command rejected: Port Security cannot be enabled on a trunk port.`;
+                    } else {
+                        simulatedPCs.forEach(pc => {
+                            const portaPC = pc.port.toLowerCase().replace('fa', '')
+                            if (portaPC === portaAlvo) { pc.vlan = "trunk"; }
+                        });
+                        cliScreen.innerHTML += `\n[OK] Porta ${configMemory.activePhysicalPort.toUpperCase().replace('FA', 'Fa')} configurada em modo TRUNK.`;
+                    }
+                }
+                // NOVO: Ativa o guarda da porta física (Port Security)
+                else if (lowerInput === 'switchport port-security') {
+                    // REGRA CISCO: Só ativa Port Security se a porta NÃO for Trunk!
+                    let eTrunk = false;
+                    simulatedPCs.forEach(pc => { if (pc.port.toLowerCase().replace('fa', '') === portaAlvo && pc.vlan === "trunk") { eTrunk = true; } });
+
+                    if (eTrunk) {
+                        cliScreen.innerHTML += `\n% Command rejected: Port Security cannot be enabled on a trunk port.`;
+                    } else if (secConfig) {
+                        secConfig.isEnabled = true;
+                        cliScreen.innerHTML += `\n[OK] Port Security ativado na interface ${configMemory.activePhysicalPort.toUpperCase().replace('FA', 'Fa')}.`;
+                    }
+                }
+                // NOVO: Ativa o método STICKY para "grudar" o MAC atual do PC legítimo
+                else if (lowerInput === 'switchport port-security mac-address sticky') {
+                    if (secConfig && secConfig.isEnabled) {
+                        secConfig.isSticky = true;
+                        // Busca o MAC real do PC plugado nessa porta e grava como o único autorizado
+                        const pcLocal = simulatedPCs.find(pc => pc.port.toLowerCase().replace('fa', '') === portaAlvo);
+                        if (pcLocal) { secConfig.authorizedMac = pcLocal.mac; }
+                        cliScreen.innerHTML += `\n[OK] Método Sticky ativado. Endereço MAC legítimo memorizado na interface.`;
+                    } else {
+                        cliScreen.innerHTML += `\n% Erro: Ative o 'switchport port-security' nesta porta primeiro.`;
+                    }
+                }
+                // NOVO: Desativa a porta administrativamente (Obrigatório para resetar falhas err-disabled)
+                else if (lowerInput === 'shutdown') {
+                    cliScreen.innerHTML += `\n%LINK-5-CHANGED: Interface FastEthernet${portaAlvo}, changed state to administratively down`;
+                }
+                // NOVO: Reativa a interface e limpa a violação de segurança do Hacker!
+                else if (lowerInput === 'no shutdown') {
+                    if (secConfig && secConfig.isViolated) {
+                        // Reseta o estado de bloqueio e desfaz a invasão, voltando o PC legítimo original
+                        secConfig.isViolated = false;
+                        cliScreen.innerHTML += `\n%LINK-5-CHANGED: Interface FastEthernet${portaAlvo}, changed state to up\n%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet${portaAlvo}, changed state to up\n[OK] Bloqueio 'err-disabled' removido da interface. Tráfego normal restabelecido.`;
+                    } else {
+                        cliScreen.innerHTML += `\n%LINK-5-CHANGED: Interface FastEthernet${portaAlvo}, changed state to up`;
+                    }
+                }
+                else if (lowerInput.startsWith('switchport access vlan ')) {
+                    const numeroVlan = parseInt(cleanInput.substring(23).trim());
+                    let ehTrunk = false;
+                    simulatedPCs.forEach(pc => { if (pc.port.toLowerCase().replace('fa', '') === portaAlvo && pc.vlan === "trunk") { ehTrunk = true; } });
+
+                    if (ehTrunk) {
+                        cliScreen.innerHTML += `\n% Command rejected: An interface whose configured mode is trunk cannot be assigned to an access VLAN.`;
+                    } else if (configMemory.vlans[numeroVlan]) {
+                        simulatedPCs.forEach(pc => {
+                            const portaPC = pc.port.toLowerCase().replace('fa', '');
+                            if (portaPC === portaAlvo) { pc.vlan = numeroVlan; }
+                        });
+                        cliScreen.innerHTML += `\n[OK] Porta ${configMemory.activePhysicalPort.toUpperCase().replace('FA', 'Fa')} associada à VLAN ${numeroVlan}.`;
+                    } else {
+                        cliScreen.innerHTML += `\n% Erro: A VLAN ${numeroVlan} não existe. Crie-a primeiro com o comando 'vlan ${numeroVlan}'.`;
+                    }
+                } 
+                else { cliScreen.innerHTML += `\n% Comando inválido na interface física.`; }
+            }
+
+
+
+            // Sincroniza e redesenha todas as caixas laterais e o prompt
+            renderPrompt();
+            updateHelpMenu();
+            updateStatusDisplay();
+            cliScreen.scrollTop = cliScreen.scrollHeight;
+        }
+
+
+
+
+        // Evento de captura do Enter
+        cliInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                processCommand(this.value);
+                this.value = '';
+            }
+        });
+
+        function toggleModal() {
+            const modal = document.getElementById('tree-modal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Execução inicial
+        updateHelpMenu();
+        updateStatusDisplay();
+    </script>
+</body>
+</html>
