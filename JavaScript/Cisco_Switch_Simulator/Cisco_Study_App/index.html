@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta 
+        name="viewport" 
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Cisco Study Simulator
+    </title>
+
+
+    <link 
+        rel="stylesheet" 
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!--
+        Área futura para renderização de topologias.
+        Inicialmente vazia.
+        Futuramente:
+        - switches
+        - routers
+        - PCs
+        - conexões
+    -->
+
+    <div id="topology-container">
+
+    </div>
+
+
+
+    <!-- ===============================
+         PAINEL ESQUERDO
+    ================================= -->
+
+    <aside class="panel left-panel">
+
+
+        <h3>
+            Help - Comandos
+        </h3>
+
+
+        <div 
+            id="help-list" 
+            class="scrollable-list"
+        >
+
+            <!-- Gerado pelo JavaScript -->
+
+        </div>
+
+
+    </aside>
+
+
+
+
+
+
+    <!-- ===============================
+         ÁREA CENTRAL
+    ================================= -->
+
+    <main class="main-content">
+
+
+
+        <!-- MISSÕES -->
+
+        <div class="mission-bar">
+
+
+            <label for="mission-selector">
+
+                🎯 Objetivo de Estudo:
+
+            </label>
+
+
+
+            <select 
+                id="mission-selector"
+            >
+
+                <option value="welcome">
+
+                    -- Selecione um objetivo --
+
+                </option>
+
+
+            </select>
+
+
+        </div>
+
+
+
+
+
+
+        <!-- TERMINAL CLI -->
+
+        <section class="cli-container">
+
+
+
+            <div 
+                id="cli-screen"
+            >
+
+                --- Cisco Study Simulator ---
+
+
+                Inicializando laboratório...
+
+
+            </div>
+
+
+
+
+
+            <div class="cli-input-area">
+
+
+                <span 
+                    id="cli-prompt"
+                >
+
+                    Switch&gt;
+
+                </span>
+
+
+
+                <input
+
+                    id="cli-input"
+
+                    type="text"
+
+                    autocomplete="off"
+
+                    spellcheck="false"
+
+                >
+
+
+
+            </div>
+
+
+        </section>
+
+
+
+
+
+
+
+        <!-- BOTÕES -->
+
+        <div class="button-area">
+
+
+
+            <button
+
+                id="btn-command-tree"
+
+                class="btn"
+
+            >
+
+                🌲 Command Tree
+
+            </button>
+
+
+
+
+            <button
+
+                id="btn-reset"
+
+                class="btn danger"
+
+            >
+
+                🟥 Reset Switch
+
+            </button>
+
+
+
+        </div>
+
+
+
+    </main>
+
+
+
+
+
+
+
+
+
+    <!-- ===============================
+         PAINEL DIREITO
+    ================================= -->
+
+
+    <aside class="panel right-panel">
+
+
+
+        <section class="status-box">
+
+
+
+            <h3>
+
+                Histórico
+
+            </h3>
+
+
+
+            <div
+
+                id="history-list"
+
+                class="scrollable-list"
+
+            >
+
+
+            </div>
+
+
+
+        </section>
+
+
+
+
+
+
+
+        <section class="status-box">
+
+
+            <h3>
+
+                Configuração e Status
+
+            </h3>
+
+
+
+            <div
+
+                id="status-display"
+
+                class="scrollable-list"
+
+            >
+
+
+            </div>
+
+
+
+        </section>
+
+
+
+    </aside>
+
+
+
+
+
+
+
+
+    <!-- ===============================
+         MODAL COMMAND TREE
+    ================================= -->
+
+
+    <div
+
+        id="tree-modal"
+
+        class="modal"
+
+    >
+
+
+
+        <button
+
+            id="btn-close-tree"
+
+            class="btn danger"
+
+        >
+
+            ❌ Fechar
+
+        </button>
+
+
+
+
+        <h2>
+
+            🛡️ Command Tree
+
+        </h2>
+
+
+
+
+        <div
+
+            id="command-tree-content"
+
+        >
+
+            <!--
+                Futuramente:
+                gerado dinamicamente
+                pelo módulo interface
+            -->
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <!-- ===============================
+         APLICAÇÃO
+    ================================= -->
+
+
+    <script
+
+        type="module"
+
+        src="core/app.js"
+
+    ></script>
+
+
+
+</body>
+
+
+</html>
