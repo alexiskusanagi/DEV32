@@ -1,40 +1,48 @@
-/*
-=================================================
-Cisco Study Simulator
 
-Arquivo:
-database.js
+/*
+CISCO STUDY SIMULATOR
+Arquivo: database.js
 
 Responsabilidade:
 
-- Guardar banco de comandos
-- Criar estado atual do laboratório
-- Simular NVRAM do switch usando localStorage
+- Guardar banco de comandos.
+- Manter o estado atual do laboratório.
+- Simular NVRAM usando localStorage.
+- Salvar e carregar startup-config.
 
 Não possui:
+
 - HTML
 - DOM
-- Interface
 - CLI
+- Interface
+- Regras de configuração do switch
+- Criação direta do laboratório
 
-=================================================
+A criação do laboratório pertence ao:
+
+labFactory.js
 */
 
 
 import {
-    createSwitchState,
-    createPCState
-} from "./state.js";
+    createLabFactory
+} from "./labFactory.js";
 
 
-
-
-// =================================================
-// BANCO DE COMANDOS
-// =================================================
+/*
+=================================================
+BANCO DE COMANDOS
+=================================================
+*/
 
 export const commandDatabase = {
 
+    /*
+    =============================================
+    USER EXEC
+    =============================================
+    */
 
     user: {
 
@@ -53,6 +61,11 @@ export const commandDatabase = {
     },
 
 
+    /*
+    =============================================
+    PRIVILEGED EXEC
+    =============================================
+    */
 
     privileged: {
 
@@ -60,124 +73,220 @@ export const commandDatabase = {
 
         commands: {
 
+            "configure terminal":
+                "Entra no modo de configuração global",
+
             "show vlan brief":
-                "Mostra VLANs"
+                "Mostra VLANs",
+
+            "copy running-config startup-config":
+                "Salva a configuração na NVRAM",
+
+            "write":
+                "Salva a configuração",
+
+            "erase startup-config":
+                "Apaga a startup-config",
+
+            "clear":
+                "Limpa informações",
+
+            "exit":
+                "Volta para o Modo User"
+
+        }
+
+    },
+
+
+    /*
+    =============================================
+    GLOBAL CONFIGURATION
+    =============================================
+    */
+
+    global: {
+
+        prompt: "(config)#",
+
+        commands: {
+
+            "hostname":
+                "Configura o hostname",
+
+            "banner motd":
+                "Configura o banner MOTD",
+
+            "enable secret":
+                "Configura a senha secreta",
+
+            "service password-encryption":
+                "Ativa criptografia de senhas",
+
+            "no service password-encryption":
+                "Desativa criptografia de senhas",
+
+            "vlan":
+                "Cria ou configura uma VLAN",
+
+            "interface":
+                "Entra na configuração de uma interface",
+
+            "line console":
+                "Entra na configuração do console",
+
+            "line vty":
+                "Entra na configuração das linhas VTY",
+
+            "exit":
+                "Volta para o modo privilegiado",
+
+            "end":
+                "Volta diretamente ao modo privilegiado"
+
+        }
+
+    },
+
+
+    /*
+    =============================================
+    INTERFACE CONFIGURATION
+    =============================================
+    */
+
+    interface: {
+
+        prompt: "(config-if)#",
+
+        commands: {
+
+            "ip address":
+                "Configura endereço IP",
+
+            "no ip address":
+                "Remove endereço IP",
+
+            "shutdown":
+                "Desativa a interface",
+
+            "no shutdown":
+                "Ativa a interface",
+
+            "switchport mode":
+                "Configura o modo da porta",
+
+            "switchport access vlan":
+                "Atribui VLAN à porta",
+
+            "switchport port-security":
+                "Ativa Port Security",
+
+            "switchport port-security mac-address sticky":
+                "Ativa Sticky MAC",
+
+            "switchport port-security mac-address":
+                "Autoriza um MAC",
+
+            "no switchport port-security":
+                "Desativa Port Security",
+
+            "exit":
+                "Volta ao modo de configuração global",
+
+            "end":
+                "Volta diretamente ao modo privilegiado"
+
+        }
+
+    },
+
+
+    /*
+    =============================================
+    LINE CONFIGURATION
+    =============================================
+    */
+
+    line: {
+
+        prompt: "(config-line)#",
+
+        commands: {
+
+            "password":
+                "Configura senha da linha",
+
+            "login":
+                "Ativa autenticação da linha",
+
+            "no login":
+                "Desativa autenticação da linha",
+
+            "exit":
+                "Volta ao modo de configuração global",
+
+            "end":
+                "Volta diretamente ao modo privilegiado"
 
         }
 
     }
 
-
 };
 
 
-
-
-
-// =================================================
-// LABORATÓRIO INICIAL
-// Estado criado quando o simulador inicia
-// =================================================
+/*
+=================================================
+LAB FACTORY
+=================================================
+*/
 
 export function createFactoryState() {
 
-
-    return {
-
-
-        switch:
-            createSwitchState(
-                "Switch"
-            ),
-
-
-
-        pcs: [
-
-
-            createPCState(
-                "PC1",
-                "192.168.1.10",
-                "fa0/1"
-            ),
-
-
-            createPCState(
-                "PC2",
-                "192.168.1.11",
-                "fa0/2"
-            ),
-
-
-            createPCState(
-                "PC3",
-                "192.168.1.12",
-                "fa0/3"
-            ),
-
-
-            createPCState(
-                "PC4",
-                "192.168.1.13",
-                "fa0/4"
-            ),
-
-
-            createPCState(
-                "PC5",
-                "192.168.1.14",
-                "fa0/5"
-            )
-
-
-        ]
-
-    };
-
+    return createLabFactory();
 
 }
 
 
+/*
+=================================================
+ESTADO ATUAL DO SIMULADOR
 
-
-
-// =================================================
-// ESTADO ATUAL DO SIMULADOR
-// Equivalente ao running-config em RAM
-// =================================================
+Equivalente ao running-config em RAM.
+=================================================
+*/
 
 export let appState =
     createFactoryState();
 
 
+/*
+=================================================
+NVRAM
 
-
-
-// =================================================
-// NVRAM
-// Simulação da startup-config
-// =================================================
+Simulação da startup-config usando localStorage.
+=================================================
+*/
 
 const NVRAM_KEY =
-"cisco-study-simulator-startup-config";
+    "cisco-study-simulator-startup-config";
 
 
+/*
+=================================================
+SALVAR CONFIGURAÇÃO
 
+Equivalente:
 
-
-// =================================================
-// SALVAR CONFIGURAÇÃO
-//
-// Equivalente:
-// copy running-config startup-config
-// wr
-// =================================================
+copy running-config startup-config
+wr
+=================================================
+*/
 
 export function saveStartupConfig() {
 
-
     try {
-
 
         const snapshot =
             JSON.stringify(
@@ -185,23 +294,16 @@ export function saveStartupConfig() {
             );
 
 
-
         localStorage.setItem(
-
             NVRAM_KEY,
-
             snapshot
-
         );
-
 
 
         return true;
 
-
     }
-    catch(error) {
-
+    catch (error) {
 
         console.error(
             "Erro salvando NVRAM:",
@@ -211,22 +313,18 @@ export function saveStartupConfig() {
 
         return false;
 
-
     }
-
 
 }
 
 
-
-
-
-// =================================================
-// VERIFICAR STARTUP-CONFIG
-// =================================================
+/*
+=================================================
+VERIFICAR STARTUP-CONFIG
+=================================================
+*/
 
 export function hasStartupConfig() {
-
 
     return (
 
@@ -236,24 +334,20 @@ export function hasStartupConfig() {
 
     );
 
-
 }
 
 
+/*
+=================================================
+CARREGAR CONFIGURAÇÃO
 
-
-
-// =================================================
-// CARREGAR CONFIGURAÇÃO
-//
-// Equivalente ao boot do switch
-// =================================================
+Equivalente ao boot do switch.
+=================================================
+*/
 
 export function loadStartupConfig() {
 
-
     try {
-
 
         const saved =
             localStorage.getItem(
@@ -261,15 +355,11 @@ export function loadStartupConfig() {
             );
 
 
-
-        if(!saved) {
-
+        if (!saved) {
 
             return false;
 
-
         }
-
 
 
         const recovered =
@@ -278,108 +368,94 @@ export function loadStartupConfig() {
             );
 
 
+        if (
+            !recovered ||
+            typeof recovered !== "object"
+        ) {
+
+            return false;
+
+        }
+
 
         Object.assign(
-
             appState,
-
             recovered
-
         );
-
 
 
         return true;
 
-
-
     }
-    catch(error) {
-
+    catch (error) {
 
         console.error(
-
             "Erro carregando NVRAM:",
-
             error
-
         );
 
 
         return false;
 
-
     }
-
 
 }
 
 
+/*
+=================================================
+APAGAR NVRAM
 
+Equivalente:
 
+erase startup-config
 
-// =================================================
-// APAGAR NVRAM
-//
-// Equivalente:
-// erase startup-config
-// =================================================
+Não altera automaticamente
+o running state.
+=================================================
+*/
 
 export function eraseStartupConfig() {
 
-
     localStorage.removeItem(
-
         NVRAM_KEY
-
     );
-
 
 }
 
 
+/*
+=================================================
+RESET DE FÁBRICA
 
-
-
-// =================================================
-// RESET DE FÁBRICA
-// =================================================
+Apaga startup-config e cria
+um novo estado de laboratório.
+=================================================
+*/
 
 export function factoryReset() {
 
-
     eraseStartupConfig();
-
 
 
     appState =
         createFactoryState();
 
-
-
 }
 
 
-
-
-
-// =================================================
-// EXPORTAR CONFIGURAÇÃO
-// Útil para debug
-// =================================================
+/*
+=================================================
+EXPORTAR CONFIGURAÇÃO
+=================================================
+*/
 
 export function exportConfig() {
 
-
     return JSON.stringify(
-
         appState,
-
         null,
-
         4
-
     );
-
 
 }
