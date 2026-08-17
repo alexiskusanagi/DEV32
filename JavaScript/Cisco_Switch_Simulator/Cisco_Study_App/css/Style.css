@@ -1,12 +1,12 @@
-
 /* =========================================================
    CISCO STUDY SIMULATOR
    CSS BASE — LAYOUT ORIGINAL + RESPONSIVIDADE
-========================================================= */
+   ========================================================= */
+
 
 /* =========================================================
    VARIÁVEIS
-========================================================= */
+   ========================================================= */
 
 :root {
     --bg-color: #1e1e1e;
@@ -22,18 +22,20 @@
     --border-color: #3e3e42;
 }
 
+
 /* =========================================================
    RESET BÁSICO
-========================================================= */
+   ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
+
 /* =========================================================
    BODY
    LAYOUT PRINCIPAL — 3 COLUNAS
-========================================================= */
+   ========================================================= */
 
 body {
     font-family:
@@ -68,9 +70,21 @@ body {
     align-items: stretch;
 }
 
+
+/* =========================================================
+   TOPOLOGY
+   Área reservada para implementação futura.
+   Não deve interferir no layout atual.
+   ========================================================= */
+
+#topology-container {
+    display: none;
+}
+
+
 /* =========================================================
    PAINÉIS LATERAIS
-========================================================= */
+   ========================================================= */
 
 .panel {
     background-color: var(--panel-bg);
@@ -86,18 +100,41 @@ body {
     overflow: visible;
 
     min-width: 0;
+    min-height: 0;
 
+    align-self: stretch;
+}
+
+
+/* =========================================================
+   POSICIONAMENTO DOS PAINÉIS
+   ========================================================= */
+
+/*
+ * O topology-container existe no HTML como área futura.
+ * Por isso não usamos :first-child para posicionar
+ * os painéis.
+ */
+
+.left-panel {
+    grid-column: 1;
     grid-row: 1;
 }
 
-/* Primeiro painel — esquerda */
-body > .panel:first-child {
-    grid-column: 1;
+.main-content {
+    grid-column: 2;
+    grid-row: 1;
 }
+
+.right-panel {
+    grid-column: 3;
+    grid-row: 1;
+}
+
 
 /* =========================================================
    TÍTULOS
-========================================================= */
+   ========================================================= */
 
 h3 {
     margin-top: 0;
@@ -108,9 +145,10 @@ h3 {
     padding-bottom: 5px;
 }
 
+
 /* =========================================================
    CONTEÚDO PRINCIPAL
-========================================================= */
+   ========================================================= */
 
 .main-content {
     display: flex;
@@ -122,15 +160,12 @@ h3 {
     min-width: 0;
 
     min-height: 0;
-
-    grid-column: 2;
-
-    grid-row: 1;
 }
+
 
 /* =========================================================
    CLI
-========================================================= */
+   ========================================================= */
 
 .cli-container {
     flex: 1;
@@ -160,9 +195,10 @@ h3 {
     overflow: hidden;
 }
 
+
 /* =========================================================
    TELA DO TERMINAL
-========================================================= */
+   ========================================================= */
 
 #cli-screen {
     flex: 1;
@@ -182,9 +218,10 @@ h3 {
     word-break: break-word;
 }
 
+
 /* =========================================================
    ÁREA DE INPUT
-========================================================= */
+   ========================================================= */
 
 .cli-input-area {
     display: flex;
@@ -194,9 +231,10 @@ h3 {
     flex-shrink: 0;
 }
 
+
 /* =========================================================
    PROMPT
-========================================================= */
+   ========================================================= */
 
 #cli-prompt {
     color: var(--cli-text);
@@ -208,9 +246,10 @@ h3 {
     white-space: nowrap;
 }
 
+
 /* =========================================================
    INPUT
-========================================================= */
+   ========================================================= */
 
 #cli-input {
     flex: 1;
@@ -233,20 +272,23 @@ h3 {
     outline: none;
 }
 
+
 /* =========================================================
    SCROLLBARS
-========================================================= */
+   ========================================================= */
 
 .scrollable-list,
 #cli-screen {
     overflow-y: scroll !important;
 }
 
+
 /* largura */
 
 ::-webkit-scrollbar {
     width: 8px;
 }
+
 
 /* canaleta */
 
@@ -256,6 +298,7 @@ h3 {
     border-radius: 4px;
 }
 
+
 /* barra */
 
 ::-webkit-scrollbar-thumb {
@@ -264,15 +307,17 @@ h3 {
     border-radius: 4px;
 }
 
+
 /* hover */
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent);
 }
 
+
 /* =========================================================
    LISTAS SCROLLABLE
-========================================================= */
+   ========================================================= */
 
 .scrollable-list {
     min-height: 0;
@@ -280,11 +325,14 @@ h3 {
     overflow-x: hidden;
 
     overflow-y: scroll;
+
+    flex: 1;
 }
+
 
 /* =========================================================
    HELP
-========================================================= */
+   ========================================================= */
 
 .help-item {
     margin-bottom: 8px;
@@ -304,9 +352,10 @@ h3 {
     color: var(--text-color);
 }
 
+
 /* =========================================================
    COMMAND ITEMS
-========================================================= */
+   ========================================================= */
 
 .command-item {
     margin-bottom: 8px;
@@ -329,9 +378,10 @@ h3 {
     font-weight: bold;
 }
 
+
 /* =========================================================
    HISTÓRICO
-========================================================= */
+   ========================================================= */
 
 .history-item {
     margin-bottom: 8px;
@@ -361,9 +411,10 @@ h3 {
     margin-top: 3px;
 }
 
+
 /* =========================================================
    STATUS
-========================================================= */
+   ========================================================= */
 
 .status-item {
     margin-bottom: 6px;
@@ -371,17 +422,22 @@ h3 {
 
 .status-item strong {
     color: #ff8c00;
+
     font-weight: bold;
+
     margin-right: 6px;
 }
 
 .status-item .status-value {
     color: #d4d4d4;
-    transition: color 0.25s ease;
+
+    transition:
+        color 0.25s ease;
 }
 
 .status-item.configured .status-value {
     color: #4ecc9b;
+
     font-weight: bold;
 }
 
@@ -396,7 +452,7 @@ h3 {
 
 /* =========================================================
    BOTÕES
-========================================================= */
+   ========================================================= */
 
 .btn {
     background-color: var(--accent);
@@ -428,9 +484,10 @@ h3 {
     transform: translateY(1px);
 }
 
+
 /* =========================================================
    MODAL — COMMAND TREE
-========================================================= */
+   ========================================================= */
 
 .modal {
     display: none;
@@ -452,7 +509,21 @@ h3 {
     overflow-y: auto;
 
     box-sizing: border-box;
+
+    /* Fundo sólido para impedir sobreposição visual */
+    background-color: var(--panel-bg);
+
+    /* Mantém a identidade visual dos painéis */
+    border: 1px solid var(--border-color);
+
+    /* Destaque discreto sobre a interface */
+    box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.55);
+
+    padding: 20px;
 }
+
 
 /* Quando aberto */
 
@@ -462,7 +533,7 @@ h3 {
 
 /* =========================================================
    COMMAND TREE
-========================================================= */
+   ========================================================= */
 
 .tree-level {
     margin-top: 10px;
@@ -497,9 +568,10 @@ h3 {
         rgba(255, 255, 255, 0.01);
 }
 
+
 /* =========================================================
    COMMAND TREE DINÂMICO
-========================================================= */
+   ========================================================= */
 
 .command-tree-section {
     margin-bottom: 15px;
@@ -519,9 +591,10 @@ h3 {
     margin-right: 6px;
 }
 
+
 /* =========================================================
    GARANTE QUE O CONTEÚDO NÃO EMPURRE O GRID
-========================================================= */
+   ========================================================= */
 
 body > *,
 .main-content > *,
@@ -529,9 +602,24 @@ body > *,
     min-width: 0;
 }
 
+
+/* =========================================================
+   IMPORTANTE PARA OS PAINÉIS
+   ========================================================= */
+
+.left-panel,
+.right-panel {
+    min-height: 0;
+}
+
+.right-panel {
+    overflow: hidden;
+}
+
+
 /* =========================================================
    TABLETS
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 1100px) {
 
@@ -547,9 +635,10 @@ body > *,
     }
 }
 
+
 /* =========================================================
    TABLET / SMARTPHONE
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 850px) {
 
@@ -564,6 +653,7 @@ body > *,
 
         min-height: 100vh;
     }
+
 
     /*
      * Mantém a área principal primeiro.
@@ -581,6 +671,25 @@ body > *,
         grid-row: auto;
     }
 
+
+    /*
+     * Painel esquerdo.
+     */
+
+    .left-panel {
+        order: 2;
+    }
+
+
+    /*
+     * Painel direito.
+     */
+
+    .right-panel {
+        order: 3;
+    }
+
+
     /*
      * Painéis laterais passam para baixo.
      */
@@ -595,6 +704,7 @@ body > *,
         grid-row: auto;
     }
 
+
     /*
      * Terminal continua sendo o elemento principal.
      */
@@ -603,6 +713,7 @@ body > *,
         min-height: 55vh;
     }
 
+
     #cli-input {
         font-size: 15px;
     }
@@ -610,6 +721,7 @@ body > *,
     #cli-prompt {
         font-size: 15px;
     }
+
 
     /*
      * Modal ocupa praticamente toda a tela.
@@ -628,9 +740,10 @@ body > *,
     }
 }
 
+
 /* =========================================================
    SMARTPHONE
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 600px) {
 
@@ -640,11 +753,13 @@ body > *,
         gap: 8px;
     }
 
+
     .main-content {
         min-height: 70vh;
 
         gap: 8px;
     }
+
 
     /*
      * Barra de objetivo.
@@ -658,15 +773,18 @@ body > *,
         gap: 6px !important;
     }
 
+
     .main-content > div:first-child label {
         font-size: 13px !important;
     }
+
 
     .main-content > div:first-child select {
         width: 100%;
 
         min-height: 38px;
     }
+
 
     /*
      * Terminal.
@@ -679,19 +797,23 @@ body > *,
             8px 10px;
     }
 
+
     #cli-screen {
         font-size: 13px;
 
         line-height: 1.4;
     }
 
+
     #cli-input {
         font-size: 14px;
     }
 
+
     #cli-prompt {
         font-size: 14px;
     }
+
 
     /*
      * Botões abaixo da CLI.
@@ -704,6 +826,7 @@ body > *,
             9px 6px;
     }
 
+
     /*
      * Painéis.
      */
@@ -714,9 +837,11 @@ body > *,
         min-height: 160px;
     }
 
+
     h3 {
         font-size: 15px;
     }
+
 
     /*
      * Command Tree.
@@ -726,11 +851,13 @@ body > *,
         font-size: 13px;
     }
 
+
     .modal h2 {
         font-size: 18px !important;
 
         padding-right: 50px;
     }
+
 
     .tree-level {
         margin-left: 5px !important;
@@ -738,14 +865,16 @@ body > *,
         padding-left: 10px !important;
     }
 
+
     .tree-level code {
         font-size: 12px;
     }
 }
 
+
 /* =========================================================
    SMARTPHONE MUITO PEQUENO
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 400px) {
 
@@ -753,22 +882,27 @@ body > *,
         padding: 4px;
     }
 
+
     .cli-container {
         min-height: 58vh;
     }
 
+
     #cli-screen {
         font-size: 12px;
     }
+
 
     #cli-input,
     #cli-prompt {
         font-size: 13px;
     }
 
+
     .main-content > div:last-child {
         flex-direction: column !important;
     }
+
 
     .main-content > div:last-child .btn {
         width: 100%;

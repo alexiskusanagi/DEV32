@@ -183,7 +183,6 @@ function loadSavedConfiguration() {
 /*
 =====================================================
 EXECUÇÃO DE COMANDOS
-=====================================================
 
 O app.js NÃO interpreta comandos.
 
@@ -201,6 +200,20 @@ function handleCommand(command) {
             executeCommand(
                 command
             );
+
+
+        /*
+        Registra o comando no histórico
+        visual da interface.
+
+        O histórico de navegação da CLI
+        (teclas ↑ / ↓) continua separado
+        e pertence ao cli.js.
+        */
+
+        addHistoryEntry(
+            command
+        );
 
 
         /*
@@ -246,14 +259,27 @@ function handleCommand(command) {
         );
 
 
+        const errorMessage =
+            "% Erro interno ao executar comando.";
+
+
+        /*
+        Registra também erros internos
+        no histórico visual.
+        */
+
+        addHistoryEntry(
+            command,
+            errorMessage
+        );
+
+
         setPrompt(
             getCliPrompt()
         );
 
 
-        return (
-            "% Erro interno ao executar comando."
-        );
+        return errorMessage;
 
     }
 
