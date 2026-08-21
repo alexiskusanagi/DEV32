@@ -1,4 +1,3 @@
-
 // =====================================================
 // CISCO STUDY SIMULATOR
 // interface/ui.js
@@ -14,6 +13,9 @@
 // - persistência NVRAM
 //
 // O ui.js apenas apresenta informações na tela.
+//
+// A topologia visual também pertence a esta camada.
+// O ui.js recebe dados prontos e os transforma em DOM.
 // =====================================================
 
 
@@ -45,6 +47,9 @@ const btnCommandTree =
 const btnCloseTree =
     document.getElementById("btn-close-tree");
 
+const topologyContainer =
+    document.getElementById("topology-container");
+
 
 // =====================================================
 // ESTADO INTERNO DA INTERFACE
@@ -60,7 +65,9 @@ const uiState = {
 
     statusData: null,
 
-    commandTreeData: null
+    commandTreeData: null,
+
+    topologyData: null
 
 };
 
@@ -155,6 +162,8 @@ function renderInitialState() {
     clearHelp();
 
     clearCommandTree();
+
+    clearTopology();
 
 }
 
@@ -463,8 +472,8 @@ export function renderStatus(
             const valueElement =
                 document.createElement("span");
 
-                valueElement.className =
-                    "status-value";
+            valueElement.className =
+                "status-value";
 
 
             if (
@@ -492,9 +501,12 @@ export function renderStatus(
             );
 
 
-
             const statusClass =
-                getStatusClass(label, value);
+                getStatusClass(
+                    label,
+                    value
+                );
+
 
             if (statusClass) {
 
@@ -515,17 +527,21 @@ export function renderStatus(
 }
 
 
-//======================================================
-// nova função
-//======================================================
+// =====================================================
+// CLASSE VISUAL DO STATUS
+// =====================================================
 
-function getStatusClass(label, value) {
+function getStatusClass(
+    label,
+    value
+) {
 
     const normalizedLabel =
         String(label).toLowerCase();
 
     const normalizedValue =
         String(value).toLowerCase();
+
 
     if (
         normalizedValue === "não configurado" ||
@@ -538,6 +554,7 @@ function getStatusClass(label, value) {
 
     }
 
+
     if (
         normalizedValue === "down" ||
         normalizedValue === "error"
@@ -546,6 +563,7 @@ function getStatusClass(label, value) {
         return "error";
 
     }
+
 
     if (
         normalizedLabel.includes("status") &&
@@ -556,6 +574,7 @@ function getStatusClass(label, value) {
 
     }
 
+
     if (
         normalizedLabel.includes("hostname") &&
         normalizedValue !== "switch"
@@ -564,6 +583,7 @@ function getStatusClass(label, value) {
         return "configured";
 
     }
+
 
     if (
         normalizedLabel.includes("ip") &&
@@ -575,14 +595,19 @@ function getStatusClass(label, value) {
 
     }
 
+
     if (
         normalizedLabel.includes("running config") &&
-        normalizedValue === "present"
+        (
+            normalizedValue === "present" ||
+            normalizedValue === "presente"
+        )
     ) {
 
         return "configured";
 
     }
+
 
     if (
         normalizedLabel.includes("porta") &&
@@ -593,6 +618,7 @@ function getStatusClass(label, value) {
 
     }
 
+
     if (
         normalizedLabel.includes("vlan atual") &&
         normalizedValue !== "nenhuma"
@@ -602,7 +628,9 @@ function getStatusClass(label, value) {
 
     }
 
+
     return "";
+
 }
 
 
@@ -629,26 +657,454 @@ export function clearStatus() {
 
 
 // =====================================================
+// TOPOLOGIA
+// =====================================================
+//
+// Recebe algo no formato:
+//
+// {
+//     devices: [
+//         { type: "switch", id: "Switch" },
+//         { type: "pc", id: "PC1" },
+//         ...
+//     ],
+//
+//     connections: [
+//         {
+//             source: "PC1",
+//             target: "Switch",
+//             sourcePort: null,
+//             targetPort: "fa0/1"
+//         },
+//         ...
+//     ]
+// }
+//
+// O ui.js NÃO cria esse estado.
+//
+// Apenas apresenta o estado recebido.
+// =====================================================
+
+export function renderTopology(
+    topology = null
+) {
+
+    uiState.topologyData =
+        topology;
+
+
+    if (!topologyContainer) {
+
+        return;
+
+    }
+
+
+    topologyContainer.innerHTML = "";
+
+
+    if (
+        !topology ||
+        typeof topology !== "object"
+    ) {
+
+        renderTopologyEmpty();
+
+        return;
+
+    }
+
+
+    const devices =
+        Array.isArray(topology.devices)
+            ? topology.devices
+            : [];
+
+
+    const connections =
+        Array.isArray(topology.connections)
+            ? topology.connections
+            : [];
+
+
+    if (
+        devices.length === 0
+    ) {
+
+        renderTopologyEmpty();
+
+        return;
+
+    }
+
+
+    /*
+    -------------------------------------------------
+    CONTAINER VISUAL
+    -------------------------------------------------
+    */
+
+    const topologyBoard =
+        document.createElement("div");
+
+    topologyBoard.className =
+        "topology-board";
+
+
+    /*
+    -------------------------------------------------
+    TÍTULO
+    -------------------------------------------------
+    */
+
+    const title =
+        document.createElement("div");
+
+    title.className =
+        "topology-title";
+
+    title.textContent =
+        "Topologia do Laboratório";
+
+
+    topologyBoard.appendChild(
+        title
+    );
+
+
+    /*
+    -------------------------------------------------
+    ÁREA DOS DISPOSITIVOS
+    -------------------------------------------------
+    */
+
+    const deviceArea =
+        document.createElement("div");
+
+    deviceArea.className =
+        "topology-device-area";
+
+
+    /*
+    -------------------------------------------------
+    SWITCHES
+    -------------------------------------------------
+    */
+
+    const switches =
+        devices.filter(
+            device =>
+                device &&
+                device.type === "switch"
+        );
+
+
+    switches.forEach(
+        device => {
+
+            const switchElement =
+                createTopologyDevice(
+                    device,
+                    "switch"
+                );
+
+
+            deviceArea.appendChild(
+                switchElement
+            );
+
+        }
+    );
+
+
+    /*
+    -------------------------------------------------
+    PCs
+    -------------------------------------------------
+    */
+
+    const pcs =
+        devices.filter(
+            device =>
+                device &&
+                device.type === "pc"
+        );
+
+
+    const pcContainer =
+        document.createElement("div");
+
+    pcContainer.className =
+        "topology-pc-container";
+
+
+    pcs.forEach(
+        (device, index) => {
+
+            const pcElement =
+                createTopologyDevice(
+                    device,
+                    "pc"
+                );
+
+
+            pcElement.dataset.index =
+                String(index + 1);
+
+
+            pcContainer.appendChild(
+                pcElement
+            );
+
+        }
+    );
+
+
+    deviceArea.appendChild(
+        pcContainer
+    );
+
+
+    topologyBoard.appendChild(
+        deviceArea
+    );
+
+
+    /*
+    -------------------------------------------------
+    CONEXÕES
+    -------------------------------------------------
+    
+    Por enquanto as conexões são apresentadas
+    como informação visual simples.
+
+    A geometria dos cabos pode ser refinada
+    posteriormente no CSS.
+    -------------------------------------------------
+    */
+
+    const connectionArea =
+        document.createElement("div");
+
+    connectionArea.className =
+        "topology-connections";
+
+
+    connections.forEach(
+        connection => {
+
+            const connectionElement =
+                createTopologyConnection(
+                    connection
+                );
+
+
+            connectionArea.appendChild(
+                connectionElement
+            );
+
+        }
+    );
+
+
+    topologyBoard.appendChild(
+        connectionArea
+    );
+
+
+    /*
+    -------------------------------------------------
+    INSERE NA INTERFACE
+    -------------------------------------------------
+    */
+
+    topologyContainer.appendChild(
+        topologyBoard
+    );
+
+}
+
+
+// =====================================================
+// CRIAR DISPOSITIVO DA TOPOLOGIA
+// =====================================================
+
+function createTopologyDevice(
+    device,
+    type
+) {
+
+    const element =
+        document.createElement("div");
+
+
+    element.className =
+        `topology-device topology-${type}`;
+
+
+    element.dataset.deviceId =
+        device?.id || "";
+
+
+    /*
+    ÍCONE
+    */
+
+    const icon =
+        document.createElement("div");
+
+    icon.className =
+        "topology-device-icon";
+
+
+    icon.textContent =
+        type === "switch"
+            ? "🔀"
+            : "🖥️";
+
+
+    /*
+    NOME
+    */
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "topology-device-name";
+
+
+    name.textContent =
+        device?.id ||
+        "Dispositivo";
+
+
+    /*
+    TIPO
+    */
+
+    const typeLabel =
+        document.createElement("div");
+
+    typeLabel.className =
+        "topology-device-type";
+
+
+    typeLabel.textContent =
+        type === "switch"
+            ? "Switch"
+            : "PC";
+
+
+    element.appendChild(
+        icon
+    );
+
+    element.appendChild(
+        name
+    );
+
+    element.appendChild(
+        typeLabel
+    );
+
+
+    return element;
+
+}
+
+
+// =====================================================
+// CRIAR CONEXÃO DA TOPOLOGIA
+// =====================================================
+
+function createTopologyConnection(
+    connection
+) {
+
+    const element =
+        document.createElement("div");
+
+
+    element.className =
+        "topology-connection";
+
+
+    const source =
+        connection?.source ||
+        "?";
+
+
+    const target =
+        connection?.target ||
+        "?";
+
+
+    const targetPort =
+        connection?.targetPort ||
+        "";
+
+
+    element.textContent =
+        targetPort
+            ? `${source} → ${target} (${targetPort})`
+            : `${source} → ${target}`;
+
+
+    return element;
+
+}
+
+
+// =====================================================
+// TOPOLOGIA VAZIA
+// =====================================================
+
+function renderTopologyEmpty() {
+
+    const empty =
+        document.createElement("div");
+
+
+    empty.className =
+        "topology-empty";
+
+
+    empty.textContent =
+        "Nenhuma topologia disponível.";
+
+
+    topologyContainer.appendChild(
+        empty
+    );
+
+}
+
+
+// =====================================================
+// LIMPAR TOPOLOGIA
+// =====================================================
+
+export function clearTopology() {
+
+    uiState.topologyData =
+        null;
+
+
+    if (!topologyContainer) {
+
+        return;
+
+    }
+
+
+    topologyContainer.innerHTML = "";
+
+}
+
+
+// =====================================================
 // MISSÕES
-//
-// Recebe um objeto simples:
-//
-// {
-//     welcome: "Bem-vindo",
-//     basic: "Configuração básica",
-//     vlan: "Criar VLAN"
-// }
-//
-// Também aceita:
-//
-// {
-//     vlan: {
-//         title: "Criar VLAN"
-//     }
-// }
-//
-// Futuramente poderá receber dados
-// diretamente de missions.js.
 // =====================================================
 
 export function renderMissions(
@@ -738,14 +1194,6 @@ function handleMissionChange(
 
     uiState.currentMission =
         missionId;
-
-
-    // O ui.js não executa a missão.
-    //
-    // O app.js poderá observar essa mudança
-    // futuramente através de um callback.
-    //
-    // Por enquanto apenas armazenamos a seleção.
 
 }
 
@@ -995,18 +1443,6 @@ function handleModalBackgroundClick(
 
 // =====================================================
 // MENSAGENS / NOTIFICAÇÕES
-//
-// Útil para pequenas notificações futuras.
-//
-// Exemplo:
-//
-// showMessage(
-//     "Configuração salva."
-// );
-//
-// Por enquanto a função escreve no console.
-// Quando o CSS estiver pronto podemos transformar
-// isso em um toast visual.
 // =====================================================
 
 export function showMessage(
@@ -1043,9 +1479,7 @@ function scrollElementToBottom(
 
 
 // =====================================================
-// OBTÉM ESTADO VISUAL
-//
-// Útil para debug.
+// ESTADO VISUAL
 // =====================================================
 
 export function getUIState() {
@@ -1067,9 +1501,11 @@ export function getUIState() {
             uiState.statusData,
 
         commandTreeData:
-            uiState.commandTreeData
+            uiState.commandTreeData,
+
+        topologyData:
+            uiState.topologyData
 
     };
 
 }
-

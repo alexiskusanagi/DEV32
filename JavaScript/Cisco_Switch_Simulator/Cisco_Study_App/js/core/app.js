@@ -1,25 +1,7 @@
-
 /*
 =====================================================
 CISCO STUDY SIMULATOR
 core/app.js
-
-Responsabilidade:
-
-- Inicializar o simulador
-- Inicializar CLI e UI
-- Carregar startup-config
-- Encaminhar comandos para cliExecutor
-- Atualizar a interface
-
-Não possui:
-
-- Regras de comandos
-- Estado de modo da CLI
-- Parser
-- Regras do switch
-- Manipulação direta do DOM
-- Criação do laboratório
 =====================================================
 */
 
@@ -39,8 +21,13 @@ import {
 } from "./cliExecutor.js";
 
 import {
-    getSimulatorState
+    getSimulatorState,
+    resetLab
 } from "./simulator.js";
+
+import {
+    createLabFactory
+} from "./labFactory.js";
 
 import {
     initializeCLI,
@@ -54,6 +41,7 @@ import {
     renderHelp,
     renderStatus,
     renderCommandTree,
+    renderTopology,
     addHistoryEntry
 } from "../interface/ui.js";
 
@@ -79,6 +67,24 @@ function initializeApp() {
 
 
     /*
+    Cria o laboratório padrão.
+
+    O labFactory é responsável por criar:
+    - Switch
+    - PC1
+    - PC2
+    - PC3
+    - PC4
+    - PC5
+    - Topologia inicial
+    */
+
+    resetLab(
+        createLabFactory()
+    );
+
+
+    /*
     Inicializa terminal.
     */
 
@@ -95,6 +101,9 @@ function initializeApp() {
 
     /*
     Carrega startup-config.
+
+    Se existir, ela substitui o estado
+    inicial criado pelo labFactory.
     */
 
     const loaded =
@@ -121,7 +130,7 @@ function initializeApp() {
         );
 
         writeLine(
-            "Iniciando com a configuração atual."
+            "Iniciando laboratório padrão."
         );
 
     }
@@ -183,12 +192,6 @@ function loadSavedConfiguration() {
 /*
 =====================================================
 EXECUÇÃO DE COMANDOS
-
-O app.js NÃO interpreta comandos.
-
-Tudo é enviado para:
-
-cliExecutor.js
 =====================================================
 */
 
@@ -202,40 +205,18 @@ function handleCommand(command) {
             );
 
 
-        /*
-        Registra o comando no histórico
-        visual da interface.
-
-        O histórico de navegação da CLI
-        (teclas ↑ / ↓) continua separado
-        e pertence ao cli.js.
-        */
-
         addHistoryEntry(
             command
         );
 
-
-        /*
-        Atualiza o prompt de acordo
-        com o contexto real do executor.
-        */
 
         setPrompt(
             getCliPrompt()
         );
 
 
-        /*
-        Atualiza a interface.
-        */
-
         refreshUI();
 
-
-        /*
-        O terminal espera uma string.
-        */
 
         if (
             result &&
@@ -262,11 +243,6 @@ function handleCommand(command) {
         const errorMessage =
             "% Erro interno ao executar comando.";
 
-
-        /*
-        Registra também erros internos
-        no histórico visual.
-        */
 
         addHistoryEntry(
             command,
@@ -297,13 +273,6 @@ function updateHelp() {
     const prompt =
         getCliPrompt();
 
-
-    /*
-    Obtém o modo a partir do prompt.
-
-    A seleção detalhada dos comandos
-    continua no database.
-    */
 
     const mode =
         getModeFromPrompt(
@@ -488,6 +457,37 @@ function updateStatus() {
 
 /*
 =====================================================
+ATUALIZAR TOPOLOGIA
+=====================================================
+*/
+
+function updateTopology() {
+
+    const simulatorState =
+        getSimulatorState();
+
+
+    if (
+        !simulatorState
+    ) {
+
+        renderTopology(null);
+
+        return;
+
+    }
+
+
+    renderTopology(
+        simulatorState.topology ||
+        null
+    );
+
+}
+
+
+/*
+=====================================================
 REFRESH UI
 =====================================================
 */
@@ -500,6 +500,8 @@ export function refreshUI() {
 
     updateStatus();
 
+    updateTopology();
+
     setPrompt(
         getCliPrompt()
     );
@@ -509,7 +511,7 @@ export function refreshUI() {
 
 /*
 =====================================================
-SNAPSHOT DO SIMULADOR
+SNAPSHOT
 =====================================================
 */
 
@@ -527,6 +529,10 @@ RESET DA APLICAÇÃO
 */
 
 export function resetApp() {
+
+    resetLab(
+        createLabFactory()
+    );
 
     setPrompt(
         getCliPrompt()
@@ -561,4 +567,3 @@ else {
     initializeApp();
 
 }
-

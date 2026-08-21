@@ -5,8 +5,8 @@
 
     <meta charset="UTF-8">
 
-    <meta 
-        name="viewport" 
+    <meta
+        name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
@@ -15,8 +15,8 @@
     </title>
 
 
-    <link 
-        rel="stylesheet" 
+    <link
+        rel="stylesheet"
         href="css/style.css"
     >
 
@@ -26,25 +26,46 @@
 <body>
 
 
-    <!--
-        Área futura para renderização de topologias.
-        Inicialmente vazia.
-        Futuramente:
-        - switches
-        - routers
-        - PCs
-        - conexões
-    -->
+    <!-- =====================================================
+         ÁREA DE TOPOLOGIA
+         
+         A topologia é criada pelo labFactory.js.
+         
+         O ui.js será responsável por transformar
+         o estado da topologia em representação visual.
+         
+         Estado inicial esperado:
+         
+         Switch
+         ├── PC1
+         ├── PC2
+         ├── PC3
+         ├── PC4
+         └── PC5
+         
+         Esta área fica inicialmente vazia.
+         ===================================================== -->
 
-    <div id="topology-container">
+    <section
+        id="topology-container"
+        aria-label="Topologia do laboratório"
+    >
 
-    </div>
+        <!--
+            Renderizado dinamicamente pelo ui.js.
+
+            Não inserir dispositivos diretamente aqui.
+
+            O HTML representa somente o container.
+        -->
+
+    </section>
 
 
 
-    <!-- ===============================
+    <!-- =====================================================
          PAINEL ESQUERDO
-    ================================= -->
+         ===================================================== -->
 
     <aside class="panel left-panel">
 
@@ -54,12 +75,14 @@
         </h3>
 
 
-        <div 
-            id="help-list" 
+        <div
+            id="help-list"
             class="scrollable-list"
         >
 
-            <!-- Gerado pelo JavaScript -->
+            <!--
+                Gerado pelo ui.js
+            -->
 
         </div>
 
@@ -68,18 +91,16 @@
 
 
 
-
-
-
-    <!-- ===============================
+    <!-- =====================================================
          ÁREA CENTRAL
-    ================================= -->
+         ===================================================== -->
 
     <main class="main-content">
 
 
-
-        <!-- MISSÕES -->
+        <!-- =================================================
+             MISSÕES
+             ================================================= -->
 
         <div class="mission-bar">
 
@@ -91,8 +112,7 @@
             </label>
 
 
-
-            <select 
+            <select
                 id="mission-selector"
             >
 
@@ -110,35 +130,29 @@
 
 
 
-
-
-
-        <!-- TERMINAL CLI -->
+        <!-- =================================================
+             TERMINAL CLI
+             ================================================= -->
 
         <section class="cli-container">
 
 
-
-            <div 
+            <div
                 id="cli-screen"
             >
-<!-- 
-                --- Cisco Study Simulator ---
 
-
-                Inicializando laboratório... -->
-
+                <!--
+                    Conteúdo gerado pelo cli.js
+                -->
 
             </div>
-
-
 
 
 
             <div class="cli-input-area">
 
 
-                <span 
+                <span
                     id="cli-prompt"
                 >
 
@@ -149,17 +163,12 @@
 
 
                 <input
-
                     id="cli-input"
-
                     type="text"
-
                     autocomplete="off"
-
                     spellcheck="false"
-
+                    aria-label="Entrada de comando CLI"
                 >
-
 
 
             </div>
@@ -169,22 +178,17 @@
 
 
 
-
-
-
-
-        <!-- BOTÕES -->
+        <!-- =================================================
+             BOTÕES
+             ================================================= -->
 
         <div class="button-area">
 
 
-
             <button
-
                 id="btn-command-tree"
-
                 class="btn"
-
+                type="button"
             >
 
                 🌲 Command Tree
@@ -193,13 +197,10 @@
 
 
 
-
             <button
-
                 id="btn-reset"
-
                 class="btn danger"
-
+                type="button"
             >
 
                 🟥 Reset Switch
@@ -207,121 +208,96 @@
             </button>
 
 
-
         </div>
-
 
 
     </main>
 
 
 
-
-
-
-
-
-
-    <!-- ===============================
+    <!-- =====================================================
          PAINEL DIREITO
-    ================================= -->
-
+         ===================================================== -->
 
     <aside class="panel right-panel">
 
 
+        <!-- =================================================
+             HISTÓRICO
+             ================================================= -->
 
         <section class="status-box">
 
 
-
             <h3>
-
                 Histórico
-
             </h3>
 
 
-
             <div
-
                 id="history-list"
-
                 class="scrollable-list"
-
             >
 
+                <!--
+                    Gerado pelo ui.js
+                -->
 
             </div>
-
 
 
         </section>
 
 
 
-
-
-
+        <!-- =================================================
+             CONFIGURAÇÃO E STATUS
+             ================================================= -->
 
         <section class="status-box">
 
 
             <h3>
-
                 Configuração e Status
-
             </h3>
 
 
-
             <div
-
                 id="status-display"
-
                 class="scrollable-list"
-
             >
 
+                <!--
+                    Gerado pelo ui.js
+                -->
 
             </div>
 
 
-
         </section>
-
 
 
     </aside>
 
 
 
-
-
-
-
-
-    <!-- ===============================
+    <!-- =====================================================
          MODAL COMMAND TREE
-    ================================= -->
-
+         ===================================================== -->
 
     <div
-
         id="tree-modal"
-
         class="modal"
-
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="command-tree-title"
     >
 
 
-
         <button
-
             id="btn-close-tree"
-
             class="btn danger"
-
+            type="button"
         >
 
             ❌ Fechar
@@ -330,8 +306,7 @@
 
 
 
-
-        <h2>
+        <h2 id="command-tree-title">
 
             🛡️ Command Tree
 
@@ -339,50 +314,31 @@
 
 
 
-
         <div
-
             id="command-tree-content"
-
         >
 
             <!--
-                Futuramente:
-                gerado dinamicamente
-                pelo módulo interface
+                Gerado dinamicamente pelo ui.js
             -->
 
-
         </div>
-
 
 
     </div>
 
 
 
-
-
-
-
-
-
-    <!-- ===============================
+    <!-- =====================================================
          APLICAÇÃO
-    ================================= -->
-
+         ===================================================== -->
 
     <script
-
         type="module"
-
         src="js/core/app.js"
-
     ></script>
 
 
-
 </body>
-
 
 </html>

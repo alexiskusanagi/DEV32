@@ -1,33 +1,26 @@
-
 /*
 CISCO STUDY SIMULATOR
 Arquivo: database.js
 
 Responsabilidade:
 
-- Guardar banco de comandos.
-- Manter o estado atual do laboratório.
-- Simular NVRAM usando localStorage.
-- Salvar e carregar startup-config.
+- Guardar o banco de comandos disponíveis por modo.
 
 Não possui:
 
-- HTML
-- DOM
+- appState
+- NVRAM
+- localStorage
+- criação do laboratório
+- reset do laboratório
+- execução de comandos
+- regras do switch
 - CLI
-- Interface
-- Regras de configuração do switch
-- Criação direta do laboratório
+- DOM
 
-A criação do laboratório pertence ao:
-
-labFactory.js
+O estado pertence ao state.js.
+A criação do laboratório pertence ao labFactory.js.
 */
-
-
-import {
-    createLabFactory
-} from "./labFactory.js";
 
 
 /*
@@ -234,228 +227,3 @@ export const commandDatabase = {
     }
 
 };
-
-
-/*
-=================================================
-LAB FACTORY
-=================================================
-*/
-
-export function createFactoryState() {
-
-    return createLabFactory();
-
-}
-
-
-/*
-=================================================
-ESTADO ATUAL DO SIMULADOR
-
-Equivalente ao running-config em RAM.
-=================================================
-*/
-
-export let appState =
-    createFactoryState();
-
-
-/*
-=================================================
-NVRAM
-
-Simulação da startup-config usando localStorage.
-=================================================
-*/
-
-const NVRAM_KEY =
-    "cisco-study-simulator-startup-config";
-
-
-/*
-=================================================
-SALVAR CONFIGURAÇÃO
-
-Equivalente:
-
-copy running-config startup-config
-wr
-=================================================
-*/
-
-export function saveStartupConfig() {
-
-    try {
-
-        const snapshot =
-            JSON.stringify(
-                appState
-            );
-
-
-        localStorage.setItem(
-            NVRAM_KEY,
-            snapshot
-        );
-
-
-        return true;
-
-    }
-    catch (error) {
-
-        console.error(
-            "Erro salvando NVRAM:",
-            error
-        );
-
-
-        return false;
-
-    }
-
-}
-
-
-/*
-=================================================
-VERIFICAR STARTUP-CONFIG
-=================================================
-*/
-
-export function hasStartupConfig() {
-
-    return (
-
-        localStorage.getItem(
-            NVRAM_KEY
-        ) !== null
-
-    );
-
-}
-
-
-/*
-=================================================
-CARREGAR CONFIGURAÇÃO
-
-Equivalente ao boot do switch.
-=================================================
-*/
-
-export function loadStartupConfig() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                NVRAM_KEY
-            );
-
-
-        if (!saved) {
-
-            return false;
-
-        }
-
-
-        const recovered =
-            JSON.parse(
-                saved
-            );
-
-
-        if (
-            !recovered ||
-            typeof recovered !== "object"
-        ) {
-
-            return false;
-
-        }
-
-
-        Object.assign(
-            appState,
-            recovered
-        );
-
-
-        return true;
-
-    }
-    catch (error) {
-
-        console.error(
-            "Erro carregando NVRAM:",
-            error
-        );
-
-
-        return false;
-
-    }
-
-}
-
-
-/*
-=================================================
-APAGAR NVRAM
-
-Equivalente:
-
-erase startup-config
-
-Não altera automaticamente
-o running state.
-=================================================
-*/
-
-export function eraseStartupConfig() {
-
-    localStorage.removeItem(
-        NVRAM_KEY
-    );
-
-}
-
-
-/*
-=================================================
-RESET DE FÁBRICA
-
-Apaga startup-config e cria
-um novo estado de laboratório.
-=================================================
-*/
-
-export function factoryReset() {
-
-    eraseStartupConfig();
-
-
-    appState =
-        createFactoryState();
-
-}
-
-
-/*
-=================================================
-EXPORTAR CONFIGURAÇÃO
-=================================================
-*/
-
-export function exportConfig() {
-
-    return JSON.stringify(
-        appState,
-        null,
-        4
-    );
-
-}
