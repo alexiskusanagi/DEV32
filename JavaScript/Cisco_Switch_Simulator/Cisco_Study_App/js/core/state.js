@@ -578,6 +578,18 @@ appState.devices.push(
 const NVRAM_KEY =
     "cisco-study-simulator-startup-config";
 
+function getNvramKey(
+    deviceType
+) {
+
+    return (
+        NVRAM_KEY +
+        "-" +
+        deviceType
+    );
+
+}
+
 
 function isLocalStorageAvailable() {
 
@@ -610,7 +622,9 @@ function isLocalStorageAvailable() {
 }
 
 
-export function saveStartupConfig() {
+export function saveStartupConfig(deviceType
+
+) {
 
     try {
 
@@ -628,9 +642,10 @@ export function saveStartupConfig() {
             );
 
         localStorage.setItem(
-            NVRAM_KEY,
-            snapshot
-        );
+                getNvramKey(deviceType),
+                snapshot
+            );
+
 
         appState.runningConfigExists =
             true;
@@ -651,7 +666,9 @@ export function saveStartupConfig() {
 }
 
 
-export function hasStartupConfig() {
+export function hasStartupConfig(
+    deviceType
+) {
 
     try {
 
@@ -663,9 +680,20 @@ export function hasStartupConfig() {
 
         }
 
+        if (
+            deviceType !== "switch" &&
+            deviceType !== "router"
+        ) {
+
+            return false;
+
+        }
+
         return (
             localStorage.getItem(
-                NVRAM_KEY
+                getNvramKey(
+                    deviceType
+                )
             ) !== null
         );
 
@@ -683,7 +711,10 @@ export function hasStartupConfig() {
 }
 
 
-export function loadStartupConfig() {
+
+export function loadStartupConfig(
+    deviceType
+) {
 
     try {
 
@@ -695,9 +726,20 @@ export function loadStartupConfig() {
 
         }
 
+        if (
+            deviceType !== "switch" &&
+            deviceType !== "router"
+        ) {
+
+            return false;
+
+        }
+
         const saved =
             localStorage.getItem(
-                NVRAM_KEY
+                getNvramKey(
+                    deviceType
+                )
             );
 
         if (!saved) {
@@ -759,7 +801,9 @@ export function loadStartupConfig() {
 }
 
 
-export function eraseStartupConfig() {
+export function eraseStartupConfig(deviceType
+
+) {
 
     try {
 
@@ -772,8 +816,9 @@ export function eraseStartupConfig() {
         }
 
         localStorage.removeItem(
-            NVRAM_KEY
+            getNvramKey(deviceType)
         );
+
 
         return true;
 
@@ -791,46 +836,93 @@ export function eraseStartupConfig() {
 }
 
 
-export function factoryReset(
-    factoryState
-) {
+export function factoryReset() {
 
     try {
 
-        if (
-            !factoryState ||
-            typeof factoryState !== "object" ||
-            Array.isArray(factoryState)
-        ) {
-
-            return false;
-
-        }
-
-        const cleanState =
-            structuredClone(
-                factoryState
+        const cleanSwitch =
+            createSwitchState(
+                "Switch"
             );
 
-        if (
-            !normalizeAppState(
-                cleanState
+        const cleanRouter =
+            createRouterState(
+                "Router"
+            );
+
+
+        appState.switch =
+            cleanSwitch;
+
+        appState.router =
+            cleanRouter;
+
+
+        appState.pcs = [];
+
+        appState.topology =
+            createTopologyState();
+
+
+        appState.devices = [
+
+            createDeviceReference(
+                "switch",
+                cleanSwitch.id
+            ),
+
+            createDeviceReference(
+                "router",
+                cleanRouter.id
             )
-        ) {
 
-            return false;
+        ];
 
-        }
 
-        eraseStartupConfig();
+        appState.topology.devices = [
 
-        Object.assign(
-            appState,
-            cleanState
-        );
+            createDeviceReference(
+                "switch",
+                cleanSwitch.id
+            ),
+
+            createDeviceReference(
+                "router",
+                cleanRouter.id
+            )
+
+        ];
+
+
+        appState.currentDeviceId =
+            "Switch";
+
+        appState.currentDeviceType =
+            "switch";
+
+        appState.currentInterface =
+            null;
+
+
+        appState.activeLabId =
+            null;
+
+        appState.activeLabName =
+            null;
+
 
         appState.runningConfigExists =
             false;
+
+
+        eraseStartupConfig(
+            "switch"
+        );
+
+        eraseStartupConfig(
+            "router"
+        );
+
 
         return true;
 
@@ -846,6 +938,7 @@ export function factoryReset(
     }
 
 }
+
 
 
 export function exportConfig() {

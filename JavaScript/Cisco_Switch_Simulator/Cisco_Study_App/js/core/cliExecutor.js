@@ -39,6 +39,7 @@ import {
     saveStartupConfig,
     loadStartupConfig,
     eraseStartupConfig,
+    // resetDevices,
     getCurrentDevice
 } from "./state.js";
 
@@ -473,11 +474,15 @@ export function executeCommand(
         case "copy":
             return executeCopy(parsed.args);
 
+        case "reset":
+            return executeReset();
+
         case "erase":
             return executeErase(parsed.args);
 
         case "reload":
             return executeReload();
+
 
         case "attack":
             return executeAttack(parsed.args);
@@ -3514,6 +3519,42 @@ function executeErase(
     );
 
 }
+
+
+/*
+=====================================================
+RESET
+=====================================================
+*/
+
+function executeReset() {
+
+    const success =
+        resetDevices();
+
+
+    if (!success) {
+
+        return createResult(
+            false,
+            "reset",
+            "% Falha ao resetar os dispositivos."
+        );
+
+    }
+
+
+    resetAllCliContexts();
+
+
+    return createResult(
+        true,
+        "reset",
+        "NVRAM do Switch e Router apagada."
+    );
+
+}
+
 
 
 /*
