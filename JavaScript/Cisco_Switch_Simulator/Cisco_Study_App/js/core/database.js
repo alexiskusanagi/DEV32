@@ -1,10 +1,14 @@
 /*
+=====================================================
 CISCO STUDY SIMULATOR
 Arquivo: database.js
+=====================================================
 
 Responsabilidade:
 
 - Guardar o banco de comandos disponíveis por modo.
+- Organizar comandos por contexto CLI.
+- Servir de fonte para Help e Command Tree.
 
 Não possui:
 
@@ -14,27 +18,29 @@ Não possui:
 - criação do laboratório
 - reset do laboratório
 - execução de comandos
-- regras do switch
-- CLI
+- regras do Switch
+- regras do Router
 - DOM
 
-O estado pertence ao state.js.
-A criação do laboratório pertence ao labFactory.js.
+A execução pertence ao cliExecutor.js.
+As regras de estado pertencem ao simulator.js/state.js.
+=====================================================
 */
 
 
 /*
-=================================================
+=====================================================
 BANCO DE COMANDOS
-=================================================
+=====================================================
 */
 
 export const commandDatabase = {
 
+
     /*
-    =============================================
+    =================================================
     USER EXEC
-    =============================================
+    =================================================
     */
 
     user: {
@@ -44,7 +50,10 @@ export const commandDatabase = {
         commands: {
 
             "enable":
-                "Entra no Modo Privilegiado",
+                "Entra no modo privilegiado",
+
+            "ping":
+                "Testa conectividade com um endereço IP",
 
             "exit":
                 "Encerra a sessão"
@@ -55,9 +64,9 @@ export const commandDatabase = {
 
 
     /*
-    =============================================
+    =================================================
     PRIVILEGED EXEC
-    =============================================
+    =================================================
     */
 
     privileged: {
@@ -69,23 +78,44 @@ export const commandDatabase = {
             "configure terminal":
                 "Entra no modo de configuração global",
 
+            "show running-config":
+                "Mostra a configuração atual",
+
+            "show ip interface brief":
+                "Mostra resumo das interfaces e endereços IP",
+
+            "show interfaces status":
+                "Mostra o status das interfaces",
+
+            "show mac address-table":
+                "Mostra a tabela de endereços MAC",
+
             "show vlan brief":
-                "Mostra VLANs",
+                "Mostra resumo das VLANs",
 
             "copy running-config startup-config":
-                "Salva a configuração na NVRAM",
+                "Salva a configuração na startup-config",
+
+            "write memory":
+                "Salva a configuração",
 
             "write":
                 "Salva a configuração",
 
+            "wr":
+                "Atalho para write",
+
             "erase startup-config":
                 "Apaga a startup-config",
+
+            "reload":
+                "Reinicia o dispositivo",
 
             "clear":
                 "Limpa informações",
 
             "exit":
-                "Volta para o Modo User"
+                "Volta ao modo User"
 
         }
 
@@ -93,9 +123,9 @@ export const commandDatabase = {
 
 
     /*
-    =============================================
+    =================================================
     GLOBAL CONFIGURATION
-    =============================================
+    =================================================
     */
 
     global: {
@@ -125,14 +155,14 @@ export const commandDatabase = {
             "interface":
                 "Entra na configuração de uma interface",
 
-            "line console":
+            "line console 0":
                 "Entra na configuração do console",
 
-            "line vty":
+            "line vty 0 15":
                 "Entra na configuração das linhas VTY",
 
             "exit":
-                "Volta para o modo privilegiado",
+                "Volta ao modo privilegiado",
 
             "end":
                 "Volta diretamente ao modo privilegiado"
@@ -143,9 +173,9 @@ export const commandDatabase = {
 
 
     /*
-    =============================================
+    =================================================
     INTERFACE CONFIGURATION
-    =============================================
+    =================================================
     */
 
     interface: {
@@ -166,6 +196,12 @@ export const commandDatabase = {
             "no shutdown":
                 "Ativa a interface",
 
+            "switchport mode access":
+                "Configura a porta como access",
+
+            "switchport mode trunk":
+                "Configura a porta como trunk",
+
             "switchport mode":
                 "Configura o modo da porta",
 
@@ -179,10 +215,13 @@ export const commandDatabase = {
                 "Ativa Sticky MAC",
 
             "switchport port-security mac-address":
-                "Autoriza um MAC",
+                "Autoriza um endereço MAC",
 
             "no switchport port-security":
                 "Desativa Port Security",
+
+            "name":
+                "Define o nome da interface ou VLAN",
 
             "exit":
                 "Volta ao modo de configuração global",
@@ -196,9 +235,9 @@ export const commandDatabase = {
 
 
     /*
-    =============================================
+    =================================================
     LINE CONFIGURATION
-    =============================================
+    =================================================
     */
 
     line: {

@@ -326,8 +326,17 @@ export function executeCommand(
         parsed.type
     ) {
 
+        /*
+        =============================================
+        MODOS BÁSICOS
+        =============================================
+        */
+
         case "enable":
             return executeEnable();
+
+        case "disable":
+            return executeDisable();
 
         case "configure-terminal":
             return executeConfigureTerminal();
@@ -337,6 +346,13 @@ export function executeCommand(
 
         case "end":
             return executeEnd();
+
+
+        /*
+        =============================================
+        CONFIGURAÇÃO
+        =============================================
+        */
 
         case "hostname":
             return executeHostname(parsed.args);
@@ -353,8 +369,25 @@ export function executeCommand(
         case "no-service-password-encryption":
             return executeNoPasswordEncryption();
 
+
+        /*
+        =============================================
+        VLAN
+        =============================================
+        */
+
         case "vlan":
             return executeVlan(parsed.args);
+
+        case "name":
+            return executeVlanName(parsed.args);
+
+
+        /*
+        =============================================
+        INTERFACES
+        =============================================
+        */
 
         case "interface":
             return executeInterface(parsed.args);
@@ -370,6 +403,13 @@ export function executeCommand(
 
         case "no-shutdown":
             return executeNoShutdown();
+
+
+        /*
+        =============================================
+        SWITCHPORT
+        =============================================
+        */
 
         case "switchport-mode":
             return executeSwitchportMode(parsed.args);
@@ -389,6 +429,13 @@ export function executeCommand(
         case "no-switchport-port-security":
             return executeNoPortSecurity();
 
+
+        /*
+        =============================================
+        LINHAS
+        =============================================
+        */
+
         case "line-console":
             return executeLineConsole(parsed.args);
 
@@ -403,6 +450,13 @@ export function executeCommand(
 
         case "no-login":
             return executeNoLogin();
+
+
+        /*
+        =============================================
+        EXEC
+        =============================================
+        */
 
         case "ping":
             return executePing(parsed.args);
@@ -422,8 +476,12 @@ export function executeCommand(
         case "erase":
             return executeErase(parsed.args);
 
+        case "reload":
+            return executeReload();
+
         case "attack":
             return executeAttack(parsed.args);
+
 
         default:
 
@@ -457,6 +515,53 @@ function executeEnable() {
     return createResult(
         true,
         "enable",
+        ""
+    );
+
+}
+
+
+/*
+=====================================================
+DISABLE
+=====================================================
+*/
+
+function executeDisable() {
+
+    const context =
+        getActiveContext();
+
+
+    if (
+        context.mode !== "privileged"
+    ) {
+
+        return createResult(
+            false,
+            "disable",
+            "% Comando permitido somente no modo privilegiado."
+        );
+
+    }
+
+
+    context.mode =
+        "user";
+
+    context.interfaceType =
+        null;
+
+    context.interfaceName =
+        null;
+
+    context.lineType =
+        null;
+
+
+    return createResult(
+        true,
+        "disable",
         ""
     );
 
@@ -676,6 +781,46 @@ function executeHostname(
     }
 
 
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
+    if (
+        requireDevice("router")
+    ) {
+
+        if (!appState.router) {
+
+            return createResult(
+                false,
+                "hostname",
+                "% Router indisponível."
+            );
+
+        }
+
+
+        appState.router.hostname =
+            hostname;
+
+
+        return createResult(
+            true,
+            "hostname",
+            ""
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
+
     const success =
         setHostname(
             hostname
@@ -723,6 +868,46 @@ function executeBanner(
     const text =
         args?.text ?? "";
 
+
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
+    if (
+        requireDevice("router")
+    ) {
+
+        if (!appState.router) {
+
+            return createResult(
+                false,
+                "banner-motd",
+                "% Router indisponível."
+            );
+
+        }
+
+
+        appState.router.bannerMotd =
+            String(text);
+
+
+        return createResult(
+            true,
+            "banner-motd",
+            ""
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
 
     const success =
         setBanner(
@@ -783,6 +968,46 @@ function executeEnableSecret(
     }
 
 
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
+    if (
+        requireDevice("router")
+    ) {
+
+        if (!appState.router) {
+
+            return createResult(
+                false,
+                "enable-secret",
+                "% Router indisponível."
+            );
+
+        }
+
+
+        appState.router.enableSecret =
+            secret;
+
+
+        return createResult(
+            true,
+            "enable-secret",
+            ""
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
+
     const success =
         setEnableSecret(
             secret
@@ -826,13 +1051,21 @@ function executePasswordEncryption() {
 
 
     if (
-        !requireDevice("switch")
+        requireDevice("router")
     ) {
 
+        if (appState.router) {
+
+            appState.router.encryptionActive =
+                true;
+
+        }
+
+
         return createResult(
-            false,
+            true,
             "service-password-encryption",
-            "% Este comando ainda não está disponível para Router."
+            ""
         );
 
     }
@@ -873,13 +1106,21 @@ function executeNoPasswordEncryption() {
 
 
     if (
-        !requireDevice("switch")
+        requireDevice("router")
     ) {
 
+        if (appState.router) {
+
+            appState.router.encryptionActive =
+                false;
+
+        }
+
+
         return createResult(
-            false,
+            true,
             "no-service-password-encryption",
-            "% Este comando ainda não está disponível para Router."
+            ""
         );
 
     }
@@ -1100,11 +1341,23 @@ function executeInterface(
     }
 
 
-    const interfaceName =
+    let interfaceName =
         args
             .join(" ")
             .trim()
             .toLowerCase();
+
+
+    /*
+    ---------------------------------------------
+    NORMALIZAÇÃO DE ATALHOS
+    ---------------------------------------------
+    */
+
+    interfaceName =
+        normalizeInterfaceName(
+            interfaceName
+        );
 
 
     /*
@@ -1136,9 +1389,18 @@ function executeInterface(
             router.interfaces || {};
 
 
-        if (
-            !interfaces[interfaceName]
-        ) {
+        const resolvedName =
+            Object.keys(
+                interfaces
+            ).find(
+                name =>
+                    normalizeInterfaceName(
+                        name.toLowerCase()
+                    ) === interfaceName
+            );
+
+
+        if (!resolvedName) {
 
             return createResult(
                 false,
@@ -1150,7 +1412,7 @@ function executeInterface(
 
 
         router.activeInterface =
-            interfaceName;
+            resolvedName;
 
 
         context.mode =
@@ -1160,7 +1422,7 @@ function executeInterface(
             "physical";
 
         context.interfaceName =
-            interfaceName;
+            resolvedName;
 
 
         return createResult(
@@ -1174,7 +1436,7 @@ function executeInterface(
 
     /*
     ---------------------------------------------
-    SWITCH
+    SWITCH VLAN
     ---------------------------------------------
     */
 
@@ -1203,6 +1465,12 @@ function executeInterface(
     }
 
 
+    /*
+    ---------------------------------------------
+    SWITCH PORTA FÍSICA
+    ---------------------------------------------
+    */
+
     const success =
         selectInterface(
             interfaceName
@@ -1227,13 +1495,108 @@ function executeInterface(
         "physical";
 
     context.interfaceName =
-        interfaceName;
+        getSwitchInterfaceName(
+            interfaceName
+        );
 
 
     return createResult(
         true,
         "interface",
         ""
+    );
+
+}
+
+
+/*
+=====================================================
+NORMALIZAR NOME DE INTERFACE
+=====================================================
+*/
+
+function normalizeInterfaceName(
+    name
+) {
+
+    let normalized =
+        String(name || "")
+            .trim()
+            .toLowerCase();
+
+
+    normalized =
+        normalized.replace(
+            /^int\s+/,
+            ""
+        );
+
+
+    normalized =
+        normalized.replace(
+            /^fa\s+/,
+            "fastethernet "
+        );
+
+
+    normalized =
+        normalized.replace(
+            /^fastethernet\s+/,
+            "fastethernet "
+        );
+
+
+    normalized =
+        normalized.replace(
+            /^gi\s+/,
+            "gigabitethernet "
+        );
+
+
+    normalized =
+        normalized.replace(
+            /^gigabitethernet\s+/,
+            "gigabitethernet "
+        );
+
+
+    return normalized;
+
+}
+
+
+/*
+=====================================================
+OBTER NOME REAL DA INTERFACE DO SWITCH
+=====================================================
+*/
+
+function getSwitchInterfaceName(
+    interfaceName
+) {
+
+    const normalized =
+        normalizeInterfaceName(
+            interfaceName
+        );
+
+
+    const ports =
+        appState.switch?.ports ||
+        {};
+
+
+    return (
+        Object.keys(
+            ports
+        ).find(
+            name =>
+                normalizeInterfaceName(
+                    name
+                ) === normalized
+        )
+        ||
+        interfaceName
     );
 
 }
@@ -1753,7 +2116,23 @@ function executeSwitchportMode(
     const mode =
         String(
             args[0] || ""
-        ).toLowerCase();
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        mode !== "access" &&
+        mode !== "trunk"
+    ) {
+
+        return createResult(
+            false,
+            "switchport-mode",
+            "% Modo de porta inválido."
+        );
+
+    }
 
 
     const success =
@@ -1855,13 +2234,14 @@ function executePortSecurity() {
 
 
     if (
-        switchContext.mode !== "interface"
+        switchContext.mode !== "interface" ||
+        switchContext.interfaceType !== "physical"
     ) {
 
         return createResult(
             false,
             "switchport-port-security",
-            "% Comando permitido somente no modo de interface."
+            "% Comando permitido somente em uma interface física."
         );
 
     }
@@ -2068,7 +2448,9 @@ LINE PASSWORD
 =====================================================
 */
 
-function executeLinePassword() {
+function executeLinePassword(
+    args
+) {
 
     const context =
         getActiveContext();
@@ -2087,10 +2469,70 @@ function executeLinePassword() {
     }
 
 
+    const password =
+        args.join(" ").trim();
+
+
+    if (!password) {
+
+        return createResult(
+            false,
+            "password",
+            "% Senha não informada."
+        );
+
+    }
+
+
+    const device =
+        getCurrentDevice();
+
+
+    if (!device) {
+
+        return createResult(
+            false,
+            "password",
+            "% Dispositivo indisponível."
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    GARANTE ESTRUTURA DE LINHAS
+    ---------------------------------------------
+    */
+
+    if (!device.lines) {
+
+        device.lines = {};
+
+    }
+
+
+    const lineName =
+        context.lineType === "vty"
+            ? "vty"
+            : "console";
+
+
+    if (!device.lines[lineName]) {
+
+        device.lines[lineName] = {};
+
+    }
+
+
+    device.lines[lineName].password =
+        password;
+
+
     return createResult(
-        false,
+        true,
         "password",
-        "% Configuração de senha de line ainda não implementada no simulator."
+        ""
     );
 
 }
@@ -2121,10 +2563,49 @@ function executeLogin() {
     }
 
 
+    const device =
+        getCurrentDevice();
+
+
+    if (!device) {
+
+        return createResult(
+            false,
+            "login",
+            "% Dispositivo indisponível."
+        );
+
+    }
+
+
+    if (!device.lines) {
+
+        device.lines = {};
+
+    }
+
+
+    const lineName =
+        context.lineType === "vty"
+            ? "vty"
+            : "console";
+
+
+    if (!device.lines[lineName]) {
+
+        device.lines[lineName] = {};
+
+    }
+
+
+    device.lines[lineName].login =
+        true;
+
+
     return createResult(
-        false,
+        true,
         "login",
-        "% Configuração de login de line ainda não implementada no simulator."
+        ""
     );
 
 }
@@ -2149,10 +2630,49 @@ function executeNoLogin() {
     }
 
 
+    const device =
+        getCurrentDevice();
+
+
+    if (!device) {
+
+        return createResult(
+            false,
+            "no-login",
+            "% Dispositivo indisponível."
+        );
+
+    }
+
+
+    if (!device.lines) {
+
+        device.lines = {};
+
+    }
+
+
+    const lineName =
+        context.lineType === "vty"
+            ? "vty"
+            : "console";
+
+
+    if (!device.lines[lineName]) {
+
+        device.lines[lineName] = {};
+
+    }
+
+
+    device.lines[lineName].login =
+        false;
+
+
     return createResult(
-        false,
+        true,
         "no-login",
-        "% Configuração de login de line ainda não implementada no simulator."
+        ""
     );
 
 }
@@ -2312,6 +2832,35 @@ function executeShow(
         command === "running-config"
     ) {
 
+        const device =
+            requireDevice("router")
+                ? appState.router
+                : appState.switch;
+
+
+        return createResult(
+            true,
+            "show",
+            JSON.stringify(
+                device,
+                null,
+                4
+            )
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    IP INTERFACE BRIEF
+    ---------------------------------------------
+    */
+
+    if (
+        command === "ip interface brief"
+    ) {
+
         if (
             requireDevice("router")
         ) {
@@ -2319,11 +2868,7 @@ function executeShow(
             return createResult(
                 true,
                 "show",
-                JSON.stringify(
-                    appState.router,
-                    null,
-                    4
-                )
+                formatRouterInterfaceBrief()
             );
 
         }
@@ -2332,11 +2877,71 @@ function executeShow(
         return createResult(
             true,
             "show",
-            JSON.stringify(
-                appState.switch,
-                null,
-                4
-            )
+            formatSwitchInterfaceBrief()
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    MAC ADDRESS TABLE
+    ---------------------------------------------
+    */
+
+    if (
+        command === "mac address-table"
+    ) {
+
+        if (
+            !requireDevice("switch")
+        ) {
+
+            return createResult(
+                false,
+                "show",
+                "% A tabela MAC pertence ao Switch."
+            );
+
+        }
+
+
+        return createResult(
+            true,
+            "show",
+            formatMacAddressTable()
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    INTERFACES STATUS
+    ---------------------------------------------
+    */
+
+    if (
+        command === "interfaces status"
+    ) {
+
+        if (
+            !requireDevice("switch")
+        ) {
+
+            return createResult(
+                false,
+                "show",
+                "% interfaces status pertence ao Switch."
+            );
+
+        }
+
+
+        return createResult(
+            true,
+            "show",
+            formatSwitchInterfacesStatus()
         );
 
     }
@@ -2413,11 +3018,7 @@ function executeShow(
         return createResult(
             true,
             "show",
-            JSON.stringify(
-                appState.switch?.vlans || {},
-                null,
-                4
-            )
+            formatVlanBrief()
         );
 
     }
@@ -2505,6 +3106,224 @@ function executeShow(
         "show",
         `% Comando show não implementado: ${command}`
     );
+
+}
+
+
+/*
+=====================================================
+SHOW IP INTERFACE BRIEF - ROUTER
+=====================================================
+*/
+
+function formatRouterInterfaceBrief() {
+
+    const interfaces =
+        appState.router?.interfaces ||
+        {};
+
+
+    const lines = [
+        "Interface              IP-Address      Status"
+    ];
+
+
+    Object.entries(
+        interfaces
+    ).forEach(
+        ([name, iface]) => {
+
+            const ip =
+                iface?.ip ||
+                "unassigned";
+
+            const status =
+                iface?.status ||
+                "down";
+
+
+            lines.push(
+                `${name.padEnd(22)} ${ip.padEnd(15)} ${status}`
+            );
+
+        }
+    );
+
+
+    return lines.join("\n");
+
+}
+
+
+/*
+=====================================================
+SHOW IP INTERFACE BRIEF - SWITCH
+=====================================================
+*/
+
+function formatSwitchInterfaceBrief() {
+
+    const lines = [
+        "Interface              IP-Address      Status"
+    ];
+
+
+    const vlan1 =
+        appState.switch?.vlan1;
+
+
+    if (vlan1) {
+
+        lines.push(
+            `${"Vlan1".padEnd(22)} ${(vlan1.ip || "unassigned").padEnd(15)} ${vlan1.isUp ? "up" : "administratively down"}`
+        );
+
+    }
+
+
+    Object.entries(
+        appState.switch?.ports || {}
+    ).forEach(
+        ([name, port]) => {
+
+            lines.push(
+                `${name.padEnd(22)} ${"unassigned".padEnd(15)} ${port?.status || "down"}`
+            );
+
+        }
+    );
+
+
+    return lines.join("\n");
+
+}
+
+
+/*
+=====================================================
+SHOW INTERFACES STATUS
+=====================================================
+*/
+
+function formatSwitchInterfacesStatus() {
+
+    const lines = [
+        "Port                    Status"
+    ];
+
+
+    Object.entries(
+        appState.switch?.ports || {}
+    ).forEach(
+        ([name, port]) => {
+
+            lines.push(
+                `${name.padEnd(23)} ${port?.status || "down"}`
+            );
+
+        }
+    );
+
+
+    return lines.join("\n");
+
+}
+
+
+/*
+=====================================================
+SHOW MAC ADDRESS-TABLE
+=====================================================
+*/
+
+function formatMacAddressTable() {
+
+    const ports =
+        appState.switch?.ports ||
+        {};
+
+
+    const lines = [
+        "Vlan    Mac Address          Port"
+    ];
+
+
+    Object.entries(
+        ports
+    ).forEach(
+        ([name, port]) => {
+
+            const vlan =
+                port?.vlan ||
+                1;
+
+
+            const mac =
+                port?.portSecurity?.authorizedMac ||
+                port?.mac ||
+                null;
+
+
+            if (mac) {
+
+                lines.push(
+                    `${String(vlan).padEnd(8)} ${String(mac).padEnd(20)} ${name}`
+                );
+
+            }
+
+        }
+    );
+
+
+    if (
+        lines.length === 1
+    ) {
+
+        lines.push(
+            "Nenhum endereço MAC aprendido."
+        );
+
+    }
+
+
+    return lines.join("\n");
+
+}
+
+
+/*
+=====================================================
+SHOW VLAN BRIEF
+=====================================================
+*/
+
+function formatVlanBrief() {
+
+    const vlans =
+        appState.switch?.vlans ||
+        {};
+
+
+    const lines = [
+        "VLAN    Name"
+    ];
+
+
+    Object.entries(
+        vlans
+    ).forEach(
+        ([id, name]) => {
+
+            lines.push(
+                `${String(id).padEnd(8)} ${name}`
+            );
+
+        }
+    );
+
+
+    return lines.join("\n");
 
 }
 
@@ -2618,6 +3437,7 @@ function executeCopy(
     const normalized =
         args
             .join(" ")
+            .trim()
             .toLowerCase();
 
 
@@ -2663,6 +3483,7 @@ function executeErase(
     const normalized =
         args
             .join(" ")
+            .trim()
             .toLowerCase();
 
 
@@ -2697,6 +3518,26 @@ function executeErase(
 
 /*
 =====================================================
+RELOAD
+=====================================================
+*/
+
+function executeReload() {
+
+    resetCliContext();
+
+
+    return createResult(
+        true,
+        "reload",
+        "Proceed with reload? [confirm]"
+    );
+
+}
+
+
+/*
+=====================================================
 ATTACK
 =====================================================
 */
@@ -2712,7 +3553,7 @@ function executeAttack(
         return createResult(
             false,
             "attack",
-            "% attack pertence ao ambiente do Switch."
+            "% atacar pertence ao ambiente do Switch."
         );
 
     }
@@ -2734,9 +3575,17 @@ function executeAttack(
     }
 
 
+    const resolvedName =
+        getSwitchInterfaceName(
+            normalizeInterfaceName(
+                interfaceName
+            )
+        );
+
+
     const success =
         triggerViolation(
-            interfaceName
+            resolvedName
         );
 
 
@@ -2744,7 +3593,7 @@ function executeAttack(
         success,
         "attack",
         success
-            ? `%PORT-SECURITY: Violação detectada em ${interfaceName}.`
+            ? `%PORT-SECURITY: Violação detectada em ${resolvedName}.`
             : "% Port Security não está habilitado."
     );
 

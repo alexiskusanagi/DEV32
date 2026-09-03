@@ -10,7 +10,7 @@ Responsabilidade:
 - Exibir comandos e resultados.
 - Controlar prompt.
 - Controlar histórico.
-- Manter sessão CLI independente por dispositivo.
+- Manter sessão CLI completamente independente por dispositivo.
 - Encaminhar comandos para o commandHandler.
 
 NÃO possui:
@@ -49,14 +49,23 @@ let commandHandler = null;
 SESSÕES DA CLI
 =========================================================
 
-Cada tipo de dispositivo possui:
+Cada dispositivo possui sua própria sessão visual.
 
-- prompt próprio
-- histórico próprio
-- índice de histórico próprio
+A sessão contém:
 
-Isso impede que comandos do Switch apareçam
-no histórico do Router e vice-versa.
+- prompt
+- histórico de comandos
+- índice do histórico
+- conteúdo visual do terminal
+
+IMPORTANTE:
+
+O conteúdo visual NÃO é compartilhado entre
+Switch e Router.
+
+Quando o usuário troca de dispositivo,
+o terminal restaura somente a sessão daquele
+dispositivo.
 =========================================================
 */
 
@@ -71,7 +80,10 @@ const cliSessions = {
             [],
 
         historyIndex:
-            -1
+            -1,
+
+        screen:
+            ""
 
     },
 
@@ -84,7 +96,10 @@ const cliSessions = {
             [],
 
         historyIndex:
-            -1
+            -1,
+
+        screen:
+            ""
 
     }
 
@@ -238,6 +253,13 @@ export function initializeCLI(
     }
 
 
+    /*
+    Restaura o terminal da sessão atual.
+    */
+
+    restoreCurrentSessionScreen();
+
+
     cliInput.addEventListener(
         "keydown",
         handleKeyDown
@@ -259,18 +281,23 @@ export function initializeCLI(
 SELECIONAR DISPOSITIVO DA CLI
 =========================================================
 
-A camada superior deve chamar:
+Troca a sessão visual completa.
 
-setCliDevice("switch")
+Exemplo:
 
-ou:
+Switch:
+    Switch>enable
+    Switch#
 
-setCliDevice("router")
 
-Isso troca somente a sessão visual da CLI.
+Router:
+    Router>enable
+    Router#
 
-O estado real do dispositivo continua sendo
-controlado pelo state.js.
+Ao voltar para Switch, o terminal volta exatamente
+para a sessão visual do Switch.
+
+Nenhum histórico é compartilhado.
 =========================================================
 */
 
@@ -289,10 +316,20 @@ export function setCliDevice(
 
     }
 
+
+    /*
+    Se já estamos no dispositivo solicitado,
+    apenas sincroniza a interface.
+    */
+
     currentCliDeviceType =
         normalized;
 
+
+    restoreCurrentSessionScreen();
+
     updatePrompt();
+
 
     if (cliInput) {
 
@@ -301,6 +338,7 @@ export function setCliDevice(
         cliInput.focus();
 
     }
+
 
     return true;
 
@@ -316,6 +354,60 @@ OBTER DISPOSITIVO ATUAL DA CLI
 export function getCliDevice() {
 
     return currentCliDeviceType;
+
+}
+
+
+/*
+=========================================================
+RESTAURAR TELA DA SESSÃO ATUAL
+=========================================================
+*/
+
+function restoreCurrentSessionScreen() {
+
+    if (!cliScreen) {
+
+        return;
+
+    }
+
+
+    const session =
+        getCurrentSession();
+
+
+    cliScreen.textContent =
+        session.screen || "";
+
+
+    cliScreen.scrollTop =
+        cliScreen.scrollHeight;
+
+}
+
+
+/*
+=========================================================
+SALVAR TELA DA SESSÃO ATUAL
+=========================================================
+*/
+
+function saveCurrentSessionScreen() {
+
+    if (!cliScreen) {
+
+        return;
+
+    }
+
+
+    const session =
+        getCurrentSession();
+
+
+    session.screen =
+        cliScreen.textContent || "";
 
 }
 
@@ -406,8 +498,7 @@ function executeInput(
 
 
     /*
-    Histórico pertence somente
-    ao dispositivo atual.
+    Histórico pertence somente ao dispositivo atual.
     */
 
     session.history.push(
@@ -479,6 +570,14 @@ function executeInput(
         input,
         result
     );
+
+
+    /*
+    Salva o conteúdo da tela na sessão
+    do dispositivo atual.
+    */
+
+    saveCurrentSessionScreen();
 
 
     cliInput.value = "";
@@ -562,6 +661,17 @@ export function writeLine(
             value;
 
     }
+
+
+    /*
+    IMPORTANTE:
+
+    O conteúdo é salvo na sessão atual.
+    Portanto, Router e Switch possuem
+    telas independentes.
+    */
+
+    saveCurrentSessionScreen();
 
 
     cliScreen.scrollTop =
@@ -825,6 +935,35 @@ export function clearCliDeviceHistory(
 
 /*
 =========================================================
+LIMPAR TELA DO DISPOSITIVO ATUAL
+=========================================================
+*/
+
+export function clearCliScreen() {
+
+    const session =
+        getCurrentSession();
+
+
+    session.screen =
+        "";
+
+
+    if (cliScreen) {
+
+        cliScreen.textContent =
+            "";
+
+    }
+
+
+    return true;
+
+}
+
+
+/*
+=========================================================
 RESETAR CLI ATUAL
 =========================================================
 */
@@ -834,15 +973,27 @@ export function resetCli() {
     const session =
         getCurrentSession();
 
+
     session.history = [];
 
     session.historyIndex =
         -1;
 
+    session.screen =
+        "";
+
     session.prompt =
         currentCliDeviceType === "router"
             ? "Router>"
             : "Switch>";
+
+
+    if (cliScreen) {
+
+        cliScreen.textContent =
+            "";
+
+    }
 
 
     updatePrompt();
@@ -877,6 +1028,9 @@ export function resetAllCliSessions() {
     cliSessions.switch.prompt =
         "Switch>";
 
+    cliSessions.switch.screen =
+        "";
+
 
     cliSessions.router.history =
         [];
@@ -887,9 +1041,20 @@ export function resetAllCliSessions() {
     cliSessions.router.prompt =
         "Router>";
 
+    cliSessions.router.screen =
+        "";
+
 
     currentCliDeviceType =
         "switch";
+
+
+    if (cliScreen) {
+
+        cliScreen.textContent =
+            "";
+
+    }
 
 
     updatePrompt();
@@ -933,7 +1098,10 @@ export function getCliState() {
             ],
 
         historyIndex:
-            session.historyIndex
+            session.historyIndex,
+
+        screen:
+            session.screen
 
     };
 
@@ -961,7 +1129,10 @@ export function getAllCliSessions() {
                 ],
 
             historyIndex:
-                cliSessions.switch.historyIndex
+                cliSessions.switch.historyIndex,
+
+            screen:
+                cliSessions.switch.screen
 
         },
 
@@ -976,7 +1147,10 @@ export function getAllCliSessions() {
                 ],
 
             historyIndex:
-                cliSessions.router.historyIndex
+                cliSessions.router.historyIndex,
+
+            screen:
+                cliSessions.router.screen
 
         }
 

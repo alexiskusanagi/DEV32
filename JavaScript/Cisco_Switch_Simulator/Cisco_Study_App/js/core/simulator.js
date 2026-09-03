@@ -1,8 +1,9 @@
 import {
-appState,
-getCurrentSwitchPort,
-normalizeAppState
+    appState,
+    getCurrentSwitchPort,
+    normalizeAppState
 } from "./state.js";
+
 
 // =====================================================
 // CISCO STUDY SIMULATOR
@@ -23,7 +24,72 @@ normalizeAppState
 // - criação do Lab Factory
 //
 // O simulator recebe ações e modifica appState.
+//
+// IMPORTANTE:
+//
+// Recursos comuns podem operar no dispositivo ativo:
+//
+//     appState.currentDeviceType === "switch"
+//         -> appState.switch
+//
+//     appState.currentDeviceType === "router"
+//         -> appState.router
+//
+// Recursos exclusivos continuam separados:
+//
+//     VLAN / Port Security / portas
+//         -> Switch
+//
+//     Interfaces / routing
+//         -> Router
 // =====================================================
+
+
+// =====================================================
+// OBTER DISPOSITIVO ATIVO
+// =====================================================
+
+function getActiveDevice() {
+
+    if (
+        appState.currentDeviceType === "router"
+    ) {
+
+        return appState.router || null;
+
+    }
+
+
+    return appState.switch || null;
+
+}
+
+
+// =====================================================
+// VERIFICAR SE É SWITCH
+// =====================================================
+
+function isSwitch() {
+
+    return (
+        appState.currentDeviceType === "switch"
+    );
+
+}
+
+
+// =====================================================
+// VERIFICAR SE É ROUTER
+// =====================================================
+
+function isRouter() {
+
+    return (
+        appState.currentDeviceType === "router"
+    );
+
+}
+
 
 // =====================================================
 // HOSTNAME
@@ -31,25 +97,35 @@ normalizeAppState
 
 export function setHostname(nome) {
 
+    if (
+        typeof nome !== "string" ||
+        nome.trim() === ""
+    ) {
 
-if (
-    typeof nome !== "string" ||
-    nome.trim() === ""
-) {
+        return false;
 
-    return false;
+    }
+
+
+    const device =
+        getActiveDevice();
+
+
+    if (!device) {
+
+        return false;
+
+    }
+
+
+    device.hostname =
+        nome.trim();
+
+
+    return true;
 
 }
 
-
-appState.switch.hostname =
-    nome.trim();
-
-
-return true;
-
-
-}
 
 // =====================================================
 // BANNER MOTD
@@ -57,25 +133,35 @@ return true;
 
 export function setBanner(texto) {
 
+    if (
+        texto === null ||
+        texto === undefined
+    ) {
 
-if (
-    texto === null ||
-    texto === undefined
-) {
+        return false;
 
-    return false;
+    }
+
+
+    const device =
+        getActiveDevice();
+
+
+    if (!device) {
+
+        return false;
+
+    }
+
+
+    device.bannerMotd =
+        String(texto);
+
+
+    return true;
 
 }
 
-
-appState.switch.bannerMotd =
-    String(texto);
-
-
-return true;
-
-
-}
 
 // =====================================================
 // ENABLE SECRET
@@ -83,182 +169,223 @@ return true;
 
 export function setEnableSecret(secret) {
 
+    if (
+        secret === null ||
+        secret === undefined
+    ) {
 
-if (
-    secret === null ||
-    secret === undefined
-) {
+        return false;
 
-    return false;
+    }
+
+
+    if (
+        String(secret).trim() === ""
+    ) {
+
+        return false;
+
+    }
+
+
+    const device =
+        getActiveDevice();
+
+
+    if (!device) {
+
+        return false;
+
+    }
+
+
+    device.enableSecret =
+        String(secret);
+
+
+    return true;
 
 }
 
-
-if (
-    String(secret).trim() === ""
-) {
-
-    return false;
-
-}
-
-
-appState.switch.enableSecret =
-    String(secret);
-
-
-return true;
-
-
-}
 
 // =====================================================
 // PASSWORD ENCRYPTION
 // =====================================================
+//
+// Recurso atualmente implementado para Switch.
+// O cliExecutor já impede uso no Router.
+// =====================================================
 
 export function enablePasswordEncryption() {
 
+    if (!isSwitch()) {
 
-appState.switch.encryptionActive =
-    true;
+        return false;
+
+    }
 
 
-return true;
+    appState.switch.encryptionActive =
+        true;
 
+
+    return true;
 
 }
+
 
 // =====================================================
 // VLAN
 // =====================================================
+//
+// Exclusivo do Switch.
+// =====================================================
 
 export function createVlan(
-id,
-name = null
+    id,
+    name = null
 ) {
 
+    if (!isSwitch()) {
 
-id =
-    Number(id);
+        return false;
+
+    }
 
 
-if (
-    !Number.isInteger(id) ||
-    id < 2 ||
-    id > 4094
-) {
+    id =
+        Number(id);
 
-    return false;
+
+    if (
+        !Number.isInteger(id) ||
+        id < 2 ||
+        id > 4094
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            appState.switch.vlans,
+            id
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    const vlanName =
+        name === null ||
+        name === undefined ||
+        String(name).trim() === ""
+            ? "VLAN" + id
+            : String(name).trim();
+
+
+    appState.switch.vlans[id] =
+        vlanName;
+
+
+    return true;
 
 }
 
-
-if (
-    Object.prototype.hasOwnProperty.call(
-        appState.switch.vlans,
-        id
-    )
-) {
-
-    return false;
-
-}
-
-
-const vlanName =
-    name === null ||
-    name === undefined ||
-    String(name).trim() === ""
-        ? "VLAN" + id
-        : String(name).trim();
-
-
-appState.switch.vlans[id] =
-    vlanName;
-
-
-return true;
-
-
-}
 
 // =====================================================
 // RENOMEAR VLAN
 // =====================================================
 
 export function renameVlan(
-id,
-name
+    id,
+    name
 ) {
 
+    if (!isSwitch()) {
 
-id =
-    Number(id);
+        return false;
+
+    }
 
 
-if (
-    !Object.prototype.hasOwnProperty.call(
-        appState.switch.vlans,
-        id
-    )
-) {
+    id =
+        Number(id);
 
-    return false;
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            appState.switch.vlans,
+            id
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        typeof name !== "string" ||
+        name.trim() === ""
+    ) {
+
+        return false;
+
+    }
+
+
+    appState.switch.vlans[id] =
+        name.trim();
+
+
+    return true;
 
 }
 
-
-if (
-    typeof name !== "string" ||
-    name.trim() === ""
-) {
-
-    return false;
-
-}
-
-
-appState.switch.vlans[id] =
-    name.trim();
-
-
-return true;
-
-
-}
 
 // =====================================================
 // INTERFACE VLAN 1
 // =====================================================
 
 export function configureManagementIP(
-ip,
-mask
+    ip,
+    mask
 ) {
 
+    if (!isSwitch()) {
 
-if (
-    !ip ||
-    !mask
-) {
+        return false;
 
-    return false;
+    }
+
+
+    if (
+        !ip ||
+        !mask
+    ) {
+
+        return false;
+
+    }
+
+
+    appState.switch.vlan1.ip =
+        String(ip).trim();
+
+
+    appState.switch.vlan1.mask =
+        String(mask).trim();
+
+
+    return true;
 
 }
 
-
-appState.switch.vlan1.ip =
-    String(ip).trim();
-
-
-appState.switch.vlan1.mask =
-    String(mask).trim();
-
-
-return true;
-
-
-}
 
 // =====================================================
 // ATIVAR INTERFACE VLAN 1
@@ -266,15 +393,21 @@ return true;
 
 export function enableManagementInterface() {
 
+    if (!isSwitch()) {
 
-appState.switch.vlan1.isUp =
-    true;
+        return false;
+
+    }
 
 
-return true;
+    appState.switch.vlan1.isUp =
+        true;
 
+
+    return true;
 
 }
+
 
 // =====================================================
 // DESATIVAR INTERFACE VLAN 1
@@ -282,72 +415,85 @@ return true;
 
 export function disableManagementInterface() {
 
+    if (!isSwitch()) {
 
-appState.switch.vlan1.isUp =
-    false;
+        return false;
+
+    }
 
 
-return true;
+    appState.switch.vlan1.isUp =
+        false;
 
+
+    return true;
 
 }
+
 
 // =====================================================
 // SELECIONAR INTERFACE FÍSICA
 // =====================================================
+//
+// Exclusivo do Switch.
+// =====================================================
 
 export function selectInterface(
-interfaceName
-) {
-
-
-if (
-    typeof interfaceName !== "string" ||
-    interfaceName.trim() === ""
-) {
-
-    return false;
-
-}
-
-
-const normalizedName =
     interfaceName
-        .trim()
-        .toLowerCase();
-
-
-const portName =
-    Object.keys(
-        appState.switch.ports
-    ).find(
-        name =>
-            name.toLowerCase() ===
-            normalizedName
-    );
-
-
-if (
-    !portName
 ) {
 
-    return false;
+    if (!isSwitch()) {
+
+        return false;
+
+    }
+
+
+    if (
+        typeof interfaceName !== "string" ||
+        interfaceName.trim() === ""
+    ) {
+
+        return false;
+
+    }
+
+
+    const normalizedName =
+        interfaceName
+            .trim()
+            .toLowerCase();
+
+
+    const portName =
+        Object.keys(
+            appState.switch.ports
+        ).find(
+            name =>
+                name.toLowerCase() ===
+                normalizedName
+        );
+
+
+    if (!portName) {
+
+        return false;
+
+    }
+
+
+    appState.switch.activePhysicalPort =
+        portName;
+
+
+    appState.currentInterface =
+        portName;
+
+
+    return true;
 
 }
 
-
-appState.switch.activePhysicalPort =
-    portName;
-
-
-appState.currentInterface =
-    portName;
-
-
-return true;
-
-
-}
 
 // =====================================================
 // OBTER PORTA ATUAL
@@ -355,11 +501,17 @@ return true;
 
 function getCurrentPort() {
 
+    if (!isSwitch()) {
 
-return getCurrentSwitchPort();
+        return null;
 
+    }
+
+
+    return getCurrentSwitchPort();
 
 }
+
 
 // =====================================================
 // SWITCHPORT MODE
@@ -367,116 +519,124 @@ return getCurrentSwitchPort();
 
 export function setPortMode(mode) {
 
+    if (!isSwitch()) {
 
-const port =
-    getCurrentPort();
+        return false;
+
+    }
 
 
-if (
-    !port
-) {
+    const port =
+        getCurrentPort();
 
-    return false;
+
+    if (!port) {
+
+        return false;
+
+    }
+
+
+    if (
+        typeof mode !== "string"
+    ) {
+
+        return false;
+
+    }
+
+
+    const normalizedMode =
+        mode.trim().toLowerCase();
+
+
+    if (
+        normalizedMode !== "access" &&
+        normalizedMode !== "trunk"
+    ) {
+
+        return false;
+
+    }
+
+
+    port.mode =
+        normalizedMode;
+
+
+    return true;
 
 }
 
-
-if (
-    typeof mode !== "string"
-) {
-
-    return false;
-
-}
-
-
-const normalizedMode =
-    mode.trim().toLowerCase();
-
-
-if (
-    normalizedMode !== "access" &&
-    normalizedMode !== "trunk"
-) {
-
-    return false;
-
-}
-
-
-port.mode =
-    normalizedMode;
-
-
-return true;
-
-
-}
 
 // =====================================================
 // ATRIBUI VLAN À PORTA
 // =====================================================
 
 export function assignPortVlan(
-vlanID
+    vlanID
 ) {
 
+    if (!isSwitch()) {
 
-const port =
-    getCurrentPort();
+        return false;
+
+    }
 
 
-if (
-    !port
-) {
+    const port =
+        getCurrentPort();
 
-    return false;
+
+    if (!port) {
+
+        return false;
+
+    }
+
+
+    vlanID =
+        Number(vlanID);
+
+
+    if (
+        !Number.isInteger(vlanID)
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            appState.switch.vlans,
+            vlanID
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        port.mode === "trunk"
+    ) {
+
+        return false;
+
+    }
+
+
+    port.vlan =
+        vlanID;
+
+
+    return true;
 
 }
 
-
-vlanID =
-    Number(vlanID);
-
-
-if (
-    !Number.isInteger(vlanID)
-) {
-
-    return false;
-
-}
-
-
-if (
-    !Object.prototype.hasOwnProperty.call(
-        appState.switch.vlans,
-        vlanID
-    )
-) {
-
-    return false;
-
-}
-
-
-if (
-    port.mode === "trunk"
-) {
-
-    return false;
-
-}
-
-
-port.vlan =
-    vlanID;
-
-
-return true;
-
-
-}
 
 // =====================================================
 // PORT SECURITY
@@ -484,37 +644,41 @@ return true;
 
 export function enablePortSecurity() {
 
+    if (!isSwitch()) {
 
-const port =
-    getCurrentPort();
+        return false;
+
+    }
 
 
-if (
-    !port
-) {
+    const port =
+        getCurrentPort();
 
-    return false;
+
+    if (!port) {
+
+        return false;
+
+    }
+
+
+    if (
+        port.mode === "trunk"
+    ) {
+
+        return false;
+
+    }
+
+
+    port.portSecurity.isEnabled =
+        true;
+
+
+    return true;
 
 }
 
-
-if (
-    port.mode === "trunk"
-) {
-
-    return false;
-
-}
-
-
-port.portSecurity.isEnabled =
-    true;
-
-
-return true;
-
-
-}
 
 // =====================================================
 // STICKY MAC
@@ -522,222 +686,238 @@ return true;
 
 export function enableStickyMac() {
 
+    if (!isSwitch()) {
 
-const port =
-    getCurrentPort();
+        return false;
+
+    }
 
 
-if (
-    !port
-) {
+    const port =
+        getCurrentPort();
 
-    return false;
+
+    if (!port) {
+
+        return false;
+
+    }
+
+
+    if (
+        !port.portSecurity.isEnabled
+    ) {
+
+        return false;
+
+    }
+
+
+    port.portSecurity.isSticky =
+        true;
+
+
+    return true;
 
 }
 
-
-if (
-    !port.portSecurity.isEnabled
-) {
-
-    return false;
-
-}
-
-
-port.portSecurity.isSticky =
-    true;
-
-
-return true;
-
-
-}
 
 // =====================================================
 // AUTORIZAR MAC MANUALMENTE
 // =====================================================
 
 export function authorizePortMac(
-mac
+    mac
 ) {
 
+    if (!isSwitch()) {
 
-const port =
-    getCurrentPort();
+        return false;
+
+    }
 
 
-if (
-    !port
-) {
+    const port =
+        getCurrentPort();
 
-    return false;
+
+    if (!port) {
+
+        return false;
+
+    }
+
+
+    if (
+        !port.portSecurity.isEnabled
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        typeof mac !== "string" ||
+        mac.trim() === ""
+    ) {
+
+        return false;
+
+    }
+
+
+    port.portSecurity.authorizedMac =
+        mac.trim().toLowerCase();
+
+
+    return true;
 
 }
 
-
-if (
-    !port.portSecurity.isEnabled
-) {
-
-    return false;
-
-}
-
-
-if (
-    typeof mac !== "string" ||
-    mac.trim() === ""
-) {
-
-    return false;
-
-}
-
-
-port.portSecurity.authorizedMac =
-    mac.trim().toLowerCase();
-
-
-return true;
-
-
-}
 
 // =====================================================
 // REGISTRAR VIOLAÇÃO DE PORT SECURITY
 // =====================================================
 
 export function triggerViolation(
-interfaceName
-) {
-
-
-if (
-    typeof interfaceName !== "string" ||
-    interfaceName.trim() === ""
-) {
-
-    return false;
-
-}
-
-
-const normalizedName =
     interfaceName
-        .trim()
-        .toLowerCase();
-
-
-const portName =
-    Object.keys(
-        appState.switch.ports
-    ).find(
-        name =>
-            name.toLowerCase() ===
-            normalizedName
-    );
-
-
-if (
-    !portName
 ) {
 
-    return false;
+    if (!isSwitch()) {
+
+        return false;
+
+    }
+
+
+    if (
+        typeof interfaceName !== "string" ||
+        interfaceName.trim() === ""
+    ) {
+
+        return false;
+
+    }
+
+
+    const normalizedName =
+        interfaceName
+            .trim()
+            .toLowerCase();
+
+
+    const portName =
+        Object.keys(
+            appState.switch.ports
+        ).find(
+            name =>
+                name.toLowerCase() ===
+                normalizedName
+        );
+
+
+    if (!portName) {
+
+        return false;
+
+    }
+
+
+    const port =
+        appState.switch.ports[
+            portName
+        ];
+
+
+    if (
+        !port.portSecurity.isEnabled
+    ) {
+
+        return false;
+
+    }
+
+
+    port.portSecurity.isViolated =
+        true;
+
+
+    port.status =
+        "err-disabled";
+
+
+    return true;
 
 }
 
-
-const port =
-    appState.switch.ports[
-        portName
-    ];
-
-
-if (
-    !port.portSecurity.isEnabled
-) {
-
-    return false;
-
-}
-
-
-port.portSecurity.isViolated =
-    true;
-
-
-port.status =
-    "err-disabled";
-
-
-return true;
-
-
-}
 
 // =====================================================
 // LIMPAR VIOLAÇÃO
 // =====================================================
 
 export function clearViolation(
-interfaceName
-) {
-
-
-if (
-    typeof interfaceName !== "string" ||
-    interfaceName.trim() === ""
-) {
-
-    return false;
-
-}
-
-
-const normalizedName =
     interfaceName
-        .trim()
-        .toLowerCase();
-
-
-const portName =
-    Object.keys(
-        appState.switch.ports
-    ).find(
-        name =>
-            name.toLowerCase() ===
-            normalizedName
-    );
-
-
-if (
-    !portName
 ) {
 
-    return false;
+    if (!isSwitch()) {
+
+        return false;
+
+    }
+
+
+    if (
+        typeof interfaceName !== "string" ||
+        interfaceName.trim() === ""
+    ) {
+
+        return false;
+
+    }
+
+
+    const normalizedName =
+        interfaceName
+            .trim()
+            .toLowerCase();
+
+
+    const portName =
+        Object.keys(
+            appState.switch.ports
+        ).find(
+            name =>
+                name.toLowerCase() ===
+                normalizedName
+        );
+
+
+    if (!portName) {
+
+        return false;
+
+    }
+
+
+    const port =
+        appState.switch.ports[
+            portName
+        ];
+
+
+    port.portSecurity.isViolated =
+        false;
+
+
+    port.status =
+        "connected";
+
+
+    return true;
 
 }
 
-
-const port =
-    appState.switch.ports[
-        portName
-    ];
-
-
-port.portSecurity.isViolated =
-    false;
-
-
-port.status =
-    "connected";
-
-
-return true;
-
-
-}
 
 // =====================================================
 // DESATIVAR PORT SECURITY
@@ -745,50 +925,54 @@ return true;
 
 export function disablePortSecurity() {
 
+    if (!isSwitch()) {
 
-const port =
-    getCurrentPort();
+        return false;
+
+    }
 
 
-if (
-    !port
-) {
+    const port =
+        getCurrentPort();
 
-    return false;
+
+    if (!port) {
+
+        return false;
+
+    }
+
+
+    port.portSecurity.isEnabled =
+        false;
+
+
+    port.portSecurity.isSticky =
+        false;
+
+
+    port.portSecurity.authorizedMac =
+        null;
+
+
+    port.portSecurity.isViolated =
+        false;
+
+
+    if (
+        port.status === "err-disabled"
+    ) {
+
+        port.status =
+            "connected";
+
+    }
+
+
+    return true;
 
 }
 
-
-port.portSecurity.isEnabled =
-    false;
-
-
-port.portSecurity.isSticky =
-    false;
-
-
-port.portSecurity.authorizedMac =
-    null;
-
-
-port.portSecurity.isViolated =
-    false;
-
-
-if (
-    port.status === "err-disabled"
-) {
-
-    port.status =
-        "connected";
-
-}
-
-
-return true;
-
-
-}
 
 // =====================================================
 // RESET DO LABORATÓRIO
@@ -803,57 +987,55 @@ return true;
 // =====================================================
 
 export function resetLab(
-factoryState
+    factoryState
 ) {
 
+    if (
+        !factoryState ||
+        typeof factoryState !== "object" ||
+        Array.isArray(factoryState)
+    ) {
 
-if (
-    !factoryState ||
-    typeof factoryState !== "object" ||
-    Array.isArray(factoryState)
-) {
+        return false;
 
-    return false;
-
-}
+    }
 
 
-try {
+    try {
 
-    const cleanState =
-        structuredClone(
-            factoryState
+        const cleanState =
+            structuredClone(
+                factoryState
+            );
+
+
+        Object.assign(
+            appState,
+            cleanState
         );
 
 
-    Object.assign(
-        appState,
-        cleanState
-    );
+        normalizeAppState(
+            appState
+        );
 
 
-    normalizeAppState(
-        appState
-    );
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao resetar laboratório:",
+            error
+        );
 
 
-    return true;
+        return false;
 
-
-} catch (error) {
-
-    console.error(
-        "Erro ao resetar laboratório:",
-        error
-    );
-
-
-    return false;
+    }
 
 }
 
-
-}
 
 // =====================================================
 // OBTER ESTADO ATUAL
@@ -867,24 +1049,22 @@ try {
 
 export function getSimulatorState() {
 
+    try {
 
-try {
+        return structuredClone(
+            appState
+        );
 
-    return structuredClone(
-        appState
-    );
+    } catch (error) {
 
-} catch (error) {
-
-    console.error(
-        "Erro obtendo estado do simulador:",
-        error
-    );
+        console.error(
+            "Erro obtendo estado do simulador:",
+            error
+        );
 
 
-    return null;
+        return null;
 
-}
-
+    }
 
 }
