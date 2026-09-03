@@ -11,6 +11,11 @@
    - contém regras específicas da CLI
 */
 
+
+/* =====================================================
+   SWITCH PORT SECURITY
+   ===================================================== */
+
 export function createPortSecurityEntry() {
 
     return {
@@ -25,14 +30,28 @@ export function createPortSecurityEntry() {
 }
 
 
+/* =====================================================
+   SWITCH PORT
+   ===================================================== */
+
 export function createSwitchPort(name) {
 
     return {
 
         name: name,
+
         status: "connected",
+
+        description: null,
+
         mode: "access",
+
         vlan: 1,
+
+        nativeVlan: null,
+
+        spanningTreePortfast: false,
+
         portSecurity:
             createPortSecurityEntry()
 
@@ -64,6 +83,10 @@ export function createSwitchPorts(quantity = 5) {
 }
 
 
+/* =====================================================
+   SWITCH STATE
+   ===================================================== */
+
 export function createSwitchState(
     hostname = "Switch",
     portQuantity = 5
@@ -83,12 +106,34 @@ export function createSwitchState(
 
         encryptionActive: false,
 
+        /*
+        ---------------------------------------------
+        DNS / DOMAIN
+        ---------------------------------------------
+        */
+
+        ipDomainLookup: true,
+
+        domainName: null,
+
+        /*
+        ---------------------------------------------
+        CONSOLE
+        ---------------------------------------------
+        */
+
         console: {
 
             password: null,
             hasLogin: false
 
         },
+
+        /*
+        ---------------------------------------------
+        VTY
+        ---------------------------------------------
+        */
 
         vty: {
 
@@ -97,13 +142,27 @@ export function createSwitchState(
 
         },
 
+        /*
+        ---------------------------------------------
+        MANAGEMENT VLAN
+        ---------------------------------------------
+        */
+
         vlan1: {
 
             ip: null,
             mask: null,
-            isUp: false
+            isUp: false,
+
+            description: null
 
         },
+
+        /*
+        ---------------------------------------------
+        VLANS
+        ---------------------------------------------
+        */
 
         vlans: {
 
@@ -113,6 +172,12 @@ export function createSwitchState(
 
         activeVlanId: null,
 
+        /*
+        ---------------------------------------------
+        PORTAS FÍSICAS
+        ---------------------------------------------
+        */
+
         ports:
             createSwitchPorts(
                 portQuantity
@@ -120,12 +185,203 @@ export function createSwitchState(
 
         activePhysicalPort: null,
 
+        /*
+        ---------------------------------------------
+        CONFIGURAÇÃO
+        ---------------------------------------------
+        */
+
         runningConfigExists: true
 
     };
 
 }
 
+
+/* =====================================================
+   ROUTER INTERFACE
+   ===================================================== */
+
+export function createRouterInterface(
+    name
+) {
+
+    return {
+
+        name: name,
+
+        description: null,
+
+        ip: null,
+
+        mask: null,
+
+        isUp: false,
+
+        status: "down",
+
+        /*
+        ---------------------------------------------
+        SUBINTERFACE
+        ---------------------------------------------
+        */
+
+        isSubinterface: false,
+
+        parentInterface: null,
+
+        subinterfaceId: null,
+
+        /*
+        ---------------------------------------------
+        802.1Q
+        ---------------------------------------------
+        */
+
+        encapsulation: {
+
+            enabled: false,
+
+            type: null,
+
+            vlanId: null,
+
+            native: false
+
+        }
+
+    };
+
+}
+
+
+export function createRouterInterfaces(
+    quantity = 2
+) {
+
+    const interfaces = {};
+
+    for (
+        let i = 0;
+        i < quantity;
+        i++
+    ) {
+
+        const name =
+            "g0/" + i;
+
+        interfaces[name] =
+            createRouterInterface(
+                name
+            );
+
+    }
+
+    return interfaces;
+
+}
+
+
+/* =====================================================
+   ROUTER STATE
+   ===================================================== */
+
+export function createRouterState(
+    hostname = "Router",
+    interfaceQuantity = 2
+) {
+
+    return {
+
+        type: "router",
+
+        id: hostname,
+
+        hostname: hostname,
+
+        bannerMotd: null,
+
+        enableSecret: null,
+
+        encryptionActive: false,
+
+        /*
+        ---------------------------------------------
+        DNS / DOMAIN
+        ---------------------------------------------
+        */
+
+        ipDomainLookup: true,
+
+        domainName: null,
+
+        /*
+        ---------------------------------------------
+        CONSOLE
+        ---------------------------------------------
+        */
+
+        console: {
+
+            password: null,
+            hasLogin: false
+
+        },
+
+        /*
+        ---------------------------------------------
+        VTY
+        ---------------------------------------------
+        */
+
+        vty: {
+
+            password: null,
+            hasLogin: false
+
+        },
+
+        /*
+        ---------------------------------------------
+        INTERFACES
+        ---------------------------------------------
+        */
+
+        interfaces:
+            createRouterInterfaces(
+                interfaceQuantity
+            ),
+
+        activeInterface: null,
+
+        /*
+        ---------------------------------------------
+        ROUTING
+        ---------------------------------------------
+        */
+
+        routing: {
+
+            staticRoutes: []
+
+        },
+
+        /*
+        ---------------------------------------------
+        CONFIGURAÇÃO
+        ---------------------------------------------
+        */
+
+        runningConfigExists: true
+
+    };
+
+}
+
+
+/* =====================================================
+   PC
+   ===================================================== */
 
 function generateRandomMac() {
 
@@ -198,6 +454,10 @@ export function createPCState(
 }
 
 
+/* =====================================================
+   REFERÊNCIA DE DISPOSITIVO
+   ===================================================== */
+
 function createDeviceReference(
     type,
     id
@@ -213,6 +473,10 @@ function createDeviceReference(
 }
 
 
+/* =====================================================
+   TOPOLOGIA
+   ===================================================== */
+
 export function createTopologyState() {
 
     return {
@@ -225,9 +489,13 @@ export function createTopologyState() {
 }
 
 
+/* =====================================================
+   ESTADO PRINCIPAL
+   ===================================================== */
+
 export const appState = {
 
-    stateVersion: 1,
+    stateVersion: 3,
 
     activeLabId: null,
 
@@ -241,11 +509,18 @@ export const appState = {
             "Switch"
         ),
 
+    router:
+        createRouterState(
+            "Router"
+        ),
+
     pcs: [],
 
     devices: [],
 
     currentDeviceId: "Switch",
+
+    currentDeviceType: "switch",
 
     currentInterface: null,
 
@@ -253,6 +528,10 @@ export const appState = {
 
 };
 
+
+/* =====================================================
+   DISPOSITIVOS INICIAIS
+   ===================================================== */
 
 appState.topology.devices.push(
 
@@ -263,12 +542,30 @@ appState.topology.devices.push(
 
 );
 
+appState.topology.devices.push(
+
+    createDeviceReference(
+        "router",
+        appState.router.id
+    )
+
+);
+
 
 appState.devices.push(
 
     createDeviceReference(
         "switch",
         appState.switch.id
+    )
+
+);
+
+appState.devices.push(
+
+    createDeviceReference(
+        "router",
+        appState.router.id
     )
 
 );
@@ -710,7 +1007,7 @@ export function restoreStateSnapshot(
 
 
 /* =====================================================
-   VALIDAÇÃO E NORMALIZAÇÃO
+   VALIDAÇÃO
    ===================================================== */
 
 export function isValidAppState(
@@ -730,6 +1027,15 @@ export function isValidAppState(
     if (
         !state.switch ||
         typeof state.switch !== "object"
+    ) {
+
+        return false;
+
+    }
+
+    if (
+        !state.router ||
+        typeof state.router !== "object"
     ) {
 
         return false;
@@ -770,6 +1076,10 @@ export function isValidAppState(
 }
 
 
+/* =====================================================
+   NORMALIZAÇÃO — TOPOLOGIA
+   ===================================================== */
+
 function ensureTopologyStructure(
     state
 ) {
@@ -808,6 +1118,10 @@ function ensureTopologyStructure(
 }
 
 
+/* =====================================================
+   NORMALIZAÇÃO — COLEÇÕES
+   ===================================================== */
+
 function ensureDeviceCollections(
     state
 ) {
@@ -835,6 +1149,10 @@ function ensureDeviceCollections(
 }
 
 
+/* =====================================================
+   NORMALIZAÇÃO — SWITCH
+   ===================================================== */
+
 function ensureSwitchStructure(
     state
 ) {
@@ -852,6 +1170,9 @@ function ensureSwitchStructure(
         return;
 
     }
+
+
+    /* VLAN */
 
     if (
         !state.switch.vlans ||
@@ -875,6 +1196,9 @@ function ensureSwitchStructure(
 
     }
 
+
+    /* PORTAS */
+
     if (
         !state.switch.ports ||
         typeof state.switch.ports !== "object"
@@ -887,6 +1211,9 @@ function ensureSwitchStructure(
 
     }
 
+
+    /* VLAN 1 */
+
     if (
         !state.switch.vlan1 ||
         typeof state.switch.vlan1 !== "object"
@@ -896,11 +1223,27 @@ function ensureSwitchStructure(
 
             ip: null,
             mask: null,
-            isUp: false
+            isUp: false,
+            description: null
 
         };
 
     }
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            state.switch.vlan1,
+            "description"
+        )
+    ) {
+
+        state.switch.vlan1.description =
+            null;
+
+    }
+
+
+    /* CONSOLE */
 
     if (
         !state.switch.console ||
@@ -916,6 +1259,9 @@ function ensureSwitchStructure(
 
     }
 
+
+    /* VTY */
+
     if (
         !state.switch.vty ||
         typeof state.switch.vty !== "object"
@@ -929,6 +1275,9 @@ function ensureSwitchStructure(
         };
 
     }
+
+
+    /* PORTAS */
 
     Object.entries(
         state.switch.ports
@@ -947,6 +1296,7 @@ function ensureSwitchStructure(
 
             }
 
+
             if (
                 !port.name
             ) {
@@ -955,6 +1305,7 @@ function ensureSwitchStructure(
                     name;
 
             }
+
 
             if (
                 typeof port.status !== "string"
@@ -965,6 +1316,20 @@ function ensureSwitchStructure(
 
             }
 
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    port,
+                    "description"
+                )
+            ) {
+
+                port.description =
+                    null;
+
+            }
+
+
             if (
                 typeof port.mode !== "string"
             ) {
@@ -974,6 +1339,7 @@ function ensureSwitchStructure(
 
             }
 
+
             if (
                 typeof port.vlan !== "number"
             ) {
@@ -982,6 +1348,31 @@ function ensureSwitchStructure(
                     1;
 
             }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    port,
+                    "nativeVlan"
+                )
+            ) {
+
+                port.nativeVlan =
+                    null;
+
+            }
+
+
+            if (
+                typeof port.spanningTreePortfast !==
+                "boolean"
+            ) {
+
+                port.spanningTreePortfast =
+                    false;
+
+            }
+
 
             if (
                 !port.portSecurity ||
@@ -993,6 +1384,7 @@ function ensureSwitchStructure(
 
             }
 
+
             if (
                 typeof port.portSecurity.isEnabled !==
                 "boolean"
@@ -1003,6 +1395,7 @@ function ensureSwitchStructure(
 
             }
 
+
             if (
                 typeof port.portSecurity.isSticky !==
                 "boolean"
@@ -1012,6 +1405,7 @@ function ensureSwitchStructure(
                     false;
 
             }
+
 
             if (
                 !Object.prototype.hasOwnProperty.call(
@@ -1024,6 +1418,7 @@ function ensureSwitchStructure(
                     null;
 
             }
+
 
             if (
                 typeof port.portSecurity.isViolated !==
@@ -1038,6 +1433,9 @@ function ensureSwitchStructure(
         }
     );
 
+
+    /* HOSTNAME */
+
     if (
         typeof state.switch.hostname !== "string"
     ) {
@@ -1046,6 +1444,7 @@ function ensureSwitchStructure(
             "Switch";
 
     }
+
 
     if (
         typeof state.switch.id !== "string"
@@ -1056,6 +1455,9 @@ function ensureSwitchStructure(
 
     }
 
+
+    /* ENCRYPTION */
+
     if (
         typeof state.switch.encryptionActive !==
         "boolean"
@@ -1065,6 +1467,35 @@ function ensureSwitchStructure(
             false;
 
     }
+
+
+    /* DNS */
+
+    if (
+        typeof state.switch.ipDomainLookup !==
+        "boolean"
+    ) {
+
+        state.switch.ipDomainLookup =
+            true;
+
+    }
+
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            state.switch,
+            "domainName"
+        )
+    ) {
+
+        state.switch.domainName =
+            null;
+
+    }
+
+
+    /* RUNNING CONFIG */
 
     if (
         typeof state.switch.runningConfigExists !==
@@ -1078,6 +1509,373 @@ function ensureSwitchStructure(
 
 }
 
+
+/* =====================================================
+   NORMALIZAÇÃO — ROUTER
+   ===================================================== */
+
+function ensureRouterStructure(
+    state
+) {
+
+    if (
+        !state.router ||
+        typeof state.router !== "object"
+    ) {
+
+        state.router =
+            createRouterState(
+                "Router"
+            );
+
+        return;
+
+    }
+
+
+    /* HOSTNAME */
+
+    if (
+        typeof state.router.hostname !== "string"
+    ) {
+
+        state.router.hostname =
+            "Router";
+
+    }
+
+
+    if (
+        typeof state.router.id !== "string"
+    ) {
+
+        state.router.id =
+            state.router.hostname;
+
+    }
+
+
+    /* DNS */
+
+    if (
+        typeof state.router.ipDomainLookup !==
+        "boolean"
+    ) {
+
+        state.router.ipDomainLookup =
+            true;
+
+    }
+
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            state.router,
+            "domainName"
+        )
+    ) {
+
+        state.router.domainName =
+            null;
+
+    }
+
+
+    /* CONSOLE */
+
+    if (
+        !state.router.console ||
+        typeof state.router.console !== "object"
+    ) {
+
+        state.router.console = {
+
+            password: null,
+            hasLogin: false
+
+        };
+
+    }
+
+
+    /* VTY */
+
+    if (
+        !state.router.vty ||
+        typeof state.router.vty !== "object"
+    ) {
+
+        state.router.vty = {
+
+            password: null,
+            hasLogin: false
+
+        };
+
+    }
+
+
+    /* INTERFACES */
+
+    if (
+        !state.router.interfaces ||
+        typeof state.router.interfaces !== "object"
+    ) {
+
+        state.router.interfaces =
+            createRouterInterfaces(
+                2
+            );
+
+    }
+
+
+    Object.entries(
+        state.router.interfaces
+    ).forEach(
+        function ([name, interfaceData]) {
+
+            if (
+                !interfaceData ||
+                typeof interfaceData !== "object"
+            ) {
+
+                state.router.interfaces[name] =
+                    createRouterInterface(
+                        name
+                    );
+
+                return;
+
+            }
+
+
+            if (
+                !interfaceData.name
+            ) {
+
+                interfaceData.name =
+                    name;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "description"
+                )
+            ) {
+
+                interfaceData.description =
+                    null;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "ip"
+                )
+            ) {
+
+                interfaceData.ip =
+                    null;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "mask"
+                )
+            ) {
+
+                interfaceData.mask =
+                    null;
+
+            }
+
+
+            if (
+                typeof interfaceData.isUp !==
+                "boolean"
+            ) {
+
+                interfaceData.isUp =
+                    false;
+
+            }
+
+
+            if (
+                typeof interfaceData.status !==
+                "string"
+            ) {
+
+                interfaceData.status =
+                    "down";
+
+            }
+
+
+            /* SUBINTERFACE */
+
+            if (
+                typeof interfaceData.isSubinterface !==
+                "boolean"
+            ) {
+
+                interfaceData.isSubinterface =
+                    false;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "parentInterface"
+                )
+            ) {
+
+                interfaceData.parentInterface =
+                    null;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "subinterfaceId"
+                )
+            ) {
+
+                interfaceData.subinterfaceId =
+                    null;
+
+            }
+
+
+            /* ENCAPSULATION */
+
+            if (
+                !interfaceData.encapsulation ||
+                typeof interfaceData.encapsulation !==
+                "object"
+            ) {
+
+                interfaceData.encapsulation = {
+
+                    enabled: false,
+                    type: null,
+                    vlanId: null,
+                    native: false
+
+                };
+
+            }
+
+
+            if (
+                typeof interfaceData.encapsulation.enabled !==
+                "boolean"
+            ) {
+
+                interfaceData.encapsulation.enabled =
+                    false;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData.encapsulation,
+                    "type"
+                )
+            ) {
+
+                interfaceData.encapsulation.type =
+                    null;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData.encapsulation,
+                    "vlanId"
+                )
+            ) {
+
+                interfaceData.encapsulation.vlanId =
+                    null;
+
+            }
+
+
+            if (
+                typeof interfaceData.encapsulation.native !==
+                "boolean"
+            ) {
+
+                interfaceData.encapsulation.native =
+                    false;
+
+            }
+
+        }
+    );
+
+
+    /* ROUTING */
+
+    if (
+        !state.router.routing ||
+        typeof state.router.routing !== "object"
+    ) {
+
+        state.router.routing = {
+
+            staticRoutes: []
+
+        };
+
+    }
+
+
+    if (
+        !Array.isArray(
+            state.router.routing.staticRoutes
+        )
+    ) {
+
+        state.router.routing.staticRoutes = [];
+
+    }
+
+
+    /* RUNNING CONFIG */
+
+    if (
+        typeof state.router.runningConfigExists !==
+        "boolean"
+    ) {
+
+        state.router.runningConfigExists =
+            true;
+
+    }
+
+}
+
+
+/* =====================================================
+   NORMALIZAÇÃO PRINCIPAL
+   ===================================================== */
 
 export function normalizeAppState(
     state = appState
@@ -1095,14 +1893,16 @@ export function normalizeAppState(
 
         }
 
+
         if (
             typeof state.stateVersion !== "number"
         ) {
 
             state.stateVersion =
-                1;
+                3;
 
         }
+
 
         if (
             !Object.prototype.hasOwnProperty.call(
@@ -1116,6 +1916,7 @@ export function normalizeAppState(
 
         }
 
+
         if (
             !Object.prototype.hasOwnProperty.call(
                 state,
@@ -1128,6 +1929,7 @@ export function normalizeAppState(
 
         }
 
+
         ensureTopologyStructure(
             state
         );
@@ -1139,6 +1941,11 @@ export function normalizeAppState(
         ensureSwitchStructure(
             state
         );
+
+        ensureRouterStructure(
+            state
+        );
+
 
         if (
             !Object.prototype.hasOwnProperty.call(
@@ -1153,6 +1960,35 @@ export function normalizeAppState(
 
         }
 
+
+        if (
+            !Object.prototype.hasOwnProperty.call(
+                state,
+                "currentDeviceType"
+            )
+        ) {
+
+            const currentDevice =
+                state.devices.find(
+                    function (device) {
+
+                        return (
+                            device &&
+                            device.id ===
+                            state.currentDeviceId
+                        );
+
+                    }
+                );
+
+            state.currentDeviceType =
+                currentDevice ?
+                currentDevice.type :
+                "switch";
+
+        }
+
+
         if (
             !Object.prototype.hasOwnProperty.call(
                 state,
@@ -1165,6 +2001,7 @@ export function normalizeAppState(
 
         }
 
+
         if (
             typeof state.runningConfigExists !==
             "boolean"
@@ -1174,6 +2011,9 @@ export function normalizeAppState(
                 true;
 
         }
+
+
+        /* SWITCH */
 
         const switchExists =
             state.devices.some(
@@ -1205,6 +2045,42 @@ export function normalizeAppState(
 
         }
 
+
+        /* ROUTER */
+
+        const routerExists =
+            state.devices.some(
+                function (device) {
+
+                    return (
+                        device &&
+                        device.type === "router" &&
+                        device.id ===
+                            state.router.id
+                    );
+
+                }
+            );
+
+        if (
+            !routerExists &&
+            state.router.id
+        ) {
+
+            state.devices.push(
+
+                createDeviceReference(
+                    "router",
+                    state.router.id
+                )
+
+            );
+
+        }
+
+
+        /* TOPOLOGIA — SWITCH */
+
         const topologySwitchExists =
             state.topology.devices.some(
                 function (device) {
@@ -1234,6 +2110,40 @@ export function normalizeAppState(
             );
 
         }
+
+
+        /* TOPOLOGIA — ROUTER */
+
+        const topologyRouterExists =
+            state.topology.devices.some(
+                function (device) {
+
+                    return (
+                        device &&
+                        device.type === "router" &&
+                        device.id ===
+                            state.router.id
+                    );
+
+                }
+            );
+
+        if (
+            !topologyRouterExists &&
+            state.router.id
+        ) {
+
+            state.topology.devices.push(
+
+                createDeviceReference(
+                    "router",
+                    state.router.id
+                )
+
+            );
+
+        }
+
 
         return true;
 
@@ -1276,6 +2186,15 @@ export function getDeviceById(
     ) {
 
         return appState.switch;
+
+    }
+
+    if (
+        appState.router &&
+        appState.router.id === id
+    ) {
+
+        return appState.router;
 
     }
 
@@ -1330,6 +2249,16 @@ export function getAllDevices() {
 
         devices.push(
             appState.switch
+        );
+
+    }
+
+    if (
+        appState.router
+    ) {
+
+        devices.push(
+            appState.router
         );
 
     }
@@ -1426,6 +2355,12 @@ export function setCurrentDevice(
     appState.currentDeviceId =
         deviceId;
 
+    appState.currentDeviceType =
+        device.type;
+
+    appState.currentInterface =
+        null;
+
     return true;
 
 }
@@ -1436,6 +2371,22 @@ export function getCurrentDevice() {
     return getDeviceById(
         appState.currentDeviceId
     );
+
+}
+
+
+export function getCurrentDeviceType() {
+
+    const device =
+        getCurrentDevice();
+
+    if (!device) {
+
+        return null;
+
+    }
+
+    return device.type;
 
 }
 
@@ -1770,6 +2721,21 @@ export function clearTopology() {
 
     }
 
+    if (
+        appState.router
+    ) {
+
+        appState.devices.push(
+
+            createDeviceReference(
+                "router",
+                appState.router.id
+            )
+
+        );
+
+    }
+
     appState.pcs = [];
 
     appState.topology.connections = [];
@@ -1791,6 +2757,21 @@ export function clearTopology() {
 
     }
 
+    if (
+        appState.router
+    ) {
+
+        appState.topology.devices.push(
+
+            createDeviceReference(
+                "router",
+                appState.router.id
+            )
+
+        );
+
+    }
+
     appState.activeLabId =
         null;
 
@@ -1803,7 +2784,7 @@ export function clearTopology() {
 
 
 /* =====================================================
-   CONTEXTO
+   CONTEXTO — SWITCH
    ===================================================== */
 
 export function getCurrentSwitchPort() {
@@ -1837,6 +2818,15 @@ export function clearCurrentInterface() {
 
     }
 
+    if (
+        appState.router
+    ) {
+
+        appState.router.activeInterface =
+            null;
+
+    }
+
     appState.currentInterface =
         null;
 
@@ -1846,20 +2836,53 @@ export function clearCurrentInterface() {
 export function clearActivePhysicalPort() {
 
     if (
-        !appState.switch
+        appState.switch
     ) {
 
-        return false;
+        appState.switch.activePhysicalPort =
+            null;
 
     }
 
-    appState.switch.activePhysicalPort =
-        null;
+    if (
+        appState.router
+    ) {
+
+        appState.router.activeInterface =
+            null;
+
+    }
 
     appState.currentInterface =
         null;
 
     return true;
+
+}
+
+
+/* =====================================================
+   CONTEXTO — ROUTER
+   ===================================================== */
+
+export function getCurrentRouterInterface() {
+
+    const interfaceName =
+        appState.router &&
+        appState.router.activeInterface;
+
+    if (!interfaceName) {
+
+        return null;
+
+    }
+
+    return (
+        appState.router.interfaces &&
+        appState.router.interfaces[
+            interfaceName
+        ]
+    ) || null;
 
 }
 
@@ -1882,7 +2905,8 @@ export function resetManagementInterface() {
 
         ip: null,
         mask: null,
-        isUp: false
+        isUp: false,
+        description: null
 
     };
 

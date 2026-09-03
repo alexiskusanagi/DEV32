@@ -1,21 +1,40 @@
-
 /*
+=========================================================
 CISCO STUDY SIMULATOR
-interface/cli.js
+Arquivo: interface/cli.js
 
 Responsabilidade:
 
-Controlar somente a interface visual
-do terminal CLI.
+- Controlar somente a interface visual do terminal CLI.
+- Capturar entrada do usuário.
+- Exibir comandos e resultados.
+- Controlar prompt.
+- Controlar histórico.
+- Manter sessão CLI independente por dispositivo.
+- Encaminhar comandos para o commandHandler.
 
-Não possui:
+NÃO possui:
 
-- regras do switch
+- regras do Switch
+- regras do Router
 - parser
 - simulator
 - state
 - banco de comandos
 - lógica de missões
+- lógica de laboratório
+
+O commandHandler é fornecido pela camada superior
+da aplicação.
+
+=========================================================
+*/
+
+
+/*
+=========================================================
+ESTADO INTERNO DA CLI
+=========================================================
 */
 
 let cliInput = null;
@@ -23,19 +42,128 @@ let cliScreen = null;
 let cliPrompt = null;
 
 let commandHandler = null;
-let currentPrompt = "Switch>";
-
-let cliHistory = [];
-let historyIndex = -1;
 
 
 /*
-=========================================
-INICIALIZAR CLI
-=========================================
+=========================================================
+SESSÕES DA CLI
+=========================================================
+
+Cada tipo de dispositivo possui:
+
+- prompt próprio
+- histórico próprio
+- índice de histórico próprio
+
+Isso impede que comandos do Switch apareçam
+no histórico do Router e vice-versa.
+=========================================================
 */
 
-export function initializeCLI(options = {}) {
+const cliSessions = {
+
+    switch: {
+
+        prompt:
+            "Switch>",
+
+        history:
+            [],
+
+        historyIndex:
+            -1
+
+    },
+
+    router: {
+
+        prompt:
+            "Router>",
+
+        history:
+            [],
+
+        historyIndex:
+            -1
+
+    }
+
+};
+
+
+/*
+=========================================================
+DISPOSITIVO ATUAL DA CLI
+=========================================================
+*/
+
+let currentCliDeviceType =
+    "switch";
+
+
+/*
+=========================================================
+OBTER SESSÃO ATUAL
+=========================================================
+*/
+
+function getCurrentSession() {
+
+    return (
+        cliSessions[
+            currentCliDeviceType
+        ]
+    ) || cliSessions.switch;
+
+}
+
+
+/*
+=========================================================
+NORMALIZAR TIPO DE DISPOSITIVO
+=========================================================
+*/
+
+function normalizeDeviceType(
+    deviceType
+) {
+
+    if (
+        typeof deviceType !== "string"
+    ) {
+
+        return null;
+
+    }
+
+    const normalized =
+        deviceType
+            .trim()
+            .toLowerCase();
+
+    if (
+        normalized === "switch" ||
+        normalized === "router"
+    ) {
+
+        return normalized;
+
+    }
+
+    return null;
+
+}
+
+
+/*
+=========================================================
+INICIALIZAÇÃO
+=========================================================
+*/
+
+export function initializeCLI(
+    options = {}
+) {
 
     cliInput =
         document.getElementById(
@@ -64,6 +192,7 @@ export function initializeCLI(options = {}) {
         );
 
         return false;
+
     }
 
 
@@ -79,11 +208,31 @@ export function initializeCLI(options = {}) {
 
 
     if (
+        typeof options.deviceType ===
+        "string"
+    ) {
+
+        const deviceType =
+            normalizeDeviceType(
+                options.deviceType
+            );
+
+        if (deviceType) {
+
+            currentCliDeviceType =
+                deviceType;
+
+        }
+
+    }
+
+
+    if (
         typeof options.prompt ===
         "string"
     ) {
 
-        currentPrompt =
+        getCurrentSession().prompt =
             options.prompt;
 
     }
@@ -101,16 +250,85 @@ export function initializeCLI(options = {}) {
 
 
     return true;
+
 }
 
 
 /*
-=========================================
-TECLADO
-=========================================
+=========================================================
+SELECIONAR DISPOSITIVO DA CLI
+=========================================================
+
+A camada superior deve chamar:
+
+setCliDevice("switch")
+
+ou:
+
+setCliDevice("router")
+
+Isso troca somente a sessão visual da CLI.
+
+O estado real do dispositivo continua sendo
+controlado pelo state.js.
+=========================================================
 */
 
-function handleKeyDown(event) {
+export function setCliDevice(
+    deviceType
+) {
+
+    const normalized =
+        normalizeDeviceType(
+            deviceType
+        );
+
+    if (!normalized) {
+
+        return false;
+
+    }
+
+    currentCliDeviceType =
+        normalized;
+
+    updatePrompt();
+
+    if (cliInput) {
+
+        cliInput.value = "";
+
+        cliInput.focus();
+
+    }
+
+    return true;
+
+}
+
+
+/*
+=========================================================
+OBTER DISPOSITIVO ATUAL DA CLI
+=========================================================
+*/
+
+export function getCliDevice() {
+
+    return currentCliDeviceType;
+
+}
+
+
+/*
+=========================================================
+TECLADO
+=========================================================
+*/
+
+function handleKeyDown(
+    event
+) {
 
     if (
         event.key === "Enter"
@@ -126,6 +344,7 @@ function handleKeyDown(event) {
         );
 
         return;
+
     }
 
 
@@ -139,6 +358,7 @@ function handleKeyDown(event) {
             getPreviousHistory();
 
         return;
+
     }
 
 
@@ -152,34 +372,50 @@ function handleKeyDown(event) {
             getNextHistory();
 
         return;
+
     }
+
 }
 
 
 /*
-=========================================
+=========================================================
 EXECUTAR ENTRADA
-=========================================
+=========================================================
 */
 
-function executeInput(command) {
+function executeInput(
+    command
+) {
 
     const input =
-        String(command || "").trim();
+        String(
+            command || ""
+        ).trim();
 
 
     if (!input) {
 
         return;
+
     }
 
 
-    cliHistory.push(
+    const session =
+        getCurrentSession();
+
+
+    /*
+    Histórico pertence somente
+    ao dispositivo atual.
+    */
+
+    session.history.push(
         input
     );
 
-    historyIndex =
-        cliHistory.length;
+    session.historyIndex =
+        session.history.length;
 
 
     let result = "";
@@ -193,7 +429,9 @@ function executeInput(command) {
         try {
 
             result =
-                commandHandler(input);
+                commandHandler(
+                    input
+                );
 
         } catch (error) {
 
@@ -215,6 +453,28 @@ function executeInput(command) {
     }
 
 
+    /*
+    Garante que resultados não-string
+    não quebrem a renderização.
+    */
+
+    if (
+        result === null ||
+        result === undefined
+    ) {
+
+        result = "";
+
+    } else if (
+        typeof result !== "string"
+    ) {
+
+        result =
+            String(result);
+
+    }
+
+
     writeCommand(
         input,
         result
@@ -224,13 +484,14 @@ function executeInput(command) {
     cliInput.value = "";
 
     cliInput.focus();
+
 }
 
 
 /*
-=========================================
+=========================================================
 MOSTRAR COMANDO E RESULTADO
-=========================================
+=========================================================
 */
 
 function writeCommand(
@@ -240,8 +501,9 @@ function writeCommand(
 
     const lines = [];
 
+
     lines.push(
-        `${currentPrompt}${command}`
+        `${getCurrentSession().prompt}${command}`
     );
 
 
@@ -260,13 +522,14 @@ function writeCommand(
     writeLine(
         lines.join("\n")
     );
+
 }
 
 
 /*
-=========================================
+=========================================================
 ESCREVER NA TELA
-=========================================
+=========================================================
 */
 
 export function writeLine(
@@ -276,7 +539,12 @@ export function writeLine(
     if (!cliScreen) {
 
         return false;
+
     }
+
+
+    const value =
+        String(text);
 
 
     const current =
@@ -286,12 +554,12 @@ export function writeLine(
     if (current) {
 
         cliScreen.textContent =
-            `${current}\n${text}`;
+            `${current}\n${value}`;
 
     } else {
 
         cliScreen.textContent =
-            text;
+            value;
 
     }
 
@@ -301,27 +569,31 @@ export function writeLine(
 
 
     return true;
+
 }
 
 
 /*
-=========================================
+=========================================================
 PROMPT
-=========================================
+=========================================================
 */
 
 export function setPrompt(
     prompt = "Switch>"
 ) {
 
-    currentPrompt =
-        String(prompt);
+    const session =
+        getCurrentSession();
 
+    session.prompt =
+        String(prompt);
 
     updatePrompt();
 
 
     return true;
+
 }
 
 
@@ -330,28 +602,31 @@ function updatePrompt() {
     if (!cliPrompt) {
 
         return;
+
     }
 
 
     cliPrompt.textContent =
-        currentPrompt;
+        getCurrentSession().prompt;
+
 }
 
 
 export function getPrompt() {
 
-    return currentPrompt;
+    return getCurrentSession().prompt;
+
 }
 
 
 /*
-=========================================
+=========================================================
 COMMAND HANDLER
-=========================================
+=========================================================
 */
 
 export function setCommandHandler(
-handler
+    handler
 ) {
 
     if (
@@ -360,6 +635,7 @@ handler
     ) {
 
         return false;
+
     }
 
 
@@ -368,13 +644,14 @@ handler
 
 
     return true;
+
 }
 
 
 /*
-=========================================
+=========================================================
 MENSAGEM INICIAL
-=========================================
+=========================================================
 */
 
 export function showWelcomeMessage() {
@@ -395,108 +672,177 @@ export function showWelcomeMessage() {
         ""
     );
 
+
     return true;
+
 }
 
 
 /*
-=========================================
+=========================================================
 HISTÓRICO
-=========================================
+=========================================================
 */
 
 export function getCliHistory() {
 
     return [
-        ...cliHistory
+        ...getCurrentSession().history
     ];
+
 }
 
 
 export function getPreviousHistory() {
 
+    const session =
+        getCurrentSession();
+
+
     if (
-        cliHistory.length === 0
+        session.history.length === 0
     ) {
 
         return "";
+
     }
 
 
     if (
-        historyIndex > 0
+        session.historyIndex > 0
     ) {
 
-        historyIndex--;
+        session.historyIndex--;
+
     }
 
 
     return (
-        cliHistory[
-            historyIndex
+        session.history[
+            session.historyIndex
         ] || ""
     );
+
 }
 
 
 export function getNextHistory() {
 
+    const session =
+        getCurrentSession();
+
+
     if (
-        cliHistory.length === 0
+        session.history.length === 0
     ) {
 
         return "";
+
     }
 
 
     if (
-        historyIndex <
-        cliHistory.length - 1
+        session.historyIndex <
+        session.history.length - 1
     ) {
 
-        historyIndex++;
+        session.historyIndex++;
 
         return (
-            cliHistory[
-                historyIndex
+            session.history[
+                session.historyIndex
             ] || ""
         );
 
     }
 
 
-    historyIndex =
-        cliHistory.length;
+    session.historyIndex =
+        session.history.length;
 
 
     return "";
-}
 
-
-export function clearCliHistory() {
-
-    cliHistory = [];
-
-    historyIndex = -1;
-
-    return true;
 }
 
 
 /*
-=========================================
-RESETAR CLI
-=========================================
+=========================================================
+LIMPAR HISTÓRICO DO DISPOSITIVO ATUAL
+=========================================================
+*/
+
+export function clearCliHistory() {
+
+    const session =
+        getCurrentSession();
+
+    session.history = [];
+
+    session.historyIndex =
+        -1;
+
+
+    return true;
+
+}
+
+
+/*
+=========================================================
+LIMPAR HISTÓRICO DE UMA SESSÃO ESPECÍFICA
+=========================================================
+*/
+
+export function clearCliDeviceHistory(
+    deviceType
+) {
+
+    const normalized =
+        normalizeDeviceType(
+            deviceType
+        );
+
+    if (!normalized) {
+
+        return false;
+
+    }
+
+    cliSessions[
+        normalized
+    ].history = [];
+
+    cliSessions[
+        normalized
+    ].historyIndex = -1;
+
+
+    return true;
+
+}
+
+
+/*
+=========================================================
+RESETAR CLI ATUAL
+=========================================================
 */
 
 export function resetCli() {
 
-    cliHistory = [];
+    const session =
+        getCurrentSession();
 
-    historyIndex = -1;
+    session.history = [];
 
-    currentPrompt =
-        "Switch>";
+    session.historyIndex =
+        -1;
+
+    session.prompt =
+        currentCliDeviceType === "router"
+            ? "Router>"
+            : "Switch>";
 
 
     updatePrompt();
@@ -510,37 +856,139 @@ export function resetCli() {
 
 
     return true;
+
 }
 
 
 /*
-=========================================
+=========================================================
+RESETAR TODAS AS SESSÕES
+=========================================================
+*/
+
+export function resetAllCliSessions() {
+
+    cliSessions.switch.history =
+        [];
+
+    cliSessions.switch.historyIndex =
+        -1;
+
+    cliSessions.switch.prompt =
+        "Switch>";
+
+
+    cliSessions.router.history =
+        [];
+
+    cliSessions.router.historyIndex =
+        -1;
+
+    cliSessions.router.prompt =
+        "Router>";
+
+
+    currentCliDeviceType =
+        "switch";
+
+
+    updatePrompt();
+
+
+    if (cliInput) {
+
+        cliInput.value = "";
+
+    }
+
+
+    return true;
+
+}
+
+
+/*
+=========================================================
 ESTADO DA CLI
-=========================================
+=========================================================
 */
 
 export function getCliState() {
 
+    const session =
+        getCurrentSession();
+
+
     return {
 
+        deviceType:
+            currentCliDeviceType,
+
         prompt:
-            currentPrompt,
+            session.prompt,
 
         history:
             [
-                ...cliHistory
+                ...session.history
             ],
 
-        historyIndex
+        historyIndex:
+            session.historyIndex
 
     };
+
 }
 
 
 /*
-=========================================
+=========================================================
+ESTADO DE TODAS AS SESSÕES
+=========================================================
+*/
+
+export function getAllCliSessions() {
+
+    return {
+
+        switch: {
+
+            prompt:
+                cliSessions.switch.prompt,
+
+            history:
+                [
+                    ...cliSessions.switch.history
+                ],
+
+            historyIndex:
+                cliSessions.switch.historyIndex
+
+        },
+
+        router: {
+
+            prompt:
+                cliSessions.router.prompt,
+
+            history:
+                [
+                    ...cliSessions.router.history
+                ],
+
+            historyIndex:
+                cliSessions.router.historyIndex
+
+        }
+
+    };
+
+}
+
+
+/*
+=========================================================
 INFORMAÇÕES
-=========================================
+=========================================================
 */
 
 export function getCliInfo() {
@@ -560,8 +1008,14 @@ export function getCliInfo() {
             "app.js",
 
         executor:
-            "app.js"
+            "app.js",
+
+        sessions:
+            [
+                "switch",
+                "router"
+            ]
 
     };
-}
 
+}

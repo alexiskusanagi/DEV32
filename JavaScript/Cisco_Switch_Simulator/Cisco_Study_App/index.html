@@ -14,7 +14,6 @@
         Cisco Study Simulator
     </title>
 
-
     <link
         rel="stylesheet"
         href="css/style.css"
@@ -28,22 +27,6 @@
 
     <!-- =====================================================
          ÁREA DE TOPOLOGIA
-         
-         A topologia é criada pelo labFactory.js.
-         
-         O ui.js será responsável por transformar
-         o estado da topologia em representação visual.
-         
-         Estado inicial esperado:
-         
-         Switch
-         ├── PC1
-         ├── PC2
-         ├── PC3
-         ├── PC4
-         └── PC5
-         
-         Esta área fica inicialmente vazia.
          ===================================================== -->
 
     <section
@@ -51,13 +34,7 @@
         aria-label="Topologia do laboratório"
     >
 
-        <!--
-            Renderizado dinamicamente pelo ui.js.
-
-            Não inserir dispositivos diretamente aqui.
-
-            O HTML representa somente o container.
-        -->
+        <!-- Renderizado dinamicamente pelo ui.js -->
 
     </section>
 
@@ -69,23 +46,18 @@
 
     <aside class="panel left-panel">
 
-
         <h3>
             Help - Comandos
         </h3>
-
 
         <div
             id="help-list"
             class="scrollable-list"
         >
 
-            <!--
-                Gerado pelo ui.js
-            -->
+            <!-- Gerado pelo ui.js -->
 
         </div>
-
 
     </aside>
 
@@ -99,11 +71,47 @@
 
 
         <!-- =================================================
+             SELETOR DE DISPOSITIVO
+             ================================================= -->
+
+        <div class="device-selector">
+
+            <div class="device-selector-buttons">
+
+                <button
+                    id="btn-switch"
+                    class="device-selector-button active"
+                    type="button"
+                    data-device="switch"
+                >
+
+                    🔀 Switch
+
+                </button>
+
+
+                <button
+                    id="btn-router"
+                    class="device-selector-button"
+                    type="button"
+                    data-device="router"
+                >
+
+                    🌐 Router
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
              MISSÕES
              ================================================= -->
 
         <div class="mission-bar">
-
 
             <label for="mission-selector">
 
@@ -122,9 +130,7 @@
 
                 </option>
 
-
             </select>
-
 
         </div>
 
@@ -141,25 +147,20 @@
                 id="cli-screen"
             >
 
-                <!--
-                    Conteúdo gerado pelo cli.js
-                -->
+                <!-- Conteúdo gerado pelo cli.js -->
 
             </div>
 
 
-
             <div class="cli-input-area">
-
 
                 <span
                     id="cli-prompt"
                 >
 
-                    Switch&gt;
+                    Device&gt;
 
                 </span>
-
 
 
                 <input
@@ -169,7 +170,6 @@
                     spellcheck="false"
                     aria-label="Entrada de comando CLI"
                 >
-
 
             </div>
 
@@ -196,14 +196,13 @@
             </button>
 
 
-
             <button
                 id="btn-reset"
                 class="btn danger"
                 type="button"
             >
 
-                🟥 Reset Switch
+                🟥 Reset Device
 
             </button>
 
@@ -228,7 +227,6 @@
 
         <section class="status-box">
 
-
             <h3>
                 Histórico
             </h3>
@@ -239,12 +237,9 @@
                 class="scrollable-list"
             >
 
-                <!--
-                    Gerado pelo ui.js
-                -->
+                <!-- Gerado pelo ui.js -->
 
             </div>
-
 
         </section>
 
@@ -256,7 +251,6 @@
 
         <section class="status-box">
 
-
             <h3>
                 Configuração e Status
             </h3>
@@ -267,12 +261,9 @@
                 class="scrollable-list"
             >
 
-                <!--
-                    Gerado pelo ui.js
-                -->
+                <!-- Gerado pelo ui.js -->
 
             </div>
-
 
         </section>
 
@@ -305,7 +296,6 @@
         </button>
 
 
-
         <h2 id="command-tree-title">
 
             🛡️ Command Tree
@@ -313,14 +303,11 @@
         </h2>
 
 
-
         <div
             id="command-tree-content"
         >
 
-            <!--
-                Gerado dinamicamente pelo ui.js
-            -->
+            <!-- Gerado dinamicamente pelo ui.js -->
 
         </div>
 

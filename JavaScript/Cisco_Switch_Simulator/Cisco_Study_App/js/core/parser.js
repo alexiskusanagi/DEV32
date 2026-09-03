@@ -8,23 +8,7 @@ Responsabilidade:
 Interpretar comandos digitados pelo usuário
 e transformá-los em ações estruturadas.
 
-Este arquivo NÃO:
-
-- altera appState
-- executa comandos
-- manipula DOM
-- renderiza interface
-- cria laboratórios
-
-Fluxo:
-
-CLI
-↓
-parser.js
-↓
-comando estruturado
-↓
-simulator.js
+NÃO altera appState.
 =====================================================
 */
 
@@ -36,8 +20,7 @@ const COMMANDS = {
     hostname: "hostname",
     bannerMotd: "banner motd",
     enableSecret: "enable secret",
-    servicePasswordEncryption:
-        "service password-encryption",
+    servicePasswordEncryption: "service password-encryption",
 
     vlan: "vlan",
     name: "name",
@@ -50,15 +33,10 @@ const COMMANDS = {
     shutdown: "shutdown",
     noShutdown: "no shutdown",
 
-    switchportMode:
-        "switchport mode",
+    switchportMode: "switchport mode",
+    switchportAccessVlan: "switchport access vlan",
 
-    switchportAccessVlan:
-        "switchport access vlan",
-
-    switchportPortSecurity:
-        "switchport port-security",
-
+    switchportPortSecurity: "switchport port-security",
     switchportPortSecuritySticky:
         "switchport port-security mac-address sticky",
 
@@ -68,8 +46,15 @@ const COMMANDS = {
     noSwitchportPortSecurity:
         "no switchport port-security",
 
-    password: "password",
+    encapsulation: "encapsulation dot1q",
+    noEncapsulation: "no encapsulation",
 
+    description: "description",
+
+    ipRoute: "ip route",
+    noIpRoute: "no ip route",
+
+    password: "password",
     login: "login",
     noLogin: "no login",
 
@@ -94,9 +79,19 @@ PADRÕES DE INTERFACE
 */
 
 const INTERFACE_PATTERNS = [
+
     /^fa0\/\d+$/i,
     /^fastethernet0\/\d+$/i,
     /^fastethernet\s+0\/\d+$/i,
+
+    /^g\d+\/\d+$/i,
+    /^gigabitethernet\d+\/\d+$/i,
+    /^gigabitethernet\s+\d+\/\d+$/i,
+
+    /^g\d+\/\d+\.\d+$/i,
+    /^gigabitethernet\d+\/\d+\.\d+$/i,
+    /^gigabitethernet\s+\d+\/\d+\.\d+$/i,
+
     /^vlan\s+\d+$/i
 ];
 
@@ -115,7 +110,6 @@ export function parseCommand(input = "") {
     const trimmed =
         original.trim();
 
-
     if (!trimmed) {
 
         return {
@@ -127,10 +121,8 @@ export function parseCommand(input = "") {
 
     }
 
-
     const tokens =
         tokenize(trimmed);
-
 
     if (tokens.length === 0) {
 
@@ -143,27 +135,16 @@ export function parseCommand(input = "") {
 
     }
 
-
     const normalizedTokens =
         tokens.map(
-            token =>
-                token.toLowerCase()
+            token => token.toLowerCase()
         );
-
 
     const command =
         normalizedTokens.join(" ");
 
 
-    /*
-    ---------------------------------------------
-    ENABLE
-    ---------------------------------------------
-    */
-
-    if (
-        command === "enable"
-    ) {
+    if (command === "enable") {
 
         return createCommand(
             "enable",
@@ -173,12 +154,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    CONFIGURE TERMINAL
-    ---------------------------------------------
-    */
 
     if (
         command === "configure terminal" ||
@@ -194,15 +169,7 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    EXIT
-    ---------------------------------------------
-    */
-
-    if (
-        command === "exit"
-    ) {
+    if (command === "exit") {
 
         return createCommand(
             "exit",
@@ -213,15 +180,7 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    END
-    ---------------------------------------------
-    */
-
-    if (
-        command === "end"
-    ) {
+    if (command === "end") {
 
         return createCommand(
             "end",
@@ -231,12 +190,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    HOSTNAME
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "hostname"
@@ -250,12 +203,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    BANNER MOTD
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "banner" &&
@@ -273,12 +220,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    ENABLE SECRET
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "enable" &&
         normalizedTokens[1] === "secret"
@@ -293,12 +234,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    SERVICE PASSWORD ENCRYPTION
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "service" &&
         normalizedTokens[1] === "password-encryption"
@@ -312,12 +247,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    NO SERVICE PASSWORD ENCRYPTION
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "no" &&
@@ -334,12 +263,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    VLAN
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "vlan"
     ) {
@@ -351,12 +274,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    INTERFACE
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "interface"
@@ -370,12 +287,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    IP ADDRESS
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "ip" &&
         normalizedTokens[1] === "address"
@@ -388,12 +299,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    NO IP ADDRESS
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "no" &&
@@ -410,11 +315,75 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    SHUTDOWN
-    ---------------------------------------------
-    */
+    if (
+        normalizedTokens[0] === "ip" &&
+        normalizedTokens[1] === "route"
+    ) {
+
+        return createCommand(
+            "ip-route",
+            tokens.slice(2),
+            original
+        );
+
+    }
+
+
+    if (
+        normalizedTokens[0] === "no" &&
+        normalizedTokens[1] === "ip" &&
+        normalizedTokens[2] === "route"
+    ) {
+
+        return createCommand(
+            "no-ip-route",
+            tokens.slice(3),
+            original
+        );
+
+    }
+
+
+    if (
+        normalizedTokens[0] === "encapsulation" &&
+        normalizedTokens[1] === "dot1q"
+    ) {
+
+        return createCommand(
+            "encapsulation-dot1q",
+            tokens.slice(2),
+            original
+        );
+
+    }
+
+
+    if (
+        normalizedTokens[0] === "no" &&
+        normalizedTokens[1] === "encapsulation"
+    ) {
+
+        return createCommand(
+            "no-encapsulation",
+            [],
+            original
+        );
+
+    }
+
+
+    if (
+        normalizedTokens[0] === "description"
+    ) {
+
+        return createCommand(
+            "description",
+            tokens.slice(1),
+            original
+        );
+
+    }
+
 
     if (
         normalizedTokens[0] === "shutdown"
@@ -428,12 +397,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    NO SHUTDOWN
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "no" &&
@@ -449,12 +412,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    SWITCHPORT MODE
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "switchport" &&
         normalizedTokens[1] === "mode"
@@ -468,12 +425,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    SWITCHPORT ACCESS VLAN
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "switchport" &&
@@ -490,12 +441,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    SWITCHPORT PORT SECURITY
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "switchport" &&
         normalizedTokens[1] === "port-security"
@@ -508,12 +453,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    NO SWITCHPORT PORT SECURITY
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "no" &&
@@ -530,12 +469,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    PASSWORD
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "password"
     ) {
@@ -549,12 +482,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    LOGIN
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "login"
     ) {
@@ -567,12 +494,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    NO LOGIN
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "no" &&
@@ -588,12 +509,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    LINE
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "line"
     ) {
@@ -605,12 +520,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    PING
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "ping"
@@ -625,12 +534,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    SHOW
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "show"
     ) {
@@ -643,12 +546,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    CLEAR
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "clear"
@@ -663,12 +560,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    WRITE
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "write"
     ) {
@@ -681,12 +572,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    COPY
-    ---------------------------------------------
-    */
 
     if (
         normalizedTokens[0] === "copy"
@@ -701,12 +586,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    ERASE
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "erase"
     ) {
@@ -720,12 +599,6 @@ export function parseCommand(input = "") {
     }
 
 
-    /*
-    ---------------------------------------------
-    ATACAR
-    ---------------------------------------------
-    */
-
     if (
         normalizedTokens[0] === "atacar"
     ) {
@@ -738,12 +611,6 @@ export function parseCommand(input = "") {
 
     }
 
-
-    /*
-    ---------------------------------------------
-    COMANDO DESCONHECIDO
-    ---------------------------------------------
-    */
 
     return {
         type: "unknown",
@@ -779,7 +646,7 @@ function createCommand(
 
 /*
 =====================================================
-PARSE VLAN
+VLAN
 =====================================================
 */
 
@@ -788,9 +655,7 @@ function parseVlanCommand(
     raw
 ) {
 
-    if (
-        tokens.length < 2
-    ) {
+    if (tokens.length < 2) {
 
         return createCommand(
             "vlan",
@@ -800,26 +665,20 @@ function parseVlanCommand(
 
     }
 
-
     const vlanId =
         Number(tokens[1]);
 
-
-    if (
-        !Number.isInteger(vlanId)
-    ) {
+    if (!Number.isInteger(vlanId)) {
 
         return {
             type: "invalid",
             command: "vlan",
             args: tokens.slice(1),
             raw,
-            error:
-                "ID de VLAN inválido."
+            error: "ID de VLAN inválido."
         };
 
     }
-
 
     return createCommand(
         "vlan",
@@ -834,7 +693,7 @@ function parseVlanCommand(
 
 /*
 =====================================================
-PARSE INTERFACE
+INTERFACE
 =====================================================
 */
 
@@ -843,27 +702,22 @@ function parseInterfaceCommand(
     raw
 ) {
 
-    if (
-        tokens.length < 2
-    ) {
+    if (tokens.length < 2) {
 
         return {
             type: "invalid",
             command: "interface",
             args: [],
             raw,
-            error:
-                "Interface não informada."
+            error: "Interface não informada."
         };
 
     }
-
 
     const interfaceName =
         normalizeInterfaceName(
             tokens.slice(1).join(" ")
         );
-
 
     if (
         !isValidInterfaceName(
@@ -876,12 +730,10 @@ function parseInterfaceCommand(
             command: "interface",
             args: tokens.slice(1),
             raw,
-            error:
-                "Interface inválida."
+            error: "Interface inválida."
         };
 
     }
-
 
     return createCommand(
         "interface",
@@ -893,7 +745,7 @@ function parseInterfaceCommand(
 
 /*
 =====================================================
-PARSE IP ADDRESS
+IP ADDRESS
 =====================================================
 */
 
@@ -902,21 +754,17 @@ function parseIpAddressCommand(
     raw
 ) {
 
-    if (
-        tokens.length < 3
-    ) {
+    if (tokens.length < 3) {
 
         return {
             type: "invalid",
             command: "ip address",
             args: tokens.slice(2),
             raw,
-            error:
-                "IP e máscara são obrigatórios."
+            error: "IP e máscara são obrigatórios."
         };
 
     }
-
 
     return createCommand(
         "ip-address",
@@ -928,7 +776,7 @@ function parseIpAddressCommand(
 
 /*
 =====================================================
-PARSE PORT SECURITY
+PORT SECURITY
 =====================================================
 */
 
@@ -937,13 +785,7 @@ function parsePortSecurityCommand(
     raw
 ) {
 
-    /*
-    switchport port-security
-    */
-
-    if (
-        tokens.length === 2
-    ) {
+    if (tokens.length === 2) {
 
         return createCommand(
             "switchport-port-security",
@@ -953,7 +795,6 @@ function parsePortSecurityCommand(
 
     }
 
-
     const normalized =
         tokens
             .slice(2)
@@ -961,12 +802,6 @@ function parsePortSecurityCommand(
                 token =>
                     token.toLowerCase()
             );
-
-
-    /*
-    switchport port-security
-    mac-address sticky
-    */
 
     if (
         normalized[0] === "mac-address" &&
@@ -981,12 +816,6 @@ function parsePortSecurityCommand(
 
     }
 
-
-    /*
-    switchport port-security
-    mac-address XXXX.XXXX.XXXX
-    */
-
     if (
         normalized[0] === "mac-address" &&
         normalized[1]
@@ -1000,11 +829,9 @@ function parsePortSecurityCommand(
 
     }
 
-
     return {
         type: "invalid",
-        command:
-            "switchport port-security",
+        command: "switchport port-security",
         args: tokens.slice(2),
         raw,
         error:
@@ -1015,7 +842,7 @@ function parsePortSecurityCommand(
 
 /*
 =====================================================
-PARSE LINE
+LINE
 =====================================================
 */
 
@@ -1024,35 +851,22 @@ function parseLineCommand(
     raw
 ) {
 
-    if (
-        tokens.length < 2
-    ) {
+    if (tokens.length < 2) {
 
         return {
             type: "invalid",
             command: "line",
             args: [],
             raw,
-            error:
-                "Tipo de linha não informado."
+            error: "Tipo de linha não informado."
         };
 
     }
 
-
     const lineType =
         tokens[1].toLowerCase();
 
-
-    /*
-    ---------------------------------------------
-    CONSOLE
-    ---------------------------------------------
-    */
-
-    if (
-        lineType === "console"
-    ) {
+    if (lineType === "console") {
 
         return createCommand(
             "line-console",
@@ -1062,16 +876,7 @@ function parseLineCommand(
 
     }
 
-
-    /*
-    ---------------------------------------------
-    VTY
-    ---------------------------------------------
-    */
-
-    if (
-        lineType === "vty"
-    ) {
+    if (lineType === "vty") {
 
         return createCommand(
             "line-vty",
@@ -1081,21 +886,19 @@ function parseLineCommand(
 
     }
 
-
     return {
         type: "invalid",
         command: "line",
         args: tokens.slice(1),
         raw,
-        error:
-            "Tipo de linha inválido."
+        error: "Tipo de linha inválido."
     };
 }
 
 
 /*
 =====================================================
-PARSE BANNER
+BANNER
 =====================================================
 */
 
@@ -1103,9 +906,7 @@ function parseBannerArguments(
     args
 ) {
 
-    if (
-        args.length === 0
-    ) {
+    if (args.length === 0) {
 
         return {
             delimiter: null,
@@ -1114,14 +915,11 @@ function parseBannerArguments(
 
     }
 
-
     const text =
         args.join(" ");
 
-
     const delimiter =
         text.charAt(0);
-
 
     if (
         delimiter &&
@@ -1133,14 +931,10 @@ function parseBannerArguments(
         return {
             delimiter,
             text:
-                text.slice(
-                    1,
-                    -1
-                )
+                text.slice(1, -1)
         };
 
     }
-
 
     return {
         delimiter: null,
@@ -1153,27 +947,15 @@ function parseBannerArguments(
 =====================================================
 TOKENIZER
 =====================================================
-
-Suporta:
-
-enable secret senha
-
-banner motd ^Mensagem^
-
-banner motd "Mensagem com espaços"
-=====================================================
 */
 
-function tokenize(
-    input
-) {
+function tokenize(input) {
 
     const tokens = [];
 
     let current = "";
 
     let quote = null;
-
 
     for (
         let i = 0;
@@ -1184,38 +966,19 @@ function tokenize(
         const char =
             input[i];
 
+        if (quote !== null) {
 
-        /*
-        -----------------------------------------
-        DENTRO DE ASPAS
-        -----------------------------------------
-        */
-
-        if (
-            quote !== null
-        ) {
-
-            if (
-                char === quote
-            ) {
+            if (char === quote) {
 
                 quote = null;
 
                 continue;
             }
 
-
             current += char;
 
             continue;
         }
-
-
-        /*
-        -----------------------------------------
-        INÍCIO DE ASPAS
-        -----------------------------------------
-        */
 
         if (
             char === '"' ||
@@ -1227,16 +990,7 @@ function tokenize(
             continue;
         }
 
-
-        /*
-        -----------------------------------------
-        ESPAÇO
-        -----------------------------------------
-        */
-
-        if (
-            /\s/.test(char)
-        ) {
+        if (/\s/.test(char)) {
 
             if (current) {
 
@@ -1250,16 +1004,8 @@ function tokenize(
             continue;
         }
 
-
         current += char;
     }
-
-
-    /*
-    ---------------------------------------------
-    ÚLTIMO TOKEN
-    ---------------------------------------------
-    */
 
     if (current) {
 
@@ -1269,14 +1015,13 @@ function tokenize(
 
     }
 
-
     return tokens;
 }
 
 
 /*
 =====================================================
-NORMALIZAR NOME DE INTERFACE
+NORMALIZAR INTERFACE
 =====================================================
 */
 
@@ -1287,16 +1032,8 @@ function normalizeInterfaceName(
     const trimmed =
         value.trim();
 
-
     const normalized =
         trimmed.toLowerCase();
-
-
-    /*
-    fastethernet 0/1
-    ↓
-    fa0/1
-    */
 
     if (
         /^fastethernet\s+0\/\d+$/i.test(
@@ -1311,13 +1048,6 @@ function normalizeInterfaceName(
 
     }
 
-
-    /*
-    fastethernet0/1
-    ↓
-    fa0/1
-    */
-
     if (
         /^fastethernet0\/\d+$/i.test(
             trimmed
@@ -1331,10 +1061,41 @@ function normalizeInterfaceName(
 
     }
 
+    if (
+        /^gigabitethernet\s+\d+\/\d+(\.\d+)?$/i.test(
+            trimmed
+        )
+    ) {
 
-    /*
-    fa0/1
-    */
+        return normalized.replace(
+            /^gigabitethernet\s*/i,
+            "g"
+        );
+
+    }
+
+    if (
+        /^gigabitethernet\d+\/\d+(\.\d+)?$/i.test(
+            trimmed
+        )
+    ) {
+
+        return normalized.replace(
+            /^gigabitethernet/i,
+            "g"
+        );
+
+    }
+
+    if (
+        /^g\d+\/\d+(\.\d+)?$/i.test(
+            trimmed
+        )
+    ) {
+
+        return normalized;
+
+    }
 
     if (
         /^fa0\/\d+$/i.test(
@@ -1346,11 +1107,6 @@ function normalizeInterfaceName(
 
     }
 
-
-    /*
-    vlan 1
-    */
-
     if (
         /^vlan\s+\d+$/i.test(
             trimmed
@@ -1358,10 +1114,7 @@ function normalizeInterfaceName(
     ) {
 
         const parts =
-            trimmed.split(
-                /\s+/
-            );
-
+            trimmed.split(/\s+/);
 
         return (
             "vlan " +
@@ -1370,14 +1123,13 @@ function normalizeInterfaceName(
 
     }
 
-
     return trimmed;
 }
 
 
 /*
 =====================================================
-VALIDAR NOME DE INTERFACE
+VALIDAR INTERFACE
 =====================================================
 */
 
@@ -1394,7 +1146,7 @@ function isValidInterfaceName(
 
 /*
 =====================================================
-VERIFICAR COMANDO CONHECIDO
+API
 =====================================================
 */
 
@@ -1405,7 +1157,6 @@ export function isKnownCommand(
     const parsed =
         parseCommand(input);
 
-
     return (
         parsed.type !== "unknown" &&
         parsed.type !== "invalid" &&
@@ -1413,12 +1164,6 @@ export function isKnownCommand(
     );
 }
 
-
-/*
-=====================================================
-OBTER TIPO DO COMANDO
-=====================================================
-*/
 
 export function getCommandType(
     input = ""
@@ -1429,12 +1174,6 @@ export function getCommandType(
     ).type;
 }
 
-
-/*
-=====================================================
-NORMALIZAR COMANDO
-=====================================================
-*/
 
 export function normalizeCommand(
     input = ""
@@ -1448,23 +1187,15 @@ export function normalizeCommand(
 }
 
 
-/*
-=====================================================
-PARSEAR VÁRIOS COMANDOS
-=====================================================
-*/
-
 export function parseCommands(
     commands = []
 ) {
 
-    if (
-        !Array.isArray(commands)
-    ) {
+    if (!Array.isArray(commands)) {
 
         return [];
-    }
 
+    }
 
     return commands.map(
         command =>
@@ -1472,12 +1203,6 @@ export function parseCommands(
     );
 }
 
-
-/*
-=====================================================
-INFORMAÇÕES DO PARSER
-=====================================================
-*/
 
 export function getParserInfo() {
 
@@ -1487,7 +1212,7 @@ export function getParserInfo() {
             "Cisco Study Simulator Parser",
 
         version:
-            "1.0.0",
+            "2.0.0",
 
         responsibility:
             "Interpretar comandos e produzir ações estruturadas.",
@@ -1498,11 +1223,5 @@ export function getParserInfo() {
         modifiesDOM:
             false
     };
+
 }
-
-
-/*
-=====================================================
-FIM DO PARSER.JS
-=====================================================
-*/

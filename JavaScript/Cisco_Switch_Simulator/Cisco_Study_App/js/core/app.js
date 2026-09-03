@@ -3,38 +3,69 @@
 CISCO STUDY SIMULATOR
 core/app.js
 =====================================================
+
+Responsabilidade:
+
+- Orquestrar a aplicação.
+- Inicializar UI e CLI.
+- Carregar startup-config.
+- Encaminhar comandos ao cliExecutor.
+- Atualizar Help, Command Tree, Status e Topologia.
+- Trabalhar com Switch e Router.
+- Respeitar currentDeviceType definido no state.
+- Sincronizar a sessão visual da CLI com o dispositivo ativo.
+
+NÃO possui:
+
+- parser
+- regras específicas do Switch
+- regras específicas do Router
+- banco de comandos
+- regras de simulação
+- lógica visual direta de DOM
+=====================================================
 */
+
 
 import {
     appState,
     loadStartupConfig,
-    hasStartupConfig
+    hasStartupConfig,
+    setCurrentDevice,
+    getCurrentDevice
 } from "./state.js";
+
 
 import {
     commandDatabase
 } from "./database.js";
+
 
 import {
     executeCommand,
     getCliPrompt
 } from "./cliExecutor.js";
 
+
 import {
     getSimulatorState,
     resetLab
 } from "./simulator.js";
 
+
 import {
     createLabFactory
-} from "./labFactory.js";
+} from "./labfactory.js";
+
 
 import {
     initializeCLI,
+    setCliDevice,
     setPrompt,
     showWelcomeMessage,
     writeLine
 } from "../interface/cli.js";
+
 
 import {
     initializeUI,
@@ -63,24 +94,32 @@ function initializeApp() {
     Inicializa interface visual.
     */
 
-    initializeUI();
+    initializeUI({
+    onDeviceSelect: selectDevice
+});
+
 
 
     /*
-    Cria o laboratório padrão.
+    Cria laboratório padrão.
 
-    O labFactory é responsável por criar:
-    - Switch
-    - PC1
-    - PC2
-    - PC3
-    - PC4
-    - PC5
-    - Topologia inicial
+    O labFactory cria os dispositivos
+    e a topologia inicial.
     */
 
     resetLab(
         createLabFactory()
+    );
+
+
+    /*
+    Sincroniza a sessão inicial da CLI
+    com o dispositivo atual.
+    */
+
+    setCliDevice(
+        appState.currentDeviceType ||
+        "switch"
     );
 
 
@@ -93,6 +132,10 @@ function initializeApp() {
         prompt:
             getCliPrompt(),
 
+        deviceType:
+            appState.currentDeviceType ||
+            "switch",
+
         onCommand:
             handleCommand
 
@@ -101,13 +144,22 @@ function initializeApp() {
 
     /*
     Carrega startup-config.
-
-    Se existir, ela substitui o estado
-    inicial criado pelo labFactory.
     */
 
     const loaded =
         loadSavedConfiguration();
+
+
+    /*
+    Após carregar a configuração,
+    garante que a sessão CLI corresponda
+    ao dispositivo recuperado.
+    */
+
+    setCliDevice(
+        appState.currentDeviceType ||
+        "switch"
+    );
 
 
     /*
@@ -140,7 +192,7 @@ function initializeApp() {
 
 
     /*
-    Atualiza interface.
+    Atualiza toda a interface.
     */
 
     refreshUI();
@@ -205,15 +257,29 @@ function handleCommand(command) {
             );
 
 
+        /*
+        Registra o comando no histórico
+        visual.
+        */
+
         addHistoryEntry(
             command
         );
 
 
+        /*
+        Atualiza prompt conforme
+        dispositivo/modo atual.
+        */
+
         setPrompt(
             getCliPrompt()
         );
 
+
+        /*
+        Atualiza interface.
+        */
 
         refreshUI();
 
@@ -309,10 +375,21 @@ OBTER MODO PELO PROMPT
 =====================================================
 */
 
-function getModeFromPrompt(prompt) {
+function getModeFromPrompt(
+    prompt
+) {
 
     if (
         prompt.includes("(config-if)")
+    ) {
+
+        return "interface";
+
+    }
+
+
+    if (
+        prompt.includes("(config-subif)")
     ) {
 
         return "interface";
@@ -378,7 +455,7 @@ function updateCommandTree() {
         ([mode, data]) => {
 
             tree[mode] =
-                data.commands ||
+                data?.commands ||
                 {};
 
         }
@@ -400,16 +477,20 @@ ATUALIZAR STATUS
 
 function updateStatus() {
 
-    const switchState =
-        appState.switch;
+    const device =
+        getCurrentDevice();
 
 
-    if (!switchState) {
+    /*
+    Nenhum dispositivo selecionado.
+    */
+
+    if (!device) {
 
         renderStatus({
 
-            Status:
-                "Switch indisponível."
+            Dispositivo:
+                "Nenhum dispositivo selecionado."
 
         });
 
@@ -418,37 +499,178 @@ function updateStatus() {
     }
 
 
+    /*
+    =============================================
+    ROUTER
+    =============================================
+    */
+
+    if (
+        appState.currentDeviceType ===
+        "router"
+    ) {
+
+        const router =
+            appState.router;
+
+
+        if (!router) {
+
+            renderStatus({
+
+                Dispositivo:
+                    "Router indisponível."
+
+            });
+
+            return;
+
+        }
+
+
+        const activeInterface =
+            router.activeInterface ||
+            "nenhuma";
+
+
+        const interfaceData =
+            router.interfaces?.[
+                activeInterface
+            ];
+
+
+        renderStatus({
+
+            Dispositivo:
+                "Router",
+
+            Hostname:
+                router.hostname ||
+                "Router",
+
+            "Interface atual":
+                activeInterface,
+
+            "IP atual":
+                interfaceData?.ip ||
+                "não configurado",
+
+            "Mask atual":
+                interfaceData?.mask ||
+                "não configurada",
+
+            "Status atual":
+                interfaceData?.status ||
+                "down",
+
+            "Encapsulation":
+                interfaceData?.encapsulation?.type ||
+                "nenhuma",
+
+            "VLAN":
+                interfaceData?.encapsulation?.vlanId ||
+                "nenhuma",
+
+            "Rotas estáticas":
+                Array.isArray(
+                    router.routing?.staticRoutes
+                )
+                    ? router.routing.staticRoutes.length
+                    : 0
+
+        });
+
+        return;
+
+    }
+
+
+    /*
+    =============================================
+    SWITCH
+    =============================================
+    */
+
+    if (
+        appState.currentDeviceType ===
+        "switch"
+    ) {
+
+        const switchState =
+            appState.switch;
+
+
+        if (!switchState) {
+
+            renderStatus({
+
+                Dispositivo:
+                    "Switch indisponível."
+
+            });
+
+            return;
+
+        }
+
+
+        renderStatus({
+
+            Dispositivo:
+                "Switch",
+
+            Hostname:
+                switchState.hostname ||
+                "Switch",
+
+            "VLAN 1 IP":
+                switchState.vlan1?.ip ||
+                "não configurado",
+
+            "VLAN 1 Mask":
+                switchState.vlan1?.mask ||
+                "não configurada",
+
+            "VLAN 1 Status":
+                switchState.vlan1?.isUp
+                    ? "up"
+                    : "down",
+
+            "Porta atual":
+                switchState.activePhysicalPort ||
+                "nenhuma",
+
+            "VLAN atual":
+                switchState.activeVlanId ||
+                "nenhuma",
+
+            "Running Config":
+                switchState.runningConfigExists
+                    ? "presente"
+                    : "ausente"
+
+        });
+
+        return;
+
+    }
+
+
+    /*
+    =============================================
+    TIPO DESCONHECIDO
+    =============================================
+    */
+
     renderStatus({
 
-        Hostname:
-            switchState.hostname ||
-            "Switch",
+        Dispositivo:
+            appState.currentDeviceType ||
+            "desconhecido",
 
-        "VLAN 1 IP":
-            switchState.vlan1?.ip ||
-            "não configurado",
-
-        "VLAN 1 Mask":
-            switchState.vlan1?.mask ||
-            "não configurada",
-
-        "VLAN 1 Status":
-            switchState.vlan1?.isUp
-                ? "up"
-                : "down",
-
-        "Porta atual":
-            switchState.activePhysicalPort ||
-            "nenhuma",
-
-        "VLAN atual":
-            switchState.activeVlanId ||
-            "nenhuma",
-
-        "Running Config":
-            switchState.runningConfigExists
-                ? "presente"
-                : "ausente"
+        ID:
+            appState.currentDeviceId ||
+            "nenhum"
 
     });
 
@@ -482,6 +704,164 @@ function updateTopology() {
         simulatorState.topology ||
         null
     );
+
+}
+
+
+/*
+=====================================================
+SELEÇÃO DE DISPOSITIVO
+=====================================================
+
+Esta função sincroniza:
+
+1. appState.currentDeviceId
+2. appState.currentDeviceType
+3. sessão visual da CLI
+4. prompt
+5. interface visual
+=====================================================
+*/
+
+export function selectDevice(
+    deviceType
+) {
+
+    const normalized =
+        String(
+            deviceType || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    /*
+    =============================================
+    SWITCH
+    =============================================
+    */
+
+    if (
+        normalized === "switch"
+    ) {
+
+        const switchDevice =
+            appState.devices?.find(
+                device =>
+                    device &&
+                    device.type ===
+                        "switch"
+            );
+
+
+        const switchId =
+            switchDevice?.id ||
+            appState.switch?.id ||
+            "Switch";
+
+
+        const selected =
+            setCurrentDevice(
+                switchId
+            );
+
+
+        if (!selected) {
+
+            return false;
+
+        }
+
+
+        /*
+        Troca para a sessão CLI do Switch.
+        */
+
+        setCliDevice(
+            "switch"
+        );
+
+
+        /*
+        Atualiza prompt.
+        */
+
+        setPrompt(
+            getCliPrompt()
+        );
+
+
+        refreshUI();
+
+        return true;
+
+    }
+
+
+    /*
+    =============================================
+    ROUTER
+    =============================================
+    */
+
+    if (
+        normalized === "router"
+    ) {
+
+        const routerDevice =
+            appState.devices?.find(
+                device =>
+                    device &&
+                    device.type ===
+                        "router"
+            );
+
+
+        const routerId =
+            routerDevice?.id ||
+            appState.router?.id ||
+            "Router";
+
+
+        const selected =
+            setCurrentDevice(
+                routerId
+            );
+
+
+        if (!selected) {
+
+            return false;
+
+        }
+
+
+        /*
+        Troca para a sessão CLI do Router.
+        */
+
+        setCliDevice(
+            "router"
+        );
+
+
+        /*
+        Atualiza prompt.
+        */
+
+        setPrompt(
+            getCliPrompt()
+        );
+
+
+        refreshUI();
+
+        return true;
+
+    }
+
+
+    return false;
 
 }
 
@@ -534,11 +914,24 @@ export function resetApp() {
         createLabFactory()
     );
 
+
+    /*
+    O laboratório padrão inicia no Switch.
+    */
+
+    setCliDevice(
+        appState.currentDeviceType ||
+        "switch"
+    );
+
+
     setPrompt(
         getCliPrompt()
     );
 
+
     refreshUI();
+
 
     return true;
 

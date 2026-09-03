@@ -7,15 +7,15 @@
 //
 // NÃO possui:
 // - regras do Switch
+// - regras do Router
 // - regras de VLAN
 // - regras de Port Security
 // - lógica de comandos Cisco
 // - persistência NVRAM
 //
-// O ui.js apenas apresenta informações na tela.
-//
-// A topologia visual também pertence a esta camada.
-// O ui.js recebe dados prontos e os transforma em DOM.
+// O ui.js apenas apresenta informações na tela
+// e encaminha seleção de dispositivo para a camada
+// superior através de onDeviceSelect.
 // =====================================================
 
 
@@ -52,6 +52,32 @@ const topologyContainer =
 
 
 // =====================================================
+// BOTÕES DE DISPOSITIVO
+// =====================================================
+//
+// O HTML pode possuir:
+//
+// #btn-switch
+// #btn-router
+//
+// O ui.js NÃO altera appState diretamente.
+//
+// Ele apenas chama:
+//
+// onDeviceSelect("switch")
+// onDeviceSelect("router")
+//
+// A função é fornecida pelo app.js.
+// =====================================================
+
+const btnSwitch =
+    document.getElementById("btn-switch");
+
+const btnRouter =
+    document.getElementById("btn-router");
+
+
+// =====================================================
 // ESTADO INTERNO DA INTERFACE
 // =====================================================
 
@@ -67,16 +93,38 @@ const uiState = {
 
     commandTreeData: null,
 
-    topologyData: null
+    topologyData: null,
+
+    currentDeviceType: null
 
 };
+
+
+// =====================================================
+// CALLBACK DE SELEÇÃO DE DISPOSITIVO
+// =====================================================
+
+let onDeviceSelect = null;
 
 
 // =====================================================
 // INICIALIZAÇÃO DA INTERFACE
 // =====================================================
 
-export function initializeUI() {
+export function initializeUI(
+    options = {}
+) {
+
+    if (
+        typeof options.onDeviceSelect ===
+        "function"
+    ) {
+
+        onDeviceSelect =
+            options.onDeviceSelect;
+
+    }
+
 
     bindUIEvents();
 
@@ -146,6 +194,204 @@ function bindUIEvents() {
 
     }
 
+
+    // ---------------------------------------------
+    // SWITCH
+    // ---------------------------------------------
+
+    if (btnSwitch) {
+
+        btnSwitch.addEventListener(
+            "click",
+            () => {
+
+                selectDeviceFromUI(
+                    "switch"
+                );
+
+            }
+        );
+
+    }
+
+
+    // ---------------------------------------------
+    // ROUTER
+    // ---------------------------------------------
+
+    if (btnRouter) {
+
+        btnRouter.addEventListener(
+            "click",
+            () => {
+
+                selectDeviceFromUI(
+                    "router"
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// SELEÇÃO DE DISPOSITIVO
+// =====================================================
+
+function selectDeviceFromUI(
+    deviceType
+) {
+
+    const normalized =
+        String(
+            deviceType || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if (
+        normalized !== "switch" &&
+        normalized !== "router"
+    ) {
+
+        return false;
+
+    }
+
+
+    uiState.currentDeviceType =
+        normalized;
+
+
+    /*
+    A UI não conhece appState.
+
+    A seleção real será feita pelo
+    callback fornecido pelo app.js.
+    */
+
+    if (
+        typeof onDeviceSelect ===
+        "function"
+    ) {
+
+        const success =
+            onDeviceSelect(
+                normalized
+            );
+
+
+        if (success === false) {
+
+            return false;
+
+        }
+
+    }
+
+
+    updateDeviceButtonState();
+
+    return true;
+
+}
+
+
+// =====================================================
+// ESTADO VISUAL DOS BOTÕES
+// =====================================================
+
+function updateDeviceButtonState() {
+
+    if (btnSwitch) {
+
+        btnSwitch.classList.toggle(
+            "active",
+            uiState.currentDeviceType ===
+                "switch"
+        );
+
+        btnSwitch.setAttribute(
+            "aria-pressed",
+            String(
+                uiState.currentDeviceType ===
+                    "switch"
+            )
+        );
+
+    }
+
+
+    if (btnRouter) {
+
+        btnRouter.classList.toggle(
+            "active",
+            uiState.currentDeviceType ===
+                "router"
+        );
+
+        btnRouter.setAttribute(
+            "aria-pressed",
+            String(
+                uiState.currentDeviceType ===
+                    "router"
+            )
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// DEFINIR DISPOSITIVO VISUALMENTE
+// =====================================================
+
+export function setUIDeviceType(
+    deviceType
+) {
+
+    const normalized =
+        String(
+            deviceType || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if (
+        normalized !== "switch" &&
+        normalized !== "router"
+    ) {
+
+        return false;
+
+    }
+
+
+    uiState.currentDeviceType =
+        normalized;
+
+
+    updateDeviceButtonState();
+
+    return true;
+
+}
+
+
+// =====================================================
+// OBTER DISPOSITIVO VISUAL ATUAL
+// =====================================================
+
+export function getUIDeviceType() {
+
+    return uiState.currentDeviceType;
+
 }
 
 
@@ -165,6 +411,8 @@ function renderInitialState() {
 
     clearTopology();
 
+    updateDeviceButtonState();
+
 }
 
 
@@ -172,7 +420,9 @@ function renderInitialState() {
 // HELP
 // =====================================================
 
-export function renderHelp(commands = {}) {
+export function renderHelp(
+    commands = {}
+) {
 
     uiState.helpCommands =
         commands || {};
@@ -308,7 +558,7 @@ export function addHistoryEntry(
 
 
 // =====================================================
-// RENDERIZA HISTÓRICO
+// RENDERIZAR HISTÓRICO
 // =====================================================
 
 function renderHistory() {
@@ -387,7 +637,7 @@ function renderHistory() {
 
 
 // =====================================================
-// LIMPA HISTÓRICO
+// LIMPAR HISTÓRICO
 // =====================================================
 
 export function clearHistory() {
@@ -577,7 +827,8 @@ function getStatusClass(
 
     if (
         normalizedLabel.includes("hostname") &&
-        normalizedValue !== "switch"
+        normalizedValue !== "switch" &&
+        normalizedValue !== "router"
     ) {
 
         return "configured";
@@ -635,7 +886,7 @@ function getStatusClass(
 
 
 // =====================================================
-// LIMPA STATUS
+// LIMPAR STATUS
 // =====================================================
 
 export function clearStatus() {
@@ -658,31 +909,6 @@ export function clearStatus() {
 
 // =====================================================
 // TOPOLOGIA
-// =====================================================
-//
-// Recebe algo no formato:
-//
-// {
-//     devices: [
-//         { type: "switch", id: "Switch" },
-//         { type: "pc", id: "PC1" },
-//         ...
-//     ],
-//
-//     connections: [
-//         {
-//             source: "PC1",
-//             target: "Switch",
-//             sourcePort: null,
-//             targetPort: "fa0/1"
-//         },
-//         ...
-//     ]
-// }
-//
-// O ui.js NÃO cria esse estado.
-//
-// Apenas apresenta o estado recebido.
 // =====================================================
 
 export function renderTopology(
@@ -738,24 +964,12 @@ export function renderTopology(
     }
 
 
-    /*
-    -------------------------------------------------
-    CONTAINER VISUAL
-    -------------------------------------------------
-    */
-
     const topologyBoard =
         document.createElement("div");
 
     topologyBoard.className =
         "topology-board";
 
-
-    /*
-    -------------------------------------------------
-    TÍTULO
-    -------------------------------------------------
-    */
 
     const title =
         document.createElement("div");
@@ -771,12 +985,6 @@ export function renderTopology(
         title
     );
 
-
-    /*
-    -------------------------------------------------
-    ÁREA DOS DISPOSITIVOS
-    -------------------------------------------------
-    */
 
     const deviceArea =
         document.createElement("div");
@@ -819,7 +1027,39 @@ export function renderTopology(
 
     /*
     -------------------------------------------------
-    PCs
+    ROUTERS
+    -------------------------------------------------
+    */
+
+    const routers =
+        devices.filter(
+            device =>
+                device &&
+                device.type === "router"
+        );
+
+
+    routers.forEach(
+        device => {
+
+            const routerElement =
+                createTopologyDevice(
+                    device,
+                    "router"
+                );
+
+
+            deviceArea.appendChild(
+                routerElement
+            );
+
+        }
+    );
+
+
+    /*
+    -------------------------------------------------
+    PCS
     -------------------------------------------------
     */
 
@@ -874,13 +1114,6 @@ export function renderTopology(
     -------------------------------------------------
     CONEXÕES
     -------------------------------------------------
-    
-    Por enquanto as conexões são apresentadas
-    como informação visual simples.
-
-    A geometria dos cabos pode ser refinada
-    posteriormente no CSS.
-    -------------------------------------------------
     */
 
     const connectionArea =
@@ -912,12 +1145,6 @@ export function renderTopology(
     );
 
 
-    /*
-    -------------------------------------------------
-    INSERE NA INTERFACE
-    -------------------------------------------------
-    */
-
     topologyContainer.appendChild(
         topologyBoard
     );
@@ -946,10 +1173,6 @@ function createTopologyDevice(
         device?.id || "";
 
 
-    /*
-    ÍCONE
-    */
-
     const icon =
         document.createElement("div");
 
@@ -957,15 +1180,22 @@ function createTopologyDevice(
         "topology-device-icon";
 
 
-    icon.textContent =
-        type === "switch"
-            ? "🔀"
-            : "🖥️";
+    if (type === "switch") {
 
+        icon.textContent = "🔀";
 
-    /*
-    NOME
-    */
+    }
+    else if (type === "router") {
+
+        icon.textContent = "🌐";
+
+    }
+    else {
+
+        icon.textContent = "🖥️";
+
+    }
+
 
     const name =
         document.createElement("div");
@@ -979,10 +1209,6 @@ function createTopologyDevice(
         "Dispositivo";
 
 
-    /*
-    TIPO
-    */
-
     const typeLabel =
         document.createElement("div");
 
@@ -990,10 +1216,24 @@ function createTopologyDevice(
         "topology-device-type";
 
 
-    typeLabel.textContent =
-        type === "switch"
-            ? "Switch"
-            : "PC";
+    if (type === "switch") {
+
+        typeLabel.textContent =
+            "Switch";
+
+    }
+    else if (type === "router") {
+
+        typeLabel.textContent =
+            "Router";
+
+    }
+    else {
+
+        typeLabel.textContent =
+            "PC";
+
+    }
 
 
     element.appendChild(
@@ -1015,7 +1255,7 @@ function createTopologyDevice(
 
 
 // =====================================================
-// CRIAR CONEXÃO DA TOPOLOGIA
+// CRIAR CONEXÃO
 // =====================================================
 
 function createTopologyConnection(
@@ -1458,7 +1698,7 @@ export function showMessage(
 
 
 // =====================================================
-// SCROLL GENÉRICO
+// SCROLL
 // =====================================================
 
 function scrollElementToBottom(
@@ -1504,7 +1744,10 @@ export function getUIState() {
             uiState.commandTreeData,
 
         topologyData:
-            uiState.topologyData
+            uiState.topologyData,
+
+        currentDeviceType:
+            uiState.currentDeviceType
 
     };
 

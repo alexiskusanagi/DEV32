@@ -1,6 +1,38 @@
+/*
+=====================================================
+CISCO STUDY SIMULATOR
+core/cliExecutor.js
+=====================================================
+
+Responsabilidade:
+
+- Receber comandos do parser.
+- Executar comandos no dispositivo ativo.
+- Manter contexto CLI independente por dispositivo.
+- Manter Switch e Router separados.
+- Não manipular DOM.
+- Não renderizar interface.
+
+IMPORTANTE:
+
+appState.currentDeviceType determina o dispositivo ativo.
+
+Switch:
+    appState.currentDeviceType === "switch"
+
+Router:
+    appState.currentDeviceType === "router"
+
+Cada dispositivo possui seu próprio contexto CLI
+e seu próprio histórico de comandos.
+=====================================================
+*/
+
+
 import {
     parseCommand
 } from "./parser.js";
+
 
 import {
     appState,
@@ -9,6 +41,7 @@ import {
     eraseStartupConfig,
     getCurrentDevice
 } from "./state.js";
+
 
 import {
     setHostname,
@@ -29,74 +62,30 @@ import {
     triggerViolation,
     clearViolation,
     disablePortSecurity,
-    resetLab,
     getSimulatorState
 } from "./simulator.js";
 
 
 /*
 =====================================================
-CISCO STUDY SIMULATOR
-cliExecutor.js
-
-Responsabilidade:
-
-Receber o resultado do parser e executar
-a ação correspondente no simulador.
-
-Fluxo:
-
-CLI
-↓
-parser.js
-↓
-cliExecutor.js
-↓
-simulator.js
-↓
-state.js
-
-Este arquivo NÃO:
-
-- manipula DOM
-- renderiza HTML
-- cria laboratórios
-- contém regras de apresentação
+CONTEXTO CLI
 =====================================================
 */
 
+const switchContext = {
 
-/*
-=====================================================
-CONTEXTO DA CLI
+    mode: "user",
 
-O estado de modo da CLI pertence à sessão
-do terminal, não ao estado permanente do switch.
+    interfaceType: null,
 
-Modos:
+    interfaceName: null,
 
-user
-Switch>
+    lineType: null
 
-privileged
-Switch#
+};
 
-global
-Switch(config)#
 
-interface
-Switch(config-if)#
-
-vlan
-Switch(config-vlan)#
-
-line
-Switch(config-line)#
-
-=====================================================
-*/
-
-const cliContext = {
+const routerContext = {
 
     mode: "user",
 
@@ -111,6 +100,69 @@ const cliContext = {
 
 /*
 =====================================================
+OBTER TIPO DO DISPOSITIVO ATIVO
+=====================================================
+*/
+
+function getDeviceType() {
+
+    if (
+        appState.currentDeviceType ===
+        "router"
+    ) {
+
+        return "router";
+
+    }
+
+
+    return "switch";
+
+}
+
+
+/*
+=====================================================
+OBTER CONTEXTO ATIVO
+=====================================================
+*/
+
+function getActiveContext() {
+
+    return getDeviceType() === "router"
+        ? routerContext
+        : switchContext;
+
+}
+
+
+/*
+=====================================================
+RESETAR UM CONTEXTO
+=====================================================
+*/
+
+function resetContext(
+    context
+) {
+
+    context.mode =
+        "user";
+
+    context.interfaceType =
+        null;
+
+    context.interfaceName =
+        null;
+
+    context.lineType =
+        null;
+
+}
+
+
+/*
+=====================================================
 OBTER CONTEXTO DA CLI
 =====================================================
 */
@@ -118,7 +170,7 @@ OBTER CONTEXTO DA CLI
 export function getCliContext() {
 
     return {
-        ...cliContext
+        ...getActiveContext()
     };
 
 }
@@ -126,21 +178,80 @@ export function getCliContext() {
 
 /*
 =====================================================
-RESETAR CONTEXTO DA CLI
+OBTER CONTEXTOS
+=====================================================
+*/
+
+export function getCliContexts() {
+
+    return {
+
+        switch:
+            {
+                ...switchContext
+            },
+
+        router:
+            {
+                ...routerContext
+            }
+
+    };
+
+}
+
+
+/*
+=====================================================
+RESETAR CONTEXTO ATIVO
 =====================================================
 */
 
 export function resetCliContext() {
 
-    cliContext.mode = "user";
-
-    cliContext.interfaceType = null;
-
-    cliContext.interfaceName = null;
-
-    cliContext.lineType = null;
+    resetContext(
+        getActiveContext()
+    );
 
     return true;
+
+}
+
+
+/*
+=====================================================
+RESETAR TODOS OS CONTEXTOS
+=====================================================
+*/
+
+export function resetAllCliContexts() {
+
+    resetContext(
+        switchContext
+    );
+
+    resetContext(
+        routerContext
+    );
+
+    return true;
+
+}
+
+
+/*
+=====================================================
+VALIDAR DISPOSITIVO
+=====================================================
+*/
+
+function requireDevice(
+    type
+) {
+
+    return (
+        getDeviceType() === type
+    );
 
 }
 
@@ -151,7 +262,9 @@ EXECUTAR COMANDO
 =====================================================
 */
 
-export function executeCommand(input) {
+export function executeCommand(
+    input
+) {
 
     const parsed =
         typeof input === "string"
@@ -209,7 +322,9 @@ export function executeCommand(input) {
     }
 
 
-    switch (parsed.type) {
+    switch (
+        parsed.type
+    ) {
 
         case "enable":
             return executeEnable();
@@ -331,8 +446,13 @@ ENABLE
 
 function executeEnable() {
 
-    cliContext.mode =
+    const context =
+        getActiveContext();
+
+
+    context.mode =
         "privileged";
+
 
     return createResult(
         true,
@@ -351,8 +471,12 @@ CONFIGURE TERMINAL
 
 function executeConfigureTerminal() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "privileged"
+        context.mode !== "privileged"
     ) {
 
         return createResult(
@@ -364,8 +488,9 @@ function executeConfigureTerminal() {
     }
 
 
-    cliContext.mode =
+    context.mode =
         "global";
+
 
     return createResult(
         true,
@@ -384,8 +509,12 @@ EXIT
 
 function executeExit() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode === "user"
+        context.mode === "user"
     ) {
 
         return createResult(
@@ -398,10 +527,10 @@ function executeExit() {
 
 
     if (
-        cliContext.mode === "privileged"
+        context.mode === "privileged"
     ) {
 
-        cliContext.mode =
+        context.mode =
             "user";
 
         return createResult(
@@ -414,21 +543,21 @@ function executeExit() {
 
 
     if (
-        cliContext.mode === "interface" ||
-        cliContext.mode === "vlan" ||
-        cliContext.mode === "line"
+        context.mode === "interface" ||
+        context.mode === "vlan" ||
+        context.mode === "line"
     ) {
 
-        cliContext.mode =
+        context.mode =
             "global";
 
-        cliContext.interfaceType =
+        context.interfaceType =
             null;
 
-        cliContext.interfaceName =
+        context.interfaceName =
             null;
 
-        cliContext.lineType =
+        context.lineType =
             null;
 
         return createResult(
@@ -441,10 +570,10 @@ function executeExit() {
 
 
     if (
-        cliContext.mode === "global"
+        context.mode === "global"
     ) {
 
-        cliContext.mode =
+        context.mode =
             "privileged";
 
         return createResult(
@@ -473,23 +602,28 @@ END
 
 function executeEnd() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "user"
+        context.mode !== "user"
     ) {
 
-        cliContext.mode =
+        context.mode =
             "privileged";
 
-        cliContext.interfaceType =
+        context.interfaceType =
             null;
 
-        cliContext.interfaceName =
+        context.interfaceName =
             null;
 
-        cliContext.lineType =
+        context.lineType =
             null;
 
     }
+
 
     return createResult(
         true,
@@ -506,10 +640,16 @@ HOSTNAME
 =====================================================
 */
 
-function executeHostname(args) {
+function executeHostname(
+    args
+) {
+
+    const context =
+        getActiveContext();
+
 
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -525,9 +665,7 @@ function executeHostname(args) {
         args.join(" ").trim();
 
 
-    if (
-        !hostname
-    ) {
+    if (!hostname) {
 
         return createResult(
             false,
@@ -539,7 +677,9 @@ function executeHostname(args) {
 
 
     const success =
-        setHostname(hostname);
+        setHostname(
+            hostname
+        );
 
 
     return createResult(
@@ -559,10 +699,16 @@ BANNER MOTD
 =====================================================
 */
 
-function executeBanner(args) {
+function executeBanner(
+    args
+) {
+
+    const context =
+        getActiveContext();
+
 
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -579,7 +725,9 @@ function executeBanner(args) {
 
 
     const success =
-        setBanner(text);
+        setBanner(
+            text
+        );
 
 
     return createResult(
@@ -599,10 +747,16 @@ ENABLE SECRET
 =====================================================
 */
 
-function executeEnableSecret(args) {
+function executeEnableSecret(
+    args
+) {
+
+    const context =
+        getActiveContext();
+
 
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -618,9 +772,7 @@ function executeEnableSecret(args) {
         args.join(" ").trim();
 
 
-    if (
-        !secret
-    ) {
+    if (!secret) {
 
         return createResult(
             false,
@@ -632,7 +784,9 @@ function executeEnableSecret(args) {
 
 
     const success =
-        setEnableSecret(secret);
+        setEnableSecret(
+            secret
+        );
 
 
     return createResult(
@@ -654,14 +808,31 @@ PASSWORD ENCRYPTION
 
 function executePasswordEncryption() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
             false,
             "service-password-encryption",
             "% Comando permitido somente no modo global."
+        );
+
+    }
+
+
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "service-password-encryption",
+            "% Este comando ainda não está disponível para Router."
         );
 
     }
@@ -674,7 +845,9 @@ function executePasswordEncryption() {
     return createResult(
         success,
         "service-password-encryption",
-        ""
+        success
+            ? ""
+            : "% Falha ao ativar password encryption."
     );
 
 }
@@ -682,8 +855,12 @@ function executePasswordEncryption() {
 
 function executeNoPasswordEncryption() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -695,8 +872,25 @@ function executeNoPasswordEncryption() {
     }
 
 
-    appState.switch.encryptionActive =
-        false;
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "no-service-password-encryption",
+            "% Este comando ainda não está disponível para Router."
+        );
+
+    }
+
+
+    if (appState.switch) {
+
+        appState.switch.encryptionActive =
+            false;
+
+    }
 
 
     return createResult(
@@ -714,10 +908,29 @@ VLAN
 =====================================================
 */
 
-function executeVlan(args) {
+function executeVlan(
+    args
+) {
 
     if (
-        cliContext.mode !== "global"
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "vlan",
+            "% O comando vlan pertence ao Switch."
+        );
+
+    }
+
+
+    const context =
+        switchContext;
+
+
+    if (
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -730,7 +943,9 @@ function executeVlan(args) {
 
 
     const vlanId =
-        Number(args[0]);
+        Number(
+            args[0]
+        );
 
 
     if (
@@ -747,7 +962,9 @@ function executeVlan(args) {
 
 
     const success =
-        createVlan(vlanId);
+        createVlan(
+            vlanId
+        );
 
 
     if (!success) {
@@ -761,18 +978,22 @@ function executeVlan(args) {
     }
 
 
-    cliContext.mode =
+    context.mode =
         "vlan";
 
-    cliContext.interfaceType =
+    context.interfaceType =
         "vlan";
 
-    cliContext.interfaceName =
+    context.interfaceName =
         `vlan ${vlanId}`;
 
 
-    appState.switch.activeVlanId =
-        vlanId;
+    if (appState.switch) {
+
+        appState.switch.activeVlanId =
+            vlanId;
+
+    }
 
 
     return createResult(
@@ -790,10 +1011,25 @@ NAME VLAN
 =====================================================
 */
 
-function executeVlanName(args) {
+function executeVlanName(
+    args
+) {
 
     if (
-        cliContext.mode !== "vlan"
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "name",
+            "% Comando name pertence ao Switch."
+        );
+
+    }
+
+
+    if (
+        switchContext.mode !== "vlan"
     ) {
 
         return createResult(
@@ -807,7 +1043,7 @@ function executeVlanName(args) {
 
     const vlanId =
         Number(
-            cliContext.interfaceName
+            switchContext.interfaceName
                 .replace(
                     "vlan ",
                     ""
@@ -843,10 +1079,16 @@ INTERFACE
 =====================================================
 */
 
-function executeInterface(args) {
+function executeInterface(
+    args
+) {
+
+    const context =
+        getActiveContext();
+
 
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -859,8 +1101,82 @@ function executeInterface(args) {
 
 
     const interfaceName =
-        args.join(" ").trim().toLowerCase();
+        args
+            .join(" ")
+            .trim()
+            .toLowerCase();
 
+
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
+    if (
+        requireDevice("router")
+    ) {
+
+        const router =
+            appState.router;
+
+
+        if (!router) {
+
+            return createResult(
+                false,
+                "interface",
+                "% Router indisponível."
+            );
+
+        }
+
+
+        const interfaces =
+            router.interfaces || {};
+
+
+        if (
+            !interfaces[interfaceName]
+        ) {
+
+            return createResult(
+                false,
+                "interface",
+                "% Interface inválida."
+            );
+
+        }
+
+
+        router.activeInterface =
+            interfaceName;
+
+
+        context.mode =
+            "interface";
+
+        context.interfaceType =
+            "physical";
+
+        context.interfaceName =
+            interfaceName;
+
+
+        return createResult(
+            true,
+            "interface",
+            ""
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
 
     if (
         /^vlan\s+\d+$/i.test(
@@ -868,13 +1184,13 @@ function executeInterface(args) {
         )
     ) {
 
-        cliContext.mode =
+        context.mode =
             "interface";
 
-        cliContext.interfaceType =
+        context.interfaceType =
             "vlan";
 
-        cliContext.interfaceName =
+        context.interfaceName =
             interfaceName;
 
 
@@ -904,13 +1220,13 @@ function executeInterface(args) {
     }
 
 
-    cliContext.mode =
+    context.mode =
         "interface";
 
-    cliContext.interfaceType =
+    context.interfaceType =
         "physical";
 
-    cliContext.interfaceName =
+    context.interfaceName =
         interfaceName;
 
 
@@ -929,17 +1245,22 @@ IP ADDRESS
 =====================================================
 */
 
-function executeIpAddress(args) {
+function executeIpAddress(
+    args
+) {
+
+    const context =
+        getActiveContext();
+
 
     if (
-        cliContext.mode !== "interface" ||
-        cliContext.interfaceType !== "vlan"
+        context.mode !== "interface"
     ) {
 
         return createResult(
             false,
             "ip-address",
-            "% O comando ip address deve ser usado na interface VLAN."
+            "% Comando permitido somente no modo de interface."
         );
 
     }
@@ -953,6 +1274,87 @@ function executeIpAddress(args) {
             false,
             "ip-address",
             "% IP e máscara são obrigatórios."
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
+    if (
+        requireDevice("router")
+    ) {
+
+        const router =
+            appState.router;
+
+
+        if (!router) {
+
+            return createResult(
+                false,
+                "ip-address",
+                "% Router indisponível."
+            );
+
+        }
+
+
+        const interfaceName =
+            context.interfaceName;
+
+
+        const interfaceData =
+            router.interfaces?.[
+                interfaceName
+            ];
+
+
+        if (!interfaceData) {
+
+            return createResult(
+                false,
+                "ip-address",
+                "% Interface do Router não encontrada."
+            );
+
+        }
+
+
+        interfaceData.ip =
+            args[0];
+
+        interfaceData.mask =
+            args[1];
+
+
+        return createResult(
+            true,
+            "ip-address",
+            ""
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
+
+    if (
+        context.interfaceType !== "vlan"
+    ) {
+
+        return createResult(
+            false,
+            "ip-address",
+            "% O comando ip address deve ser usado na interface VLAN."
         );
 
     }
@@ -976,11 +1378,71 @@ function executeIpAddress(args) {
 }
 
 
+/*
+=====================================================
+NO IP ADDRESS
+=====================================================
+*/
+
 function executeNoIpAddress() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "interface" ||
-        cliContext.interfaceType !== "vlan"
+        context.mode !== "interface"
+    ) {
+
+        return createResult(
+            false,
+            "no-ip-address",
+            "% Comando permitido somente no modo de interface."
+        );
+
+    }
+
+
+    if (
+        requireDevice("router")
+    ) {
+
+        const interfaceData =
+            appState.router
+                ?.interfaces?.[
+                    context.interfaceName
+                ];
+
+
+        if (!interfaceData) {
+
+            return createResult(
+                false,
+                "no-ip-address",
+                "% Interface não encontrada."
+            );
+
+        }
+
+
+        interfaceData.ip =
+            null;
+
+        interfaceData.mask =
+            null;
+
+
+        return createResult(
+            true,
+            "no-ip-address",
+            ""
+        );
+
+    }
+
+
+    if (
+        context.interfaceType !== "vlan"
     ) {
 
         return createResult(
@@ -992,11 +1454,15 @@ function executeNoIpAddress() {
     }
 
 
-    appState.switch.vlan1.ip =
-        null;
+    if (appState.switch?.vlan1) {
 
-    appState.switch.vlan1.mask =
-        null;
+        appState.switch.vlan1.ip =
+            null;
+
+        appState.switch.vlan1.mask =
+            null;
+
+    }
 
 
     return createResult(
@@ -1016,8 +1482,12 @@ SHUTDOWN
 
 function executeShutdown() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "interface"
+        context.mode !== "interface"
     ) {
 
         return createResult(
@@ -1029,8 +1499,55 @@ function executeShutdown() {
     }
 
 
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
     if (
-        cliContext.interfaceType === "vlan"
+        requireDevice("router")
+    ) {
+
+        const interfaceData =
+            appState.router
+                ?.interfaces?.[
+                    context.interfaceName
+                ];
+
+
+        if (!interfaceData) {
+
+            return createResult(
+                false,
+                "shutdown",
+                "% Interface não encontrada."
+            );
+
+        }
+
+
+        interfaceData.status =
+            "administratively down";
+
+
+        return createResult(
+            true,
+            "shutdown",
+            ""
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
+
+    if (
+        context.interfaceType === "vlan"
     ) {
 
         disableManagementInterface();
@@ -1039,8 +1556,8 @@ function executeShutdown() {
 
         const port =
             appState.switch
-                .ports?.[
-                    cliContext.interfaceName
+                ?.ports?.[
+                    context.interfaceName
                 ];
 
 
@@ -1078,8 +1595,12 @@ NO SHUTDOWN
 
 function executeNoShutdown() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "interface"
+        context.mode !== "interface"
     ) {
 
         return createResult(
@@ -1091,8 +1612,55 @@ function executeNoShutdown() {
     }
 
 
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
     if (
-        cliContext.interfaceType === "vlan"
+        requireDevice("router")
+    ) {
+
+        const interfaceData =
+            appState.router
+                ?.interfaces?.[
+                    context.interfaceName
+                ];
+
+
+        if (!interfaceData) {
+
+            return createResult(
+                false,
+                "no-shutdown",
+                "% Interface não encontrada."
+            );
+
+        }
+
+
+        interfaceData.status =
+            "up";
+
+
+        return createResult(
+            true,
+            "no-shutdown",
+            ""
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
+
+    if (
+        context.interfaceType === "vlan"
     ) {
 
         enableManagementInterface();
@@ -1101,8 +1669,8 @@ function executeNoShutdown() {
 
         const port =
             appState.switch
-                .ports?.[
-                    cliContext.interfaceName
+                ?.ports?.[
+                    context.interfaceName
                 ];
 
 
@@ -1118,11 +1686,12 @@ function executeNoShutdown() {
 
 
         if (
-            port.status === "err-disabled"
+            port.status ===
+            "err-disabled"
         ) {
 
             clearViolation(
-                cliContext.interfaceName
+                context.interfaceName
             );
 
         } else {
@@ -1150,11 +1719,26 @@ SWITCHPORT MODE
 =====================================================
 */
 
-function executeSwitchportMode(args) {
+function executeSwitchportMode(
+    args
+) {
 
     if (
-        cliContext.mode !== "interface" ||
-        cliContext.interfaceType !== "physical"
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "switchport-mode",
+            "% switchport pertence ao Switch."
+        );
+
+    }
+
+
+    if (
+        switchContext.mode !== "interface" ||
+        switchContext.interfaceType !== "physical"
     ) {
 
         return createResult(
@@ -1173,7 +1757,9 @@ function executeSwitchportMode(args) {
 
 
     const success =
-        setPortMode(mode);
+        setPortMode(
+            mode
+        );
 
 
     return createResult(
@@ -1193,11 +1779,26 @@ SWITCHPORT ACCESS VLAN
 =====================================================
 */
 
-function executeSwitchportAccessVlan(args) {
+function executeSwitchportAccessVlan(
+    args
+) {
 
     if (
-        cliContext.mode !== "interface" ||
-        cliContext.interfaceType !== "physical"
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "switchport-access-vlan",
+            "% switchport pertence ao Switch."
+        );
+
+    }
+
+
+    if (
+        switchContext.mode !== "interface" ||
+        switchContext.interfaceType !== "physical"
     ) {
 
         return createResult(
@@ -1210,11 +1811,15 @@ function executeSwitchportAccessVlan(args) {
 
 
     const vlanId =
-        Number(args[0]);
+        Number(
+            args[0]
+        );
 
 
     const success =
-        assignPortVlan(vlanId);
+        assignPortVlan(
+            vlanId
+        );
 
 
     return createResult(
@@ -1237,7 +1842,20 @@ PORT SECURITY
 function executePortSecurity() {
 
     if (
-        cliContext.mode !== "interface"
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "switchport-port-security",
+            "% Port Security pertence ao Switch."
+        );
+
+    }
+
+
+    if (
+        switchContext.mode !== "interface"
     ) {
 
         return createResult(
@@ -1266,6 +1884,19 @@ function executePortSecurity() {
 
 function executeStickyMac() {
 
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "switchport-port-security-sticky",
+            "% Sticky MAC pertence ao Switch."
+        );
+
+    }
+
+
     const success =
         enableStickyMac();
 
@@ -1281,14 +1912,31 @@ function executeStickyMac() {
 }
 
 
-function executePortSecurityMac(args) {
+function executePortSecurityMac(
+    args
+) {
+
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "switchport-port-security-mac",
+            "% Port Security pertence ao Switch."
+        );
+
+    }
+
 
     const mac =
         args.join(" ").trim();
 
 
     const success =
-        authorizePortMac(mac);
+        authorizePortMac(
+            mac
+        );
 
 
     return createResult(
@@ -1303,6 +1951,19 @@ function executePortSecurityMac(args) {
 
 
 function executeNoPortSecurity() {
+
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "no-switchport-port-security",
+            "% Port Security pertence ao Switch."
+        );
+
+    }
+
 
     const success =
         disablePortSecurity();
@@ -1325,10 +1986,14 @@ LINE CONSOLE
 =====================================================
 */
 
-function executeLineConsole(args) {
+function executeLineConsole() {
+
+    const context =
+        getActiveContext();
+
 
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -1340,10 +2005,10 @@ function executeLineConsole(args) {
     }
 
 
-    cliContext.mode =
+    context.mode =
         "line";
 
-    cliContext.lineType =
+    context.lineType =
         "console";
 
 
@@ -1362,10 +2027,14 @@ LINE VTY
 =====================================================
 */
 
-function executeLineVty(args) {
+function executeLineVty() {
+
+    const context =
+        getActiveContext();
+
 
     if (
-        cliContext.mode !== "global"
+        context.mode !== "global"
     ) {
 
         return createResult(
@@ -1377,10 +2046,10 @@ function executeLineVty(args) {
     }
 
 
-    cliContext.mode =
+    context.mode =
         "line";
 
-    cliContext.lineType =
+    context.lineType =
         "vty";
 
 
@@ -1396,20 +2065,17 @@ function executeLineVty(args) {
 /*
 =====================================================
 LINE PASSWORD
-
-O modelo atual do simulator ainda não possui
-funções específicas para console/vty.
-
-Por enquanto o executor informa isso claramente,
-em vez de alterar appState diretamente.
-
 =====================================================
 */
 
 function executeLinePassword() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "line"
+        context.mode !== "line"
     ) {
 
         return createResult(
@@ -1438,8 +2104,12 @@ LOGIN
 
 function executeLogin() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "line"
+        context.mode !== "line"
     ) {
 
         return createResult(
@@ -1462,8 +2132,12 @@ function executeLogin() {
 
 function executeNoLogin() {
 
+    const context =
+        getActiveContext();
+
+
     if (
-        cliContext.mode !== "line"
+        context.mode !== "line"
     ) {
 
         return createResult(
@@ -1490,7 +2164,9 @@ PING
 =====================================================
 */
 
-function executePing(args) {
+function executePing(
+    args
+) {
 
     const target =
         args.join(" ").trim();
@@ -1507,8 +2183,70 @@ function executePing(args) {
     }
 
 
+    /*
+    ---------------------------------------------
+    ROUTER
+    ---------------------------------------------
+    */
+
+    if (
+        requireDevice("router")
+    ) {
+
+        const router =
+            appState.router;
+
+
+        if (!router) {
+
+            return createResult(
+                false,
+                "ping",
+                "% Router indisponível."
+            );
+
+        }
+
+
+        const interfaces =
+            router.interfaces || {};
+
+
+        const reachable =
+            Object.values(
+                interfaces
+            ).some(
+                iface =>
+                    iface &&
+                    iface.ip === target &&
+                    iface.status !==
+                        "administratively down" &&
+                    iface.status !==
+                        "down"
+            );
+
+
+        return createResult(
+            reachable,
+            "ping",
+            reachable
+                ? `Ping ${target}: sucesso.`
+                : `Ping ${target}: destino inalcançável.`
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    SWITCH
+    ---------------------------------------------
+    */
+
     const managementIp =
-        appState.switch.vlan1.ip;
+        appState.switch
+            ?.vlan1
+            ?.ip;
 
 
     if (
@@ -1525,6 +2263,9 @@ function executePing(args) {
 
 
     const reachable =
+        Array.isArray(
+            appState.pcs
+        ) &&
         appState.pcs.some(
             pc =>
                 pc &&
@@ -1550,7 +2291,9 @@ SHOW
 =====================================================
 */
 
-function executeShow(args) {
+function executeShow(
+    args
+) {
 
     const command =
         args
@@ -1559,15 +2302,38 @@ function executeShow(args) {
             .toLowerCase();
 
 
+    /*
+    ---------------------------------------------
+    RUNNING CONFIG
+    ---------------------------------------------
+    */
+
     if (
         command === "running-config"
     ) {
+
+        if (
+            requireDevice("router")
+        ) {
+
+            return createResult(
+                true,
+                "show",
+                JSON.stringify(
+                    appState.router,
+                    null,
+                    4
+                )
+            );
+
+        }
+
 
         return createResult(
             true,
             "show",
             JSON.stringify(
-                appState,
+                appState.switch,
                 null,
                 4
             )
@@ -1575,6 +2341,12 @@ function executeShow(args) {
 
     }
 
+
+    /*
+    ---------------------------------------------
+    STARTUP CONFIG
+    ---------------------------------------------
+    */
 
     if (
         command === "startup-config"
@@ -1595,11 +2367,17 @@ function executeShow(args) {
         }
 
 
+        const device =
+            requireDevice("router")
+                ? appState.router
+                : appState.switch;
+
+
         return createResult(
             true,
             "show",
             JSON.stringify(
-                appState,
+                device,
                 null,
                 4
             )
@@ -1607,17 +2385,36 @@ function executeShow(args) {
 
     }
 
+
+    /*
+    ---------------------------------------------
+    VLAN
+    ---------------------------------------------
+    */
 
     if (
         command === "vlan" ||
         command === "vlan brief"
     ) {
 
+        if (
+            !requireDevice("switch")
+        ) {
+
+            return createResult(
+                false,
+                "show",
+                "% VLAN é um recurso do Switch."
+            );
+
+        }
+
+
         return createResult(
             true,
             "show",
             JSON.stringify(
-                appState.switch.vlans,
+                appState.switch?.vlans || {},
                 null,
                 4
             )
@@ -1626,15 +2423,75 @@ function executeShow(args) {
     }
 
 
+    /*
+    ---------------------------------------------
+    INTERFACES
+    ---------------------------------------------
+    */
+
     if (
         command === "interfaces"
     ) {
+
+        if (
+            requireDevice("router")
+        ) {
+
+            return createResult(
+                true,
+                "show",
+                JSON.stringify(
+                    appState.router?.interfaces || {},
+                    null,
+                    4
+                )
+            );
+
+        }
+
 
         return createResult(
             true,
             "show",
             JSON.stringify(
-                appState.switch.ports,
+                appState.switch?.ports || {},
+                null,
+                4
+            )
+        );
+
+    }
+
+
+    /*
+    ---------------------------------------------
+    ROUTES
+    ---------------------------------------------
+    */
+
+    if (
+        command === "ip route" ||
+        command === "ip routes"
+    ) {
+
+        if (
+            !requireDevice("router")
+        ) {
+
+            return createResult(
+                false,
+                "show",
+                "% Routing pertence ao Router."
+            );
+
+        }
+
+
+        return createResult(
+            true,
+            "show",
+            JSON.stringify(
+                appState.router?.routing || {},
                 null,
                 4
             )
@@ -1658,7 +2515,9 @@ CLEAR
 =====================================================
 */
 
-function executeClear(args) {
+function executeClear(
+    args
+) {
 
     const command =
         args
@@ -1672,7 +2531,20 @@ function executeClear(args) {
     ) {
 
         if (
-            cliContext.mode !== "interface"
+            !requireDevice("switch")
+        ) {
+
+            return createResult(
+                false,
+                "clear",
+                "% Violations pertencem ao Switch."
+            );
+
+        }
+
+
+        if (
+            switchContext.mode !== "interface"
         ) {
 
             return createResult(
@@ -1686,7 +2558,7 @@ function executeClear(args) {
 
         const success =
             clearViolation(
-                cliContext.interfaceName
+                switchContext.interfaceName
             );
 
 
@@ -1716,7 +2588,7 @@ WRITE
 =====================================================
 */
 
-function executeWrite(args) {
+function executeWrite() {
 
     const success =
         saveStartupConfig();
@@ -1739,7 +2611,9 @@ COPY
 =====================================================
 */
 
-function executeCopy(args) {
+function executeCopy(
+    args
+) {
 
     const normalized =
         args
@@ -1782,7 +2656,9 @@ ERASE
 =====================================================
 */
 
-function executeErase(args) {
+function executeErase(
+    args
+) {
 
     const normalized =
         args
@@ -1821,15 +2697,30 @@ function executeErase(args) {
 
 /*
 =====================================================
-ATACAR
+ATTACK
 =====================================================
 */
 
-function executeAttack(args) {
+function executeAttack(
+    args
+) {
+
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "attack",
+            "% attack pertence ao ambiente do Switch."
+        );
+
+    }
+
 
     const interfaceName =
         args[0] ||
-        cliContext.interfaceName;
+        switchContext.interfaceName;
 
 
     if (!interfaceName) {
@@ -1862,7 +2753,7 @@ function executeAttack(args) {
 
 /*
 =====================================================
-RESULTADO PADRÃO
+RESULTADO
 =====================================================
 */
 
@@ -1883,6 +2774,12 @@ function createResult(
         context:
             getCliContext(),
 
+        deviceType:
+            getDeviceType(),
+
+        device:
+            getCurrentDevice(),
+
         state:
             getSimulatorState()
 
@@ -1893,40 +2790,64 @@ function createResult(
 
 /*
 =====================================================
-OBTER PROMPT
+PROMPT
 =====================================================
 */
 
 export function getCliPrompt() {
 
-    const hostname =
-        appState.switch?.hostname ||
-        "Switch";
+    const context =
+        getActiveContext();
+
+
+    let hostname;
+
+
+    if (
+        requireDevice("router")
+    ) {
+
+        hostname =
+            appState.router?.hostname ||
+            "Router";
+
+    } else {
+
+        hostname =
+            appState.switch?.hostname ||
+            "Switch";
+
+    }
 
 
     switch (
-        cliContext.mode
+        context.mode
     ) {
 
         case "privileged":
 
             return `${hostname}#`;
 
+
         case "global":
 
             return `${hostname}(config)#`;
+
 
         case "interface":
 
             return `${hostname}(config-if)#`;
 
+
         case "vlan":
 
             return `${hostname}(config-vlan)#`;
 
+
         case "line":
 
             return `${hostname}(config-line)#`;
+
 
         case "user":
 
@@ -1946,7 +2867,7 @@ EXECUTAR VÁRIOS COMANDOS
 */
 
 export function executeCommands(
-commands = []
+    commands = []
 ) {
 
     if (
@@ -1970,7 +2891,7 @@ commands = []
 
 /*
 =====================================================
-OBTER ESTADO DO EXECUTOR
+ESTADO DO EXECUTOR
 =====================================================
 */
 
@@ -1978,8 +2899,14 @@ export function getExecutorState() {
 
     return {
 
+        deviceType:
+            getDeviceType(),
+
         context:
             getCliContext(),
+
+        contexts:
+            getCliContexts(),
 
         prompt:
             getCliPrompt(),
