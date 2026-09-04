@@ -63,8 +63,14 @@ import {
     setCliDevice,
     setPrompt,
     showWelcomeMessage,
-    writeLine
+    writeLine,
+    resetAllCliSessions
 } from "../interface/cli.js";
+
+
+// import {
+//     getAllMissions
+// } from ".missions.js";
 
 
 import {
@@ -73,6 +79,7 @@ import {
     renderStatus,
     renderCommandTree,
     renderTopology,
+    // renderMissions,
     addHistoryEntry
 } from "../interface/ui.js";
 
@@ -95,8 +102,16 @@ function initializeApp() {
     */
 
     initializeUI({
-    onDeviceSelect: selectDevice
+    onDeviceSelect: selectDevice,
+
+    onReset:
+        resetApp
 });
+
+    // renderMissions(
+    //     getAllMissions()
+    // );
+
 
 
 
@@ -211,20 +226,94 @@ STARTUP-CONFIG
 =====================================================
 */
 
+
+
 function loadSavedConfiguration() {
 
     try {
 
+        let loaded = false;
+
+
+        /*
+        =============================================
+        SWITCH
+        =============================================
+        */
+
         if (
-            !hasStartupConfig()
+            hasStartupConfig(
+                "switch"
+            )
         ) {
 
-            return false;
+            loaded =
+                loadStartupConfig(
+                    "switch"
+                ) || loaded;
 
         }
 
 
-        return loadStartupConfig();
+        /*
+        =============================================
+        ROUTER
+        =============================================
+        */
+
+       
+        // if (
+        //     hasStartupConfig(
+        //         "router"
+        //     )
+        // ) {
+
+        //     /*
+        //     Guarda o dispositivo atual
+        //     antes de carregar o Router.
+        //     */
+
+        //     const originalDeviceId =
+        //         appState.currentDeviceId;
+
+
+        //     const originalDeviceType =
+        //         appState.currentDeviceType;
+
+
+        //     loaded =
+        //         loadStartupConfig(
+        //             "router"
+        //         ) || loaded;
+
+
+        //     /*
+        //     Restaura a seleção original.
+        //     */
+
+        //     appState.currentDeviceId =
+        //         originalDeviceId;
+
+        //     appState.currentDeviceType =
+        //         originalDeviceType;
+
+        // }   
+
+        if (
+    hasStartupConfig(
+        "router"
+    )
+) {
+
+    loaded =
+        loadStartupConfig(
+            "router"
+        ) || loaded;
+
+}
+
+
+        return loaded;
 
     }
     catch (error) {
@@ -239,6 +328,7 @@ function loadSavedConfiguration() {
     }
 
 }
+
 
 
 /*
@@ -548,6 +638,12 @@ function updateStatus() {
                 router.hostname ||
                 "Router",
 
+            "Running Config":
+                hasStartupConfig("router")
+                    ? "presente"
+                    : "ausente",
+                
+
             "Interface atual":
                 activeInterface,
 
@@ -645,9 +741,10 @@ function updateStatus() {
                 "nenhuma",
 
             "Running Config":
-                switchState.runningConfigExists
+                hasStartupConfig("switch")
                     ? "presente"
                     : "ausente"
+
 
         });
 
@@ -910,14 +1007,21 @@ RESET DA APLICAÇÃO
 
 export function resetApp() {
 
-    resetLab(
-        createLabFactory()
-    );
+    const success =
+        resetLab(
+            createLabFactory()
+        );
 
 
-    /*
-    O laboratório padrão inicia no Switch.
-    */
+    if (!success) {
+
+        return false;
+
+    }
+
+
+    resetAllCliSessions();
+
 
     setCliDevice(
         appState.currentDeviceType ||
@@ -936,6 +1040,7 @@ export function resetApp() {
     return true;
 
 }
+
 
 
 /*

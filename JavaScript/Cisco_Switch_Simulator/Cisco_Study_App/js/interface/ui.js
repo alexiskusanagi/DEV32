@@ -50,6 +50,9 @@ const btnCloseTree =
 const topologyContainer =
     document.getElementById("topology-container");
 
+const btnReset =
+    document.getElementById("btn-reset");
+
 
 // =====================================================
 // BOTÕES DE DISPOSITIVO
@@ -106,6 +109,8 @@ const uiState = {
 
 let onDeviceSelect = null;
 
+let onReset = null;
+
 
 // =====================================================
 // INICIALIZAÇÃO DA INTERFACE
@@ -123,8 +128,19 @@ export function initializeUI(
         onDeviceSelect =
             options.onDeviceSelect;
 
+            
     }
 
+    // RESET Lab
+    if (
+    typeof options.onReset ===
+    "function"
+    ) {
+
+        onReset =
+            options.onReset;
+
+    }
 
     bindUIEvents();
 
@@ -233,6 +249,27 @@ function bindUIEvents() {
         );
 
     }
+
+    if (btnReset) {
+
+    btnReset.addEventListener(
+        "click",
+        () => {
+
+            if (
+                typeof onReset ===
+                "function"
+            ) {
+
+                onReset();
+
+            }
+
+        }
+    );
+
+}
+
 
 }
 

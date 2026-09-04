@@ -578,6 +578,7 @@ appState.devices.push(
 const NVRAM_KEY =
     "cisco-study-simulator-startup-config";
 
+
 function getNvramKey(
     deviceType
 ) {
@@ -586,6 +587,18 @@ function getNvramKey(
         NVRAM_KEY +
         "-" +
         deviceType
+    );
+
+}
+
+
+function isValidDeviceType(
+    deviceType
+) {
+
+    return (
+        deviceType === "switch" ||
+        deviceType === "router"
     );
 
 }
@@ -622,11 +635,21 @@ function isLocalStorageAvailable() {
 }
 
 
-export function saveStartupConfig(deviceType
-
+export function saveStartupConfig(
+    deviceType
 ) {
 
     try {
+
+        if (
+            !isValidDeviceType(
+                deviceType
+            )
+        ) {
+
+            return false;
+
+        }
 
         if (
             !isLocalStorageAvailable()
@@ -636,19 +659,27 @@ export function saveStartupConfig(deviceType
 
         }
 
+        const device =
+            deviceType === "switch"
+                ? appState.switch
+                : appState.router;
+
+        if (!device) {
+
+            return false;
+
+        }
+
         const snapshot =
             JSON.stringify(
-                appState
+                device
             );
+
 
         localStorage.setItem(
-                getNvramKey(deviceType),
-                snapshot
-            );
-
-
-        appState.runningConfigExists =
-            true;
+            getNvramKey(deviceType),
+            snapshot
+        );
 
         return true;
 
@@ -673,7 +704,9 @@ export function hasStartupConfig(
     try {
 
         if (
-            !isLocalStorageAvailable()
+            !isValidDeviceType(
+                deviceType
+            )
         ) {
 
             return false;
@@ -681,8 +714,7 @@ export function hasStartupConfig(
         }
 
         if (
-            deviceType !== "switch" &&
-            deviceType !== "router"
+            !isLocalStorageAvailable()
         ) {
 
             return false;
@@ -691,9 +723,7 @@ export function hasStartupConfig(
 
         return (
             localStorage.getItem(
-                getNvramKey(
-                    deviceType
-                )
+                getNvramKey(deviceType)
             ) !== null
         );
 
@@ -711,12 +741,22 @@ export function hasStartupConfig(
 }
 
 
-
 export function loadStartupConfig(
     deviceType
 ) {
 
     try {
+
+        if (
+            !isValidDeviceType(
+                deviceType
+            )
+        ) {
+
+            return false;
+
+        }
+
 
         if (
             !isLocalStorageAvailable()
@@ -726,21 +766,13 @@ export function loadStartupConfig(
 
         }
 
-        if (
-            deviceType !== "switch" &&
-            deviceType !== "router"
-        ) {
-
-            return false;
-
-        }
 
         const saved =
             localStorage.getItem(
-                getNvramKey(
-                    deviceType
-                )
+                getNvramKey(deviceType)
             );
+
+            
 
         if (!saved) {
 
@@ -748,51 +780,85 @@ export function loadStartupConfig(
 
         }
 
+
         const recovered =
             JSON.parse(
                 saved
             );
 
+
         if (
-            !isValidAppState(
-                recovered
-            )
+            !recovered ||
+            typeof recovered !== "object" ||
+            Array.isArray(recovered)
         ) {
 
-            console.warn(
-                "NVRAM: startup-config inválida."
+            return false;
+
+        }
+
+
+        /*
+        =============================================
+        SWITCH
+        =============================================
+        */
+
+        if (
+            deviceType === "switch"
+        ) {
+
+            appState.switch =
+                recovered;
+
+
+            ensureSwitchStructure(
+                appState
             );
 
-            return false;
+        }
+
+
+        /*
+        =============================================
+        ROUTER
+        =============================================
+        */
+
+        else {
+
+            appState.router =
+                recovered;
+
+                
+
+            ensureRouterStructure(
+                appState
+            );
 
         }
 
-        if (
-            !normalizeAppState(
-                recovered
-            )
-        ) {
 
-            return false;
+        /*
+        Não alterar:
+        appState.runningConfigExists
 
-        }
+        Esse estado global mistura Switch e Router.
+        A existência da NVRAM deve ser determinada
+        pela chave específica de cada dispositivo.
+        */
 
-        Object.assign(
-            appState,
-            recovered
-        );
-
-        appState.runningConfigExists =
-            true;
 
         return true;
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
             "NVRAM: erro carregando startup-config.",
             error
         );
+
 
         return false;
 
@@ -801,11 +867,22 @@ export function loadStartupConfig(
 }
 
 
-export function eraseStartupConfig(deviceType
 
+export function eraseStartupConfig(
+    deviceType
 ) {
 
     try {
+
+        if (
+            !isValidDeviceType(
+                deviceType
+            )
+        ) {
+
+            return false;
+
+        }
 
         if (
             !isLocalStorageAvailable()
@@ -819,117 +896,12 @@ export function eraseStartupConfig(deviceType
             getNvramKey(deviceType)
         );
 
-
         return true;
 
     } catch (error) {
 
         console.error(
             "NVRAM: erro apagando startup-config.",
-            error
-        );
-
-        return false;
-
-    }
-
-}
-
-
-export function factoryReset() {
-
-    try {
-
-        const cleanSwitch =
-            createSwitchState(
-                "Switch"
-            );
-
-        const cleanRouter =
-            createRouterState(
-                "Router"
-            );
-
-
-        appState.switch =
-            cleanSwitch;
-
-        appState.router =
-            cleanRouter;
-
-
-        appState.pcs = [];
-
-        appState.topology =
-            createTopologyState();
-
-
-        appState.devices = [
-
-            createDeviceReference(
-                "switch",
-                cleanSwitch.id
-            ),
-
-            createDeviceReference(
-                "router",
-                cleanRouter.id
-            )
-
-        ];
-
-
-        appState.topology.devices = [
-
-            createDeviceReference(
-                "switch",
-                cleanSwitch.id
-            ),
-
-            createDeviceReference(
-                "router",
-                cleanRouter.id
-            )
-
-        ];
-
-
-        appState.currentDeviceId =
-            "Switch";
-
-        appState.currentDeviceType =
-            "switch";
-
-        appState.currentInterface =
-            null;
-
-
-        appState.activeLabId =
-            null;
-
-        appState.activeLabName =
-            null;
-
-
-        appState.runningConfigExists =
-            false;
-
-
-        eraseStartupConfig(
-            "switch"
-        );
-
-        eraseStartupConfig(
-            "router"
-        );
-
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "NVRAM: erro executando factory reset.",
             error
         );
 

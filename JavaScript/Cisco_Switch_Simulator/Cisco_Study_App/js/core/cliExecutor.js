@@ -2963,7 +2963,9 @@ function executeShow(
     ) {
 
         const loaded =
-            loadStartupConfig();
+            loadStartupConfig(
+                getCurrentDevice().type
+            );
 
 
         if (!loaded) {
@@ -3414,8 +3416,11 @@ WRITE
 
 function executeWrite() {
 
+    
     const success =
-        saveStartupConfig();
+        saveStartupConfig(
+             getCurrentDevice().type
+            );
 
 
     return createResult(
@@ -3452,7 +3457,10 @@ function executeCopy(
     ) {
 
         const success =
-            saveStartupConfig();
+            saveStartupConfig(
+                getCurrentDevice().type
+            );
+
 
 
         return createResult(
@@ -3498,7 +3506,9 @@ function executeErase(
     ) {
 
         const success =
-            eraseStartupConfig();
+            eraseStartupConfig(
+                getCurrentDevice().type
+            );
 
 
         return createResult(

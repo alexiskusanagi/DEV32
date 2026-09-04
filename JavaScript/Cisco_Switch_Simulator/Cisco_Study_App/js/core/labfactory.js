@@ -34,6 +34,7 @@ Limites de quantidade de dispositivos pertencem
 
 import {
     createSwitchState,
+    createRouterState,
     createPCState
 } from "./state.js";
 
@@ -219,6 +220,12 @@ export function createLabFactory() {
         createSwitchState(
             DEFAULT_SWITCH_ID
         );
+    
+    const routerState =
+        createRouterState(
+            "Router"
+        );
+    
 
     const pcs =
         createDefaultPCs();
@@ -244,6 +251,10 @@ export function createLabFactory() {
 
         switch:
             switchState,
+
+        router:
+            routerState,
+    
 
         pcs:
             pcs,
