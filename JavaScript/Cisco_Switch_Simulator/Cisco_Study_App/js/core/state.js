@@ -77,7 +77,16 @@ export function createSwitchPorts(quantity = 5) {
             createSwitchPort(name);
 
     }
+        ports["GigabitEthernet0/0"] =
+                createSwitchPort(
+                    "GigabitEthernet0/0"
+                );
 
+        ports["GigabitEthernet0/1"] =
+            createSwitchPort(
+                "GigabitEthernet0/1"
+        );
+        
     return ports;
 
 }
@@ -1275,6 +1284,32 @@ function ensureSwitchStructure(
             );
 
     }
+
+
+    /* GARANTIR PORTAS GIGABIT */
+
+if (
+    !state.switch.ports["GigabitEthernet0/0"]
+) {
+
+    state.switch.ports["GigabitEthernet0/0"] =
+        createSwitchPort(
+            "GigabitEthernet0/0"
+        );
+
+}
+
+if (
+    !state.switch.ports["GigabitEthernet0/1"]
+) {
+
+    state.switch.ports["GigabitEthernet0/1"] =
+        createSwitchPort(
+            "GigabitEthernet0/1"
+        );
+
+}
+
 
 
     /* VLAN 1 */

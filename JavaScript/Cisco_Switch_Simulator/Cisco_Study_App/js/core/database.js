@@ -153,7 +153,7 @@ export const commandDatabase = {
                 "Cria ou configura uma VLAN",
 
             "interface":
-                "Entra na configuração de uma interface",
+                "Entra na configuração de uma interface. Ex: interface fastethernet 0/1",
 
             "line console 0":
                 "Entra na configuração do console",

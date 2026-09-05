@@ -146,7 +146,7 @@ export const routerCommandDatabase = {
                 "Configura o nome de domínio do dispositivo",
 
             "interface":
-                "Entra na configuração de uma interface",
+                "Entra na configuração de uma interface. Ex: interface GigabitEthernet",
 
             "ip route":
                 "Configura uma rota estática",
