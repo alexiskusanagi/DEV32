@@ -40,6 +40,9 @@ import {
     commandDatabase
 } from "./database.js";
 
+import {
+    routerCommandDatabase
+} from "./databaseRouter.js";
 
 import {
     executeCommand,
@@ -435,9 +438,14 @@ function updateHelp() {
             prompt
         );
 
+    const database =
+        appState.currentDeviceType === "router"
+            ? routerCommandDatabase
+            : commandDatabase;    
+
 
     const modeData =
-        commandDatabase[
+        database[
             mode
         ];
 
@@ -536,11 +544,25 @@ ATUALIZAR COMMAND TREE
 
 function updateCommandTree() {
 
+  
+    console.log(
+    "DATABASE USADO:",
+    appState.currentDeviceType === "router"
+        ? "ROUTER"
+        : "SWITCH"
+);
+
+
+    const database =
+        appState.currentDeviceType === "router"
+            ? routerCommandDatabase
+            : commandDatabase;
+
     const tree = {};
 
 
     Object.entries(
-        commandDatabase
+        database
     ).forEach(
         ([mode, data]) => {
 
