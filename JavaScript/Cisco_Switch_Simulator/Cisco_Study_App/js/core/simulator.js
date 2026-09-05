@@ -466,13 +466,46 @@ export function selectInterface(
 
 
     const portName =
-        Object.keys(
-            appState.switch.ports
-        ).find(
-            name =>
-                name.toLowerCase() ===
+    Object.keys(
+        appState.switch.ports
+    ).find(
+        name => {
+
+            const normalizedPortName =
+                name.toLowerCase();
+
+            if (
+                normalizedPortName ===
                 normalizedName
-        );
+            ) {
+
+                return true;
+
+            }
+
+            if (
+                normalizedPortName.startsWith(
+                    "gigabitethernet"
+                )
+            ) {
+
+                const shortName =
+                    normalizedPortName.replace(
+                        "gigabitethernet",
+                        "g"
+                    );
+
+                return (
+                    shortName ===
+                    normalizedName
+                );
+
+            }
+
+            return false;
+
+        }
+    );
 
 
     if (!portName) {
