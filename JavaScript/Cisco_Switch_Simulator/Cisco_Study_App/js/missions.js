@@ -24,42 +24,6 @@ e utilizar a CLI livremente.
 
 export const missions = {
 
-/*
-=================================================
-WELCOME
-=================================================
-*/
-
-welcome: {
-
-    title:
-        "Bem-vindo ao laboratório",
-
-    category:
-        "Introdução",
-
-    difficulty:
-        "iniciante",
-
-    description:
-        "Explore livremente o laboratório de estudos Cisco.",
-
-    steps: [
-
-        "Fique de olho no menu Help à esquerda.",
-
-        "Observe o painel de status à direita.",
-
-        "Escolha uma missão no menu para carregar um roteiro guiado.",
-
-        "Execute os comandos sugeridos diretamente na CLI.",
-
-        "Você é livre para executar outros comandos fora do roteiro."
-
-    ]
-
-},
-
 
 /*
 =================================================

@@ -774,6 +774,12 @@ export function showWelcomeMessage() {
         ""
     );
 
+
+
+    writeLine(
+        ""
+    );
+
     writeLine(
         "Inicializando laboratório..."
     );
@@ -781,6 +787,18 @@ export function showWelcomeMessage() {
     writeLine(
         ""
     );
+
+    writeLine(`
+Bem-vindo ao laboratório Cisco Study Simulator
+Explore livremente o laboratório de estudos Cisco.
+
+Passos
+1. Fique de olho no menu Help à esquerda.
+2. Observe o painel de status à direita.
+3. Escolha uma missão no menu para carregar um roteiro guiado.
+4. Execute os comandos sugeridos diretamente na CLI.
+5. Você é livre para executar outros comandos fora do roteiro.
+`);
 
 
     return true;

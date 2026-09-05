@@ -35,6 +35,10 @@ const statusDisplay =
 const missionSelector =
     document.getElementById("mission-selector");
 
+const missionContent =
+    document.getElementById("mission-content");
+
+
 const treeModal =
     document.getElementById("tree-modal");
 
@@ -89,6 +93,8 @@ const uiState = {
     history: [],
 
     currentMission: "welcome",
+
+    missions: {},
 
     helpCommands: {},
 
@@ -1384,9 +1390,37 @@ export function clearTopology() {
 // MISSÕES
 // =====================================================
 
+// =====================================================
+// VISIBILIDADE DO CONTEÚDO DA MISSÃO
+// =====================================================
+
+function updateMissionVisibility() {
+
+    if (!missionContent) {
+
+        return;
+
+    }
+
+
+    const hasMission =
+        uiState.currentMission !== "welcome";
+
+
+    missionContent.hidden =
+        !hasMission;
+
+}
+
+//================================
+
 export function renderMissions(
     missions = {}
 ) {
+
+        uiState.missions =
+        missions || {};
+
 
     if (!missionSelector) {
 
@@ -1454,6 +1488,164 @@ export function renderMissions(
     missionSelector.value =
         uiState.currentMission;
 
+    renderMission(
+    uiState.currentMission
+);
+    // updateMissionVisibility();
+
+}
+
+// =====================================================
+// RENDERIZAR MISSÃO
+// =====================================================
+
+function renderMission(
+    missionId
+) {
+
+    if (!missionContent) {
+
+        return;
+
+    }
+
+
+    missionContent.innerHTML = "";
+
+
+    /*
+    Obtém a missão pelo ID.
+    */
+
+    const mission =
+        uiState.missions?.[
+            missionId
+        ];
+
+
+    if (!mission) {
+
+        return;
+
+    }
+
+
+    /*
+    TÍTULO
+    */
+
+    const title =
+        document.createElement("h3");
+
+    title.textContent =
+        mission.title ||
+        missionId;
+
+
+    missionContent.appendChild(
+        title
+    );
+
+
+    /*
+    CATEGORIA
+    */
+
+    const category =
+        document.createElement("div");
+
+    category.textContent =
+        `Categoria: ${mission.category || "—"}`;
+
+
+    missionContent.appendChild(
+        category
+    );
+
+
+    /*
+    DIFICULDADE
+    */
+
+    const difficulty =
+        document.createElement("div");
+
+    difficulty.textContent =
+        `Dificuldade: ${mission.difficulty || "—"}`;
+
+
+    missionContent.appendChild(
+        difficulty
+    );
+
+
+    /*
+    DESCRIÇÃO
+    */
+
+    const description =
+        document.createElement("p");
+
+    description.textContent =
+        mission.description ||
+        "";
+
+
+    missionContent.appendChild(
+        description
+    );
+
+
+    /*
+    PASSOS
+    */
+
+    const stepsTitle =
+        document.createElement("h4");
+
+    stepsTitle.textContent =
+        "Passos";
+
+
+    missionContent.appendChild(
+        stepsTitle
+    );
+
+
+    const stepsList =
+        document.createElement("ol");
+
+
+    const steps =
+        Array.isArray(
+            mission.steps
+        )
+            ? mission.steps
+            : [];
+
+
+    steps.forEach(
+        step => {
+
+            const item =
+                document.createElement("li");
+
+            item.textContent =
+                step;
+
+
+            stepsList.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    missionContent.appendChild(
+        stepsList
+    );
+
 }
 
 
@@ -1471,6 +1663,12 @@ function handleMissionChange(
 
     uiState.currentMission =
         missionId;
+
+    renderMission(
+        missionId
+    );     
+
+    updateMissionVisibility();
 
 }
 
@@ -1769,6 +1967,11 @@ export function getUIState() {
 
         currentMission:
             uiState.currentMission,
+
+        missions: {
+            ...uiState.missions
+        },
+
 
         helpCommands: {
             ...uiState.helpCommands

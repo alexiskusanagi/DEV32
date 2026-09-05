@@ -68,9 +68,9 @@ import {
 } from "../interface/cli.js";
 
 
-// import {
-//     getAllMissions
-// } from ".missions.js";
+import {
+    getAllMissions
+} from "../missions.js";
 
 
 import {
@@ -79,7 +79,7 @@ import {
     renderStatus,
     renderCommandTree,
     renderTopology,
-    // renderMissions,
+    renderMissions,
     addHistoryEntry
 } from "../interface/ui.js";
 
@@ -108,9 +108,9 @@ function initializeApp() {
         resetApp
 });
 
-    // renderMissions(
-    //     getAllMissions()
-    // );
+    renderMissions(
+        getAllMissions()
+    );
 
 
 

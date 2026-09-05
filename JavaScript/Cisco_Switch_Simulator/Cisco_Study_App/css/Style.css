@@ -472,6 +472,119 @@ h3 {
 
 
 /* =========================================================
+MISSÕES
+========================================================= */
+
+.mission-bar {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+
+
+}
+
+.mission-bar label {
+    color: var(--text-color);
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+
+}
+
+#mission-selector {
+    flex: 1;
+
+    min-width: 0;
+
+    background-color: #2d2d30;
+
+    color: var(--text-color);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius: 5px;
+
+    padding: 8px;
+
+
+}
+
+.mission-content {
+    flex: 0 1 auto;
+
+    min-width: 0;
+
+    max-height: 220px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding: 12px;
+
+    background-color: var(--panel-bg);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius: 8px;
+
+    color: var(--text-color);
+
+
+}
+
+.mission-content h3 {
+    color: var(--accent);
+
+    margin-top: 0;
+
+    margin-bottom: 8px;
+
+
+}
+
+.mission-content h4 {
+    color: var(--accent);
+
+    margin-bottom: 6px;
+
+
+}
+
+.mission-content p {
+    margin:
+    8px 0;
+
+    line-height: 1.4;
+
+
+}
+
+.mission-content ol {
+    margin-top: 8px;
+
+    padding-left: 25px;
+
+
+}
+
+.mission-content li {
+    margin-bottom: 5px;
+
+    line-height: 1.35;
+
+
+}
+
+/* =========================================================
    CLI
    ========================================================= */
 
