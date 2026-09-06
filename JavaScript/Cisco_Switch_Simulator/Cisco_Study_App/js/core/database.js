@@ -236,6 +236,42 @@ export const commandDatabase = {
 
     /*
     =================================================
+    VLAN CONFIGURATION
+    =================================================
+    */
+
+    vlan: {
+
+        prompt: "(config-vlan)#",
+
+        commands: {
+
+            "name":
+                "Define o nome da VLAN",
+
+            "no name":
+                "Remove o nome personalizado da VLAN",
+
+            "state active":
+                "Deixa a VLAN ativa",
+
+            "state suspend":
+                "Suspende a VLAN",
+
+            "exit":
+                "Volta ao modo de configuração global",
+
+            "end":
+                "Volta diretamente ao modo privilegiado"
+
+        }
+
+    },
+
+
+
+    /*
+    =================================================
     LINE CONFIGURATION
     =================================================
     */

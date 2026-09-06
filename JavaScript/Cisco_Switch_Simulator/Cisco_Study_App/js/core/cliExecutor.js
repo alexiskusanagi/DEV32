@@ -383,6 +383,15 @@ export function executeCommand(
         case "name":
             return executeVlanName(parsed.args);
 
+        case "no-name":
+            return executeNoVlanName();
+
+        case "vlan-state-active":
+            return executeVlanStateActive();
+
+        case "vlan-state-suspend":
+            return executeVlanStateSuspend();
+
 
         /*
         =============================================
@@ -1314,6 +1323,277 @@ function executeVlanName(
         success
             ? ""
             : "% Falha ao renomear VLAN."
+    );
+
+}
+
+/*
+=====================================================
+NO NAME VLAN
+=====================================================
+*/
+
+function executeNoVlanName() {
+
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "no-name",
+            "% Comando no name pertence ao Switch."
+        );
+
+    }
+
+
+    if (
+        switchContext.mode !== "vlan"
+    ) {
+
+        return createResult(
+            false,
+            "no-name",
+            "% Comando permitido somente no modo VLAN."
+        );
+
+    }
+
+
+    const vlanId =
+        Number(
+            switchContext.interfaceName
+                .replace(
+                    "vlan ",
+                    ""
+                )
+        );
+
+
+    if (
+        !Number.isInteger(vlanId)
+    ) {
+
+        return createResult(
+            false,
+            "no-name",
+            "% VLAN inválida."
+        );
+
+    }
+
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            appState.switch.vlans,
+            vlanId
+        )
+    ) {
+
+        return createResult(
+            false,
+            "no-name",
+            "% VLAN não encontrada."
+        );
+
+    }
+
+
+    appState.switch.vlans[vlanId] =
+        "VLAN" + vlanId;
+
+
+    return createResult(
+        true,
+        "no-name",
+        ""
+    );
+
+}
+
+
+/*
+=====================================================
+STATE ACTIVE
+=====================================================
+*/
+
+function executeVlanStateActive() {
+
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-active",
+            "% Comando state pertence ao Switch."
+        );
+
+    }
+
+
+    if (
+        switchContext.mode !== "vlan"
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-active",
+            "% Comando permitido somente no modo VLAN."
+        );
+
+    }
+
+
+    const vlanId =
+        Number(
+            switchContext.interfaceName
+                .replace(
+                    "vlan ",
+                    ""
+                )
+        );
+
+
+    if (
+        !Number.isInteger(vlanId)
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-active",
+            "% VLAN inválida."
+        );
+
+    }
+
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            appState.switch.vlans,
+            vlanId
+        )
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-active",
+            "% VLAN não encontrada."
+        );
+
+    }
+
+
+    if (!appState.switch.vlanStates) {
+
+        appState.switch.vlanStates = {};
+
+    }
+
+
+    appState.switch.vlanStates[vlanId] =
+        "active";
+
+
+    return createResult(
+        true,
+        "vlan-state-active",
+        ""
+    );
+
+}
+
+
+/*
+=====================================================
+STATE SUSPEND
+=====================================================
+*/
+
+function executeVlanStateSuspend() {
+
+    if (
+        !requireDevice("switch")
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-suspend",
+            "% Comando state pertence ao Switch."
+        );
+
+    }
+
+
+    if (
+        switchContext.mode !== "vlan"
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-suspend",
+            "% Comando permitido somente no modo VLAN."
+        );
+
+    }
+
+
+    const vlanId =
+        Number(
+            switchContext.interfaceName
+                .replace(
+                    "vlan ",
+                    ""
+                )
+        );
+
+
+    if (
+        !Number.isInteger(vlanId)
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-suspend",
+            "% VLAN inválida."
+        );
+
+    }
+
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            appState.switch.vlans,
+            vlanId
+        )
+    ) {
+
+        return createResult(
+            false,
+            "vlan-state-suspend",
+            "% VLAN não encontrada."
+        );
+
+    }
+
+
+    if (!appState.switch.vlanStates) {
+
+        appState.switch.vlanStates = {};
+
+    }
+
+
+    appState.switch.vlanStates[vlanId] =
+        "suspended";
+
+
+    return createResult(
+        true,
+        "vlan-state-suspend",
+        ""
     );
 
 }

@@ -24,7 +24,8 @@ const COMMANDS = {
 
     vlan: "vlan",
     name: "name",
-
+    vlanStateActive: "state active",
+    vlanStateSuspend: "state suspend",
     interface: "interface",
 
     ipAddress: "ip address",
@@ -273,6 +274,53 @@ export function parseCommand(input = "") {
         );
 
     }
+
+    if (
+        normalizedTokens[0] === "name"
+    ) {
+
+        return createCommand(
+            "name",
+            tokens.slice(1),
+            original
+        );
+
+    }
+
+        /*
+    =====================================================
+    VLAN STATE
+    =====================================================
+    */
+
+    if (
+        normalizedTokens[0] === "state" &&
+        normalizedTokens[1] === "active"
+    ) {
+
+        return createCommand(
+            "vlan-state-active",
+            [],
+            original
+        );
+
+    }
+
+
+    if (
+        normalizedTokens[0] === "state" &&
+        normalizedTokens[1] === "suspend"
+    ) {
+
+        return createCommand(
+            "vlan-state-suspend",
+            [],
+            original
+        );
+
+    }
+
+
 
 
     if (
