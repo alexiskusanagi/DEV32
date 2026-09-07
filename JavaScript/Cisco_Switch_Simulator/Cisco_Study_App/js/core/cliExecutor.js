@@ -3035,8 +3035,15 @@ function executePing(
             reachable,
             "ping",
             reachable
-                ? `Ping ${target}: sucesso.`
-                : `Ping ${target}: destino inalcançável.`
+                ? `Ping ${target}: Type escape sequence to abort.
+                    Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+                    !!!!!
+                    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+                    `
+                : `Ping ${target}: Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+.....
+Success rate is 0 percent (0/5)`
         );
 
     }
@@ -3061,7 +3068,10 @@ function executePing(
         return createResult(
             true,
             "ping",
-            `Ping ${target}: sucesso.`
+            `Ping ${target}: Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms`
         );
 
     }
@@ -3083,8 +3093,15 @@ function executePing(
         reachable,
         "ping",
         reachable
-            ? `Ping ${target}: sucesso.`
-            : `Ping ${target}: destino inalcançável.`
+            ? `Ping ${target}: Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+`
+            : `Ping ${target}: Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+.....
+Success rate is 0 percent (0/5)`
     );
 
 }

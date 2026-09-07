@@ -156,6 +156,13 @@ export function getDefaultTopology() {
 
     );
 
+    devices.push(
+    createDeviceReference(
+        "router",
+        "Router"
+    )
+);
+
     for (
         let i = 1;
         i <= DEFAULT_PC_COUNT;
@@ -198,6 +205,21 @@ export function getDefaultTopology() {
         });
 
     }
+
+    connections.push({
+
+    source: DEFAULT_SWITCH_ID,
+
+    target: "Router",
+
+    sourcePort:
+        "GigabitEthernet0/0",
+
+    targetPort:
+        "g0/0"
+
+});
+
 
     return {
 

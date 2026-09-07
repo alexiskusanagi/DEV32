@@ -2991,6 +2991,137 @@ export function getCurrentRouterInterface() {
    UTILIDADES
    ===================================================== */
 
+   /* =====================================================
+   UTILIDADES — REDE
+   ===================================================== */
+
+export function sameNetwork(
+    ip1,
+    mask1,
+    ip2,
+    mask2
+) {
+
+    if (
+        !ip1 ||
+        !mask1 ||
+        !ip2 ||
+        !mask2
+    ) {
+
+        return false;
+
+    }
+
+    const parts1 =
+        ip1.split(".").map(Number);
+
+    const maskParts1 =
+        mask1.split(".").map(Number);
+
+    const parts2 =
+        ip2.split(".").map(Number);
+
+    const maskParts2 =
+        mask2.split(".").map(Number);
+
+
+    if (
+        parts1.length !== 4 ||
+        maskParts1.length !== 4 ||
+        parts2.length !== 4 ||
+        maskParts2.length !== 4
+    ) {
+
+        return false;
+
+    }
+
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+        if (
+            (parts1[i] & maskParts1[i]) !==
+            (parts2[i] & maskParts2[i])
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+    return true;
+
+}
+
+
+/* =====================================================
+   RESOLUÇÃO DE GATEWAY
+   ===================================================== */
+
+export function resolveDefaultGateway(
+    pc,
+    router
+) {
+
+    if (
+        !pc?.ip ||
+        !pc?.mask
+    ) {
+
+        return null;
+
+    }
+
+
+    const interfaces =
+        Object.values(
+            router?.interfaces ?? {}
+        );
+
+
+    const match =
+        interfaces.find(
+            function (iface) {
+
+                return (
+                    iface?.ip &&
+                    iface?.mask &&
+                    iface?.isUp &&
+                    iface?.encapsulation?.enabled &&
+                    iface?.encapsulation?.vlanId ===
+                        pc.vlan &&
+                    sameNetwork(
+                        pc.ip,
+                        pc.mask,
+                        iface.ip,
+                        iface.mask
+                    )
+                );
+
+            }
+        );
+
+
+    return (
+        match?.ip ??
+        null
+    );
+
+}
+
+
+////////////////////////////////
+
+
+
+
+
 export function resetManagementInterface() {
 
     if (
