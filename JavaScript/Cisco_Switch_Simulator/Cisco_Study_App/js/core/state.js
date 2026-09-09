@@ -157,15 +157,29 @@ export function createSwitchState(
         ---------------------------------------------
         */
 
-        vlan1: {
+        // vlan1: {
 
-            ip: null,
-            mask: null,
-            isUp: false,
+        //     ip: null,
+        //     mask: null,
+        //     isUp: false,
 
-            description: null
+        //     description: null
+
+        // },
+
+        vlanInterfaces: {
+
+            1: {
+
+                ip: null,
+                mask: null,
+                isUp: false,
+                description: null
+
+            }
 
         },
+
 
         /*
         ---------------------------------------------
@@ -1314,33 +1328,118 @@ if (
 
     /* VLAN 1 */
 
+    // if (
+    //     !state.switch.vlan1 ||
+    //     typeof state.switch.vlan1 !== "object"
+    // ) {
+
+    //     state.switch.vlan1 = {
+
+    //         ip: null,
+    //         mask: null,
+    //         isUp: false,
+    //         description: null
+
+    //     };
+
+    // }
+
+    // if (
+    //     !Object.prototype.hasOwnProperty.call(
+    //         state.switch.vlan1,
+    //         "description"
+    //     )
+    // ) {
+
+    //     state.switch.vlan1.description =
+    //         null;
+
+    // }
+
+   /* VLAN INTERFACES / SVI */
+
     if (
-        !state.switch.vlan1 ||
-        typeof state.switch.vlan1 !== "object"
+        !state.switch.vlanInterfaces ||
+        typeof state.switch.vlanInterfaces !== "object" ||
+        Array.isArray(state.switch.vlanInterfaces)
     ) {
 
-        state.switch.vlan1 = {
-
-            ip: null,
-            mask: null,
-            isUp: false,
-            description: null
-
-        };
+        state.switch.vlanInterfaces = {};
 
     }
 
-    if (
-        !Object.prototype.hasOwnProperty.call(
-            state.switch.vlan1,
-            "description"
-        )
-    ) {
 
-        state.switch.vlan1.description =
-            null;
+    Object.entries(
+        state.switch.vlanInterfaces
+    ).forEach(
+        function ([vlanId, interfaceData]) {
 
-    }
+            if (
+                !interfaceData ||
+                typeof interfaceData !== "object"
+            ) {
+
+                state.switch.vlanInterfaces[vlanId] = {
+
+                    ip: null,
+                    mask: null,
+                    isUp: false,
+                    description: null
+
+                };
+
+                return;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "ip"
+                )
+            ) {
+
+                interfaceData.ip = null;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "mask"
+                )
+            ) {
+
+                interfaceData.mask = null;
+
+            }
+
+
+            if (
+                typeof interfaceData.isUp !== "boolean"
+            ) {
+
+                interfaceData.isUp = false;
+
+            }
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    interfaceData,
+                    "description"
+                )
+            ) {
+
+                interfaceData.description = null;
+
+            }
+
+        }
+    );
+
 
 
     /* CONSOLE */
@@ -3132,14 +3231,24 @@ export function resetManagementInterface() {
 
     }
 
-    appState.switch.vlan1 = {
+    // appState.switch.vlan1 = {
 
-        ip: null,
-        mask: null,
-        isUp: false,
-        description: null
+    //     ip: null,
+    //     mask: null,
+    //     isUp: false,
+    //     description: null
 
-    };
+    // };
+
+    appState.switch.vlanInterfaces[1] = {
+
+    ip: null,
+    mask: null,
+    isUp: false,
+    description: null
+
+};
+
 
     return true;
 

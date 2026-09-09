@@ -63,6 +63,7 @@ import {
     triggerViolation,
     clearViolation,
     disablePortSecurity,
+    checkConnectivity,
     getSimulatorState
 } from "./simulator.js";
 
@@ -2008,11 +2009,43 @@ function executeIpAddress(
     }
 
 
-    const success =
-        configureManagementIP(
-            args[0],
-            args[1]
+    // const success =
+    //     configureManagementIP(
+    //         args[0],
+    //         args[1]
+    //     );
+
+    const vlanId =
+    Number(
+        context.interfaceName
+            .replace(/^vlan\s+/i, "")
+    );
+
+    const svi =
+        appState.switch?.vlanInterfaces?.[vlanId];
+
+    if (!svi) {
+
+        return createResult(
+            false,
+            "ip-address",
+            "% Interface VLAN não existe."
         );
+
+    }
+
+    svi.ip =
+        args[0];
+
+    svi.mask =
+        args[1];
+
+    return createResult(
+        true,
+        "ip-address",
+        ""
+    );
+
 
 
     return createResult(
@@ -2102,15 +2135,41 @@ function executeNoIpAddress() {
     }
 
 
-    if (appState.switch?.vlan1) {
+    // if (appState.switch?.vlan1) {
 
-        appState.switch.vlan1.ip =
-            null;
+    //     appState.switch.vlan1.ip =
+    //         null;
 
-        appState.switch.vlan1.mask =
-            null;
+    //     appState.switch.vlan1.mask =
+    //         null;
+
+    // }
+
+    const vlanId =
+    Number(
+        context.interfaceName
+            .replace(/^vlan\s+/i, "")
+    );
+
+    const svi =
+        appState.switch?.vlanInterfaces?.[vlanId];
+
+    if (!svi) {
+
+        return createResult(
+            false,
+            "no-ip-address",
+            "% Interface VLAN não existe."
+        );
 
     }
+
+    svi.ip =
+        null;
+
+    svi.mask =
+        null;
+
 
 
     return createResult(
@@ -2194,13 +2253,43 @@ function executeShutdown() {
     ---------------------------------------------
     */
 
+    // if (
+    //     context.interfaceType === "vlan"
+    // ) {
+
+    //     disableManagementInterface();
+
+    // 
+    
     if (
-        context.interfaceType === "vlan"
-    ) {
+    context.interfaceType === "vlan"
+) {
 
-        disableManagementInterface();
+    const vlanId =
+        Number(
+            context.interfaceName
+                .replace(/^vlan\s+/i, "")
+        );
 
-    } else {
+    const svi =
+        appState.switch?.vlanInterfaces?.[vlanId];
+
+    if (!svi) {
+
+        return createResult(
+            false,
+            "shutdown",
+            "% Interface VLAN não existe."
+        );
+
+    }
+
+    svi.isUp =
+        false;
+
+    }
+
+    else {
 
         const port =
             appState.switch
@@ -2307,13 +2396,44 @@ function executeNoShutdown() {
     ---------------------------------------------
     */
 
+    // if (
+    //     context.interfaceType === "vlan"
+    // ) {
+
+    //     enableManagementInterface();
+
+    // } 
+    
     if (
-        context.interfaceType === "vlan"
-    ) {
+    context.interfaceType === "vlan"
+) {
 
-        enableManagementInterface();
+    const vlanId =
+        Number(
+            context.interfaceName
+                .replace(/^vlan\s+/i, "")
+        );
 
-    } else {
+    const svi =
+        appState.switch?.vlanInterfaces?.[vlanId];
+
+    if (!svi) {
+
+        return createResult(
+            false,
+            "no-shutdown",
+            "% Interface VLAN não existe."
+        );
+
+    }
+
+    svi.isUp =
+        true;
+
+    }
+
+
+    else {
 
         const port =
             appState.switch
@@ -2963,148 +3083,369 @@ function executeNoLogin() {
 }
 
 
-/*
-=====================================================
-PING
-=====================================================
-*/
+// /*
+// =====================================================
+// PING
+// =====================================================
+// */
 
-function executePing(
-    args
-) {
+function executePing(args) {
 
     const target =
         args.join(" ").trim();
 
-
     if (!target) {
 
         return createResult(
-            false,
-            "ping",
-            "% Endereço de destino não informado."
-        );
+        false,
+        "ping",
+        `Ping ${target}: Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+    .....
+    Success rate is 0 percent (0/5)`
+    );
+
 
     }
 
+    const result =
+        checkConnectivity(target);
 
-    /*
-    ---------------------------------------------
-    ROUTER
-    ---------------------------------------------
-    */
-
-    if (
-        requireDevice("router")
-    ) {
-
-        const router =
-            appState.router;
-
-
-        if (!router) {
-
-            return createResult(
-                false,
-                "ping",
-                "% Router indisponível."
-            );
-
-        }
-
-
-        const interfaces =
-            router.interfaces || {};
-
-
-        const reachable =
-            Object.values(
-                interfaces
-            ).some(
-                iface =>
-                    iface &&
-                    iface.ip === target &&
-                    iface.status !==
-                        "administratively down" &&
-                    iface.status !==
-                        "down"
-            );
-
-
-        return createResult(
-            reachable,
-            "ping",
-            reachable
-                ? `Ping ${target}: Type escape sequence to abort.
-                    Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
-                    !!!!!
-                    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
-                    `
-                : `Ping ${target}: Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
-.....
-Success rate is 0 percent (0/5)`
-        );
-
-    }
-
-
-    /*
-    ---------------------------------------------
-    SWITCH
-    ---------------------------------------------
-    */
-
-    const managementIp =
-        appState.switch
-            ?.vlan1
-            ?.ip;
-
-
-    if (
-        target === managementIp
-    ) {
+    if (result.reachable) {
 
         return createResult(
             true,
             "ping",
             `Ping ${target}: Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 192.168.1.1, timeout is 2 seconds:
+Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms`
         );
 
     }
 
-
-    const reachable =
-        Array.isArray(
-            appState.pcs
-        ) &&
-        appState.pcs.some(
-            pc =>
-                pc &&
-                pc.ip === target &&
-                pc.status === "online"
-        );
-
-
     return createResult(
-        reachable,
+        false,
         "ping",
-        reachable
-            ? `Ping ${target}: Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
-`
-            : `Ping ${target}: Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
-.....
-Success rate is 0 percent (0/5)`
+        `% ${result.reason}`
     );
 
 }
+
+
+
+// function executePing(args) {
+
+//     const target =
+//         args.join(" ").trim();
+
+//     if (!target) {
+
+//         return createResult(
+//             false,
+//             "ping",
+//             "% Endereço de destino não informado."
+//         );
+
+//     }
+
+
+//     /*
+//     ---------------------------------------------
+//     ROUTER
+//     ---------------------------------------------
+//     */
+
+//     if (requireDevice("router")) {
+
+//         const interfaces =
+//             appState.router?.interfaces || {};
+
+//         const reachable =
+//             Object.values(interfaces).some(
+//                 iface =>
+//                     iface &&
+//                     iface.ip === target &&
+//                     iface.status !== "administratively down" &&
+//                     iface.status !== "down"
+//             );
+
+//         return createResult(
+//             reachable,
+//             "ping",
+//             reachable
+//                 ? `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// !!!!!
+// Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms`
+//                 : `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// .....
+// Success rate is 0 percent (0/5)`
+//         );
+
+//     }
+
+
+//     /*
+//     ---------------------------------------------
+//     SWITCH — SVI
+//     ---------------------------------------------
+//     */
+
+//     const vlanInterfaces =
+//         appState.switch?.vlanInterfaces || {};
+
+//     const sviReachable =
+//         Object.values(vlanInterfaces).some(
+//             svi =>
+//                 svi &&
+//                 svi.ip === target &&
+//                 svi.isUp === true
+//         );
+
+//     if (sviReachable) {
+
+//         return createResult(
+//             true,
+//             "ping",
+//             `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// !!!!!
+// Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms`
+//         );
+
+//     }
+
+
+//     /*
+//     ---------------------------------------------
+//     SWITCH → PC
+//     ---------------------------------------------
+//     */
+
+//     const pc =
+//         Array.isArray(appState.pcs)
+//             ? appState.pcs.find(
+//                 item =>
+//                     item &&
+//                     item.ip === target &&
+//                     item.status === "online"
+//             )
+//             : null;
+
+
+//     if (!pc) {
+
+//         return createResult(
+//             false,
+//             "ping",
+//             `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// .....
+// Success rate is 0 percent (0/5)`
+//         );
+
+//     }
+
+
+//     /*
+//     ---------------------------------------------
+//     VERIFICAR VLAN / CONECTIVIDADE
+//     ---------------------------------------------
+//     */
+
+//     const vlanId =
+//         Number(pc.vlan);
+
+
+//     const svi =
+//         vlanInterfaces[vlanId];
+
+
+//     if (!svi || !svi.isUp) {
+
+//         return createResult(
+//             false,
+//             "ping",
+//             `% Destino ${target} não alcançável: SVI da VLAN ${vlanId} está indisponível.`
+//         );
+
+//     }
+
+
+//     /*
+//     ---------------------------------------------
+//     VERIFICAR SUBNET
+//     ---------------------------------------------
+//     */
+
+//     if (
+//         !sameNetwork(
+//             pc.ip,
+//             pc.mask,
+//             svi.ip,
+//             svi.mask
+//         )
+//     ) {
+
+//         return createResult(
+//             false,
+//             "ping",
+//             `% Destino ${target} não alcançável: redes diferentes.`
+//         );
+
+//     }
+
+
+//     return createResult(
+//         true,
+//         "ping",
+//         `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// !!!!!
+// Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms`
+//     );
+
+// }
+
+
+// function executePing(
+//     args
+// ) {
+
+//     const target =
+//         args.join(" ").trim();
+
+
+//     if (!target) {
+
+//         return createResult(
+//             false,
+//             "ping",
+//             "% Endereço de destino não informado."
+//         );
+
+//     }
+
+
+//     /*
+//     ---------------------------------------------
+//     ROUTER
+//     ---------------------------------------------
+//     */
+
+//     if (
+//         requireDevice("router")
+//     ) {
+
+//         const router =
+//             appState.router;
+
+
+//         if (!router) {
+
+//             return createResult(
+//                 false,
+//                 "ping",
+//                 "% Router indisponível."
+//             );
+
+//         }
+
+
+//         const interfaces =
+//             router.interfaces || {};
+
+
+//         const reachable =
+//             Object.values(
+//                 interfaces
+//             ).some(
+//                 iface =>
+//                     iface &&
+//                     iface.ip === target &&
+//                     iface.status !==
+//                         "administratively down" &&
+//                     iface.status !==
+//                         "down"
+//             );
+
+
+//         return createResult(
+//             reachable,
+//             "ping",
+//             reachable
+//                 ? `Ping ${target}: Type escape sequence to abort.
+//                     Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+//                     !!!!!
+//                     Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+//                     `
+//                 : `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// .....
+// Success rate is 0 percent (0/5)`
+//         );
+
+//     }
+
+
+//     /*
+//     ---------------------------------------------
+//     SWITCH
+//     ---------------------------------------------
+//     */
+
+//     const managementIp =
+//         appState.switch
+//             ?.vlan1
+//             ?.ip;
+
+
+//     if (
+//         target === managementIp
+//     ) {
+
+//         return createResult(
+//             true,
+//             "ping",
+//             `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// !!!!!
+// Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms`
+//         );
+
+//     }
+
+
+//     const reachable =
+//         Array.isArray(
+//             appState.pcs
+//         ) &&
+//         appState.pcs.some(
+//             pc =>
+//                 pc &&
+//                 pc.ip === target &&
+//                 pc.status === "online"
+//         );
+
+
+//     return createResult(
+//         reachable,
+//         "ping",
+//         reachable
+//             ? `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// !!!!!
+// Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+// `
+//             : `Ping ${target}: Type escape sequence to abort.
+// Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:
+// .....
+// Success rate is 0 percent (0/5)`
+//     );
+
+// }
 
 
 /*
@@ -3472,17 +3813,21 @@ function formatSwitchInterfaceBrief() {
     ];
 
 
-    const vlan1 =
-        appState.switch?.vlan1;
+    const vlanInterfaces =
+        appState.switch?.vlanInterfaces || {};
 
 
-    if (vlan1) {
+    Object.entries(
+        vlanInterfaces
+    ).forEach(
+        ([vlanId, svi]) => {
 
-        lines.push(
-            `${"Vlan1".padEnd(22)} ${(vlan1.ip || "unassigned").padEnd(15)} ${vlan1.isUp ? "up" : "administratively down"}`
-        );
+            lines.push(
+                `${("Vlan" + vlanId).padEnd(22)} ${(svi?.ip || "unassigned").padEnd(15)} ${svi?.isUp ? "up" : "administratively down"}`
+            );
 
-    }
+        }
+    );
 
 
     Object.entries(
@@ -3501,6 +3846,45 @@ function formatSwitchInterfaceBrief() {
     return lines.join("\n");
 
 }
+
+
+
+// function formatSwitchInterfaceBrief() {
+
+//     const lines = [
+//         "Interface              IP-Address      Status"
+//     ];
+
+
+//     const vlan1 =
+//         appState.switch?.vlan1;
+
+
+//     if (vlan1) {
+
+//         lines.push(
+//             `${"Vlan1".padEnd(22)} ${(vlan1.ip || "unassigned").padEnd(15)} ${vlan1.isUp ? "up" : "administratively down"}`
+//         );
+
+//     }
+
+
+//     Object.entries(
+//         appState.switch?.ports || {}
+//     ).forEach(
+//         ([name, port]) => {
+
+//             lines.push(
+//                 `${name.padEnd(22)} ${"unassigned".padEnd(15)} ${port?.status || "down"}`
+//             );
+
+//         }
+//     );
+
+
+//     return lines.join("\n");
+
+// }
 
 
 /*

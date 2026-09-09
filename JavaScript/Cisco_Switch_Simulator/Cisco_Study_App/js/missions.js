@@ -247,35 +247,57 @@ router_on_a_stick: {
 
     steps: [
 
-        "Crie a VLAN 10 com 'vlan 10'.",
+        "Digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Nomeie a VLAN 10 como Vendas usando 'name Vendas'.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
 
-        "Crie a VLAN 20 com 'vlan 20'.",
+        "Digite 'vlan 10' para criar a VLAN 10.",
 
-        "Nomeie a VLAN 20 como Administracao usando 'name Administracao'.",
+        "Digite 'name Vendas' para nomear a VLAN.",
 
-        "Configure as portas dos PCs como Access.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Associe os PCs da primeira rede à VLAN 10.",
+        "Digite 'vlan 20' para criar a VLAN 20.",
 
-        "Associe os PCs da segunda rede à VLAN 20.",
+        "Digite 'name Administracao' para nomear a VLAN.",
 
-        "Configure a porta do Switch conectada ao Router como Trunk.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "No Router, acesse 'interface g0/0.10'.",
+        "Acesse a porta do primeiro PC com 'interface fastethernet 0/1'.",
 
-        "Configure 'encapsulation dot1Q 10'.",
+        "Digite 'switchport mode access' para configurar a porta como Access.",
 
-        "Configure o endereço IP do gateway da VLAN 10.",
+        "Digite 'switchport access vlan 10' para associar a porta à VLAN 10.",
 
-        "Crie a subinterface 'g0/0.20'.",
+        "Acesse as portas dos demais PCs e associe cada uma à VLAN correspondente.",
 
-        "Configure 'encapsulation dot1Q 20'.",
+        "Acesse a porta do Switch conectada ao Router.",
 
-        "Configure o endereço IP do gateway da VLAN 20.",
+        "Digite 'switchport mode trunk' para configurar o enlace como Trunk.",
 
-        "Configure os PCs com endereços IP, máscaras e gateways correspondentes.",
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "No Router, digite 'interface gigabitethernet 0/0.10' para criar a subinterface da VLAN 10.",
+
+        "Digite 'encapsulation dot1Q 10' para identificar os quadros da VLAN 10.",
+
+        "Digite 'ip address 192.168.10.1 255.255.255.0' para configurar o gateway da VLAN 10.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Digite 'interface gigabitethernet 0/0.20' para criar a subinterface da VLAN 20.",
+
+        "Digite 'encapsulation dot1Q 20' para identificar os quadros da VLAN 20.",
+
+        "Digite 'ip address 192.168.20.1 255.255.255.0' para configurar o gateway da VLAN 20.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Acesse a interface física com 'interface gigabitethernet 0/0'.",
+
+        "Digite 'no shutdown' para ativar a interface física.",
+
+        "Configure os PCs com endereços da rede 192.168.10.0/24 ou 192.168.20.0/24 e utilize como gateway o endereço correspondente do Router.",
 
         "Teste a comunicação entre PCs que pertencem a VLANs diferentes."
 
@@ -306,37 +328,67 @@ corporate_three_vlans: {
 
     steps: [
 
-        "Crie a VLAN 10 e nomeie como Vendas.",
+        "Digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Crie a VLAN 20 e nomeie como Administracao.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
 
-        "Crie a VLAN 30 e nomeie como TI.",
+        "Digite 'vlan 10' para criar a VLAN de Vendas.",
 
-        "Distribua até cinco PCs entre as três VLANs.",
+        "Digite 'name Vendas' para nomear a VLAN.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Digite 'vlan 20' para criar a VLAN de Administração.",
+
+        "Digite 'name Administracao' para nomear a VLAN.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Digite 'vlan 30' para criar a VLAN de TI.",
+
+        "Digite 'name TI' para nomear a VLAN.",
 
         "Configure as portas dos PCs como Access.",
 
-        "Associe cada porta à VLAN correspondente.",
+        "Associe as portas dos PCs da Vendas à VLAN 10.",
 
-        "Configure o enlace Switch → Router como Trunk.",
+        "Associe as portas dos PCs da Administração à VLAN 20.",
 
-        "No Router, crie uma subinterface para a VLAN 10.",
+        "Associe as portas dos PCs da TI à VLAN 30.",
 
-        "Configure 'encapsulation dot1Q 10'.",
+        "Acesse a porta do Switch conectada ao Router.",
 
-        "Configure o gateway da rede de Vendas.",
+        "Digite 'switchport mode trunk' para configurar o enlace como Trunk.",
 
-        "Crie uma subinterface para a VLAN 20 e configure 'encapsulation dot1Q 20'.",
+        "No Router, acesse 'interface gigabitethernet 0/0.10'.",
 
-        "Configure o gateway da rede de Administração.",
+        "Digite 'encapsulation dot1Q 10' para configurar o encapsulamento da VLAN 10.",
 
-        "Crie uma subinterface para a VLAN 30 e configure 'encapsulation dot1Q 30'.",
+        "Digite 'ip address 192.168.10.1 255.255.255.0' para configurar o gateway da Vendas.",
 
-        "Configure o gateway da rede de TI.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Configure os endereços IP dos PCs.",
+        "Acesse 'interface gigabitethernet 0/0.20'.",
 
-        "Teste a conectividade entre os três segmentos."
+        "Digite 'encapsulation dot1Q 20' para configurar o encapsulamento da VLAN 20.",
+
+        "Digite 'ip address 192.168.20.1 255.255.255.0' para configurar o gateway da Administração.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Acesse 'interface gigabitethernet 0/0.30'.",
+
+        "Digite 'encapsulation dot1Q 30' para configurar o encapsulamento da VLAN 30.",
+
+        "Digite 'ip address 192.168.30.1 255.255.255.0' para configurar o gateway da TI.",
+
+        "Acesse 'interface gigabitethernet 0/0'.",
+
+        "Digite 'no shutdown' para ativar a interface física.",
+
+        "Configure os PCs com endereços das redes correspondentes e utilize como gateway o endereço .1 de cada VLAN.",
+
+        "Teste a conectividade entre PCs das três VLANs."
 
     ]
 
@@ -365,35 +417,71 @@ port_security_inter_vlan: {
 
     steps: [
 
-        "Crie a VLAN 10.",
+        "Digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Crie a VLAN 20.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
+
+        "Digite 'vlan 10' para criar a VLAN 10.",
+
+        "Digite 'name Vendas' para nomear a VLAN.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Digite 'vlan 20' para criar a VLAN 20.",
+
+        "Digite 'name Administracao' para nomear a VLAN.",
 
         "Configure as portas dos PCs como Access.",
 
-        "Associe cada porta à VLAN correspondente.",
+        "Associe as portas dos PCs da primeira rede à VLAN 10.",
 
-        "Ative 'switchport port-security' nas portas dos PCs.",
+        "Associe as portas dos PCs da segunda rede à VLAN 20.",
 
-        "Ative Sticky MAC com 'switchport port-security mac-address sticky'.",
+        "Acesse uma porta de PC com 'interface fastethernet 0/1'.",
 
-        "Configure o enlace Switch → Router como Trunk.",
+        "Digite 'switchport mode access' para garantir que a porta está em modo Access.",
 
-        "No Router, crie as subinterfaces correspondentes às VLANs.",
+        "Digite 'switchport port-security' para ativar o Port Security.",
 
-        "Configure o encapsulamento 802.1Q para cada VLAN.",
+        "Digite 'switchport port-security mac-address sticky' para ativar o aprendizado Sticky MAC.",
 
-        "Configure um gateway diferente para cada rede.",
+        "Repita a configuração de Port Security nas demais portas dos PCs.",
 
-        "Configure os PCs com os respectivos endereços IP e gateways.",
+        "Acesse a porta do Switch conectada ao Router.",
+
+        "Digite 'switchport mode trunk' para configurar o enlace como Trunk.",
+
+        "No Router, acesse 'interface gigabitethernet 0/0.10'.",
+
+        "Digite 'encapsulation dot1Q 10' para configurar o encapsulamento da VLAN 10.",
+
+        "Digite 'ip address 192.168.10.1 255.255.255.0' para configurar o gateway da VLAN 10.",
+
+        "Acesse 'interface gigabitethernet 0/0.20'.",
+
+        "Digite 'encapsulation dot1Q 20' para configurar o encapsulamento da VLAN 20.",
+
+        "Digite 'ip address 192.168.20.1 255.255.255.0' para configurar o gateway da VLAN 20.",
+
+        "Acesse 'interface gigabitethernet 0/0' e digite 'no shutdown' para ativar a interface física.",
+
+        "Configure os PCs com endereços das redes correspondentes e seus respectivos gateways.",
 
         "Teste o ping entre PCs de VLANs diferentes.",
 
-        "Simule uma tentativa de invasão em uma porta protegida usando 'atacar fa0/1'.",
+        "Volte ao Modo Privilegiado com 'end'.",
 
-        "Observe a violação de Port Security.",
+        "Simule uma tentativa de invasão usando 'atacar fa0/1'.",
 
-        "Recupere a porta utilizando 'shutdown' e 'no shutdown'.",
+        "Observe o comportamento da porta após a violação de Port Security.",
+
+        "Verifique o estado da porta e do Port Security.",
+
+        "Para recuperar a porta, acesse novamente 'interface fastethernet 0/1'.",
+
+        "Digite 'shutdown' para desativar administrativamente a porta.",
+
+        "Digite 'no shutdown' para reativar a porta.",
 
         "Teste novamente a conectividade da rede."
 
@@ -424,35 +512,51 @@ switch_management_router: {
 
     steps: [
 
-        "Crie a VLAN 99 com 'vlan 99'.",
+        "Digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Nomeie a VLAN como GERENCIA.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
 
-        "No Switch, acesse 'interface vlan 99'.",
+        "Digite 'vlan 99' para criar a VLAN de gerenciamento.",
 
-        "Configure um endereço IP para a SVI da VLAN 99.",
+        "Digite 'name GERENCIA' para nomear a VLAN.",
 
-        "Ative a interface com 'no shutdown'.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Configure a porta do Switch conectada ao Router como Trunk.",
+        "Digite 'interface vlan 99' para acessar a SVI de gerenciamento.",
 
-        "No Router, acesse a subinterface 'g0/0.99'.",
+        "Digite 'ip address 192.168.99.2 255.255.255.0' para configurar o IP de gerenciamento do Switch.",
 
-        "Configure 'encapsulation dot1Q 99'.",
+        "Digite 'no shutdown' para ativar a SVI.",
 
-        "Configure o endereço IP do Router para a rede de gerenciamento.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Configure o gateway correspondente.",
+        "Acesse a porta do Switch conectada ao Router.",
 
-        "Configure uma porta para o PC de gerenciamento.",
+        "Digite 'switchport mode trunk' para configurar o enlace como Trunk.",
 
-        "Associe a porta do PC à VLAN 99.",
+        "No Router, digite 'interface gigabitethernet 0/0.99' para criar a subinterface de gerenciamento.",
 
-        "Configure o IP do PC de gerenciamento.",
+        "Digite 'encapsulation dot1Q 99' para identificar a VLAN 99.",
 
-        "Teste o ping do Switch para o Router.",
+        "Digite 'ip address 192.168.99.1 255.255.255.0' para configurar o gateway da rede de gerenciamento.",
 
-        "Teste a comunicação entre o PC de gerenciamento e o Switch."
+        "Digite 'exit' e depois acesse 'interface gigabitethernet 0/0'.",
+
+        "Digite 'no shutdown' para ativar a interface física.",
+
+        "No Switch, retorne ao Modo Global e digite 'ip default-gateway 192.168.99.1'.",
+
+        "Acesse a porta destinada ao PC de gerenciamento.",
+
+        "Digite 'switchport mode access' para configurar a porta como Access.",
+
+        "Digite 'switchport access vlan 99' para associar a porta à VLAN de gerenciamento.",
+
+        "Configure o PC de gerenciamento com um endereço da rede 192.168.99.0/24 e utilize 192.168.99.1 como gateway.",
+
+        "Teste o ping do Switch para o Router com 'ping 192.168.99.1'.",
+
+        "Teste a comunicação entre o PC de gerenciamento e o Switch com 'ping 192.168.99.2'."
 
     ]
 
@@ -477,37 +581,49 @@ static_routing: {
         "intermediário",
 
     description:
-        "Interligue duas redes através do Router utilizando endereçamento e uma rota estática.",
+        "Interligue duas redes através de dois Routers utilizando endereçamento e uma rota estática.",
 
     steps: [
 
-        "Crie a primeira rede para os PCs.",
+        "Digite 'enable' para entrar no Modo Privilegiado do primeiro Router.",
 
-        "Configure o Switch para essa rede.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
 
-        "Configure a primeira interface do Router.",
+        "Acesse a interface conectada à primeira rede com 'interface gigabitethernet 0/0'.",
 
-        "Atribua o endereço IP e a máscara da primeira rede.",
+        "Digite 'ip address 192.168.10.1 255.255.255.0' para configurar o gateway da primeira rede.",
+
+        "Digite 'no shutdown' para ativar a interface.",
+
+        "Acesse a interface do Router conectada ao segundo Router.",
+
+        "Configure um endereço da rede de trânsito, por exemplo 'ip address 10.0.0.1 255.255.255.252'.",
+
+        "Digite 'no shutdown' para ativar a interface de trânsito.",
+
+        "No segundo Router, configure a interface conectada ao primeiro Router com um endereço da mesma rede de trânsito, por exemplo '10.0.0.2 255.255.255.252'.",
+
+        "Ative a interface do segundo Router com 'no shutdown'.",
+
+        "Configure a interface do segundo Router conectada à segunda rede.",
+
+        "Utilize 'ip address 192.168.20.1 255.255.255.0' para configurar o gateway da segunda rede.",
 
         "Ative a interface com 'no shutdown'.",
 
-        "Crie uma segunda rede lógica no Router.",
+        "Configure os PCs da primeira rede com endereços da rede 192.168.10.0/24 e gateway 192.168.10.1.",
 
-        "Configure a segunda interface ou subinterface.",
+        "Configure os PCs da segunda rede com endereços da rede 192.168.20.0/24 e gateway 192.168.20.1.",
 
-        "Atribua o endereço IP e a máscara da segunda rede.",
+        "No primeiro Router, utilize 'ip route 192.168.20.0 255.255.255.0 10.0.0.2' para criar uma rota estática até a segunda rede.",
 
-        "Ative a interface correspondente.",
+        "No segundo Router, utilize 'ip route 192.168.10.0 255.255.255.0 10.0.0.1' para criar a rota de retorno.",
 
-        "Configure os endereços IP e gateways dos PCs.",
+        "Utilize 'show ip interface brief' para verificar o estado das interfaces.",
 
-        "Adicione uma rota estática para a rede necessária.",
+        "Utilize 'show ip route' para verificar as rotas instaladas.",
 
-        "Verifique as interfaces do Router.",
-
-        "Utilize 'show' para conferir as configurações.",
-
-        "Teste a conectividade entre as duas redes com ping."
+        "Teste a conectividade entre PCs das duas redes com 'ping'."
 
     ]
 
@@ -536,37 +652,53 @@ native_vlan: {
 
     steps: [
 
-        "Crie a VLAN 10.",
+        "Digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Crie a VLAN 20.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
+
+        "Digite 'vlan 10' para criar a VLAN 10.",
+
+        "Digite 'name Vendas' para nomear a VLAN.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Digite 'vlan 20' para criar a VLAN 20.",
+
+        "Digite 'name Administracao' para nomear a VLAN.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
 
         "Configure as portas dos PCs como Access.",
 
         "Associe os PCs às VLANs correspondentes.",
 
-        "Configure o enlace Switch → Router como Trunk.",
+        "Acesse a porta do Switch conectada ao Router.",
 
-        "No Router, crie a subinterface correspondente à VLAN 10.",
+        "Digite 'switchport mode trunk' para configurar o enlace como Trunk.",
 
-        "Configure 'encapsulation dot1Q 10'.",
+        "Digite 'switchport trunk native vlan 20' para definir a VLAN 20 como VLAN nativa.",
 
-        "Configure o endereço IP do gateway da VLAN 10.",
+        "No Router, acesse 'interface gigabitethernet 0/0.10'.",
 
-        "Crie a subinterface correspondente à VLAN 20.",
+        "Digite 'encapsulation dot1Q 10' para configurar o encapsulamento da VLAN 10.",
 
-        "Configure 'encapsulation dot1Q 20'.",
+        "Digite 'ip address 192.168.10.1 255.255.255.0' para configurar o gateway da VLAN 10.",
 
-        "Configure o endereço IP do gateway da VLAN 20.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Escolha uma das VLANs para funcionar como VLAN nativa.",
+        "Acesse 'interface gigabitethernet 0/0.20'.",
 
-        "Configure o encapsulamento usando o formato 'encapsulation dot1Q <VLAN> native'.",
+        "Digite 'encapsulation dot1Q 20 native' para configurar a VLAN 20 como nativa.",
 
-        "Garanta que a configuração da VLAN nativa esteja coerente entre Switch e Router.",
+        "Digite 'ip address 192.168.20.1 255.255.255.0' para configurar o gateway da VLAN 20.",
 
-        "Configure os endereços IP dos PCs.",
+        "Acesse 'interface gigabitethernet 0/0' e digite 'no shutdown' para ativar a interface física.",
 
-        "Teste a comunicação entre as redes."
+        "Garanta que a VLAN nativa configurada no Switch e no Router seja a mesma.",
+
+        "Configure os PCs com endereços das redes correspondentes e utilize os gateways configurados no Router.",
+
+        "Teste a comunicação entre as duas redes."
 
     ]
 
@@ -595,43 +727,73 @@ initial_configuration: {
 
     steps: [
 
-        "No Switch, altere o hostname para um nome de sua escolha.",
+        "No Switch, digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Configure um banner MOTD no Switch.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
 
-        "Configure um 'enable secret' no Switch.",
+        "Digite 'hostname SW-CORE' para definir o nome do Switch.",
 
-        "Acesse 'line console 0' e configure uma senha para o Console.",
+        "Digite 'banner motd #ACESSO RESTRITO - SOMENTE USUARIOS AUTORIZADOS#' para configurar o banner MOTD.",
 
-        "Ative o 'login' no Console.",
+        "Digite 'enable secret cisco123' para configurar a senha do Modo Privilegiado.",
 
-        "Acesse 'line vty 0 15' e configure uma senha VTY.",
+        "Digite 'line console 0' para acessar a configuração do Console.",
 
-        "Ative o 'login' nas linhas VTY.",
+        "Digite 'password cisco' para definir a senha do Console.",
 
-        "Ative 'service password-encryption' no Switch.",
+        "Digite 'login' para exigir a senha no acesso pelo Console.",
 
-        "No Router, altere o hostname para um nome de sua escolha.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Configure um banner MOTD no Router.",
+        "Digite 'line vty 0 15' para acessar as linhas VTY.",
 
-        "Configure um 'enable secret' no Router.",
+        "Digite 'password cisco' para definir a senha VTY.",
 
-        "Configure a senha do Console do Router.",
+        "Digite 'login' para ativar a autenticação das linhas VTY.",
 
-        "Configure a senha das linhas VTY do Router.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Ative a criptografia das senhas no Router.",
+        "Digite 'service password-encryption' para ativar a criptografia das senhas simples.",
 
-        "Configure 'no ip domain-lookup' no Router.",
+        "Digite 'end' para retornar ao Modo Privilegiado.",
 
-        "Salve a configuração do Switch.",
+        "No Router, digite 'configure terminal' para entrar no Modo Global.",
 
-        "Salve a configuração do Router.",
+        "Digite 'hostname R1' para definir o nome do Router.",
 
-        "Exiba 'show running-config' para conferir a configuração.",
+        "Digite 'banner motd #ACESSO RESTRITO - SOMENTE USUARIOS AUTORIZADOS#' para configurar o banner MOTD.",
 
-        "Verifique o estado das interfaces."
+        "Digite 'enable secret cisco123' para configurar a senha do Modo Privilegiado.",
+
+        "Digite 'line console 0' para acessar a configuração do Console.",
+
+        "Digite 'password cisco' para definir a senha do Console.",
+
+        "Digite 'login' para exigir a senha no acesso pelo Console.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Digite 'line vty 0 15' para acessar as linhas VTY.",
+
+        "Digite 'password cisco' para definir a senha VTY.",
+
+        "Digite 'login' para ativar a autenticação das linhas VTY.",
+
+        "Digite 'exit' para retornar ao Modo Global.",
+
+        "Digite 'service password-encryption' para ativar a criptografia das senhas simples.",
+
+        "Digite 'no ip domain-lookup' para impedir que comandos digitados incorretamente sejam tratados como nomes de domínio.",
+
+        "Digite 'end' para retornar ao Modo Privilegiado.",
+
+        "No Switch, utilize 'copy running-config startup-config' para salvar a configuração.",
+
+        "No Router, utilize 'copy running-config startup-config' para salvar a configuração.",
+
+        "Utilize 'show running-config' para conferir as configurações.",
+
+        "Utilize 'show ip interface brief' no Router para verificar o estado das interfaces."
 
     ]
 
@@ -660,41 +822,69 @@ five_pcs_three_vlans: {
 
     steps: [
 
-        "Configure o PC1 na VLAN 10 — Vendas.",
+        "Digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Configure o PC2 na VLAN 10 — Vendas.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
 
-        "Configure o PC3 na VLAN 20 — Administração.",
+        "Digite 'vlan 10' para criar a VLAN de Vendas.",
 
-        "Configure o PC4 na VLAN 20 — Administração.",
+        "Digite 'name Vendas' para nomear a VLAN.",
 
-        "Configure o PC5 na VLAN 30 — Suporte.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Crie a VLAN 10 e nomeie como Vendas.",
+        "Digite 'vlan 20' para criar a VLAN de Administração.",
 
-        "Crie a VLAN 20 e nomeie como Administracao.",
+        "Digite 'name Administracao' para nomear a VLAN.",
 
-        "Crie a VLAN 30 e nomeie como Suporte.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Configure todas as portas dos PCs como Access.",
+        "Digite 'vlan 30' para criar a VLAN de Suporte.",
 
-        "Associe cada porta à VLAN correta.",
+        "Digite 'name Suporte' para nomear a VLAN.",
 
-        "Configure o enlace Switch → Router como Trunk.",
+        "Configure a porta do PC1 como Access e associe-a à VLAN 10.",
 
-        "Crie no Router uma subinterface para a VLAN 10.",
+        "Configure a porta do PC2 como Access e associe-a à VLAN 10.",
 
-        "Configure o encapsulamento 802.1Q da VLAN 10.",
+        "Configure a porta do PC3 como Access e associe-a à VLAN 20.",
 
-        "Configure o gateway da VLAN 10.",
+        "Configure a porta do PC4 como Access e associe-a à VLAN 20.",
 
-        "Crie a subinterface da VLAN 20 e configure seu gateway.",
+        "Configure a porta do PC5 como Access e associe-a à VLAN 30.",
 
-        "Crie a subinterface da VLAN 30 e configure seu gateway.",
+        "Acesse a porta do Switch conectada ao Router.",
 
-        "Configure os endereços IP e máscaras dos cinco PCs.",
+        "Digite 'switchport mode trunk' para configurar o enlace como Trunk.",
 
-        "Configure o gateway de cada PC de acordo com sua VLAN.",
+        "No Router, acesse 'interface gigabitethernet 0/0.10'.",
+
+        "Digite 'encapsulation dot1Q 10' para configurar o encapsulamento da VLAN 10.",
+
+        "Digite 'ip address 192.168.10.1 255.255.255.0' para configurar o gateway da VLAN 10.",
+
+        "Acesse 'interface gigabitethernet 0/0.20'.",
+
+        "Digite 'encapsulation dot1Q 20' para configurar o encapsulamento da VLAN 20.",
+
+        "Digite 'ip address 192.168.20.1 255.255.255.0' para configurar o gateway da VLAN 20.",
+
+        "Acesse 'interface gigabitethernet 0/0.30'.",
+
+        "Digite 'encapsulation dot1Q 30' para configurar o encapsulamento da VLAN 30.",
+
+        "Digite 'ip address 192.168.30.1 255.255.255.0' para configurar o gateway da VLAN 30.",
+
+        "Acesse 'interface gigabitethernet 0/0' e digite 'no shutdown' para ativar a interface física.",
+
+        "Configure o PC1 com 192.168.10.10/24 e gateway 192.168.10.1.",
+
+        "Configure o PC2 com 192.168.10.11/24 e gateway 192.168.10.1.",
+
+        "Configure o PC3 com 192.168.20.10/24 e gateway 192.168.20.1.",
+
+        "Configure o PC4 com 192.168.20.11/24 e gateway 192.168.20.1.",
+
+        "Configure o PC5 com 192.168.30.10/24 e gateway 192.168.30.1.",
 
         "Teste o ping entre PCs da mesma VLAN.",
 
@@ -727,37 +917,39 @@ network_diagnostics: {
 
     steps: [
 
-        "Comece verificando quais VLANs existem no Switch.",
+        "Digite 'enable' para entrar no Modo Privilegiado.",
 
-        "Verifique se as portas dos PCs estão configuradas como Access.",
+        "Digite 'show vlan brief' para verificar quais VLANs existem no Switch.",
 
-        "Verifique a VLAN atribuída a cada porta.",
+        "Utilize 'show interfaces status' para verificar o estado das portas do Switch.",
 
-        "Verifique qual porta está configurada como Trunk.",
+        "Utilize 'show interfaces switchport' para verificar a configuração das portas.",
 
-        "Verifique a SVI e seu estado.",
+        "Utilize 'show interfaces trunk' para verificar qual porta está configurada como Trunk.",
 
-        "Verifique as interfaces físicas do Router.",
+        "Utilize 'show ip interface brief' para verificar a SVI e as interfaces do Router.",
 
-        "Verifique as subinterfaces existentes.",
+        "No Router, utilize 'show ip interface brief' para verificar as interfaces físicas e subinterfaces.",
 
-        "Verifique o encapsulamento 802.1Q de cada subinterface.",
+        "Utilize 'show running-config' para verificar os endereços IP configurados.",
 
-        "Verifique os endereços IP e máscaras.",
+        "Utilize 'show interfaces' para verificar se as interfaces estão apresentando problemas.",
 
-        "Verifique se as interfaces estão up ou down.",
+        "No Switch, utilize 'show port-security' para verificar o estado do Port Security.",
 
-        "Verifique o estado do Port Security.",
+        "Teste a comunicação entre cada PC e seu gateway utilizando 'ping'.",
 
-        "Teste o PC → Gateway com ping.",
+        "Teste a comunicação entre PCs da mesma VLAN utilizando 'ping'.",
 
-        "Teste PC → PC dentro da mesma VLAN.",
+        "Teste a comunicação entre PCs de VLANs diferentes utilizando 'ping'.",
 
-        "Teste PC → PC entre VLANs diferentes.",
+        "Compare os resultados dos testes com a configuração esperada.",
 
-        "Identifique a origem de cada falha.",
+        "Identifique a origem de cada falha encontrada.",
 
-        "Corrija as configurações incorretas.",
+        "Corrija as configurações incorretas utilizando os comandos IOS apropriados.",
+
+        "Repita os comandos de verificação após realizar as correções.",
 
         "Repita os testes de conectividade após as correções.",
 
@@ -792,59 +984,113 @@ final_corporate_project: {
 
         "Monte a topologia com 1 Router, 1 Switch e 5 PCs.",
 
-        "Crie a VLAN 10 — Vendas.",
+        "Digite 'enable' para entrar no Modo Privilegiado do Switch.",
 
-        "Crie a VLAN 20 — Administração.",
+        "Digite 'configure terminal' para entrar no Modo Global.",
 
-        "Crie a VLAN 30 — TI.",
+        "Digite 'vlan 10' para criar a VLAN de Vendas.",
 
-        "Configure o PC1 e o PC2 na VLAN 10 — Vendas.",
+        "Digite 'name Vendas' para nomear a VLAN.",
 
-        "Configure o PC3 e o PC4 na VLAN 20 — Administração.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Configure o PC5 na VLAN 30 — TI.",
+        "Digite 'vlan 20' para criar a VLAN de Administração.",
 
-        "Configure todas as portas dos PCs como Access.",
+        "Digite 'name Administracao' para nomear a VLAN.",
 
-        "Associe cada porta à VLAN correspondente.",
+        "Digite 'exit' para retornar ao Modo Global.",
 
-        "Configure o uplink Switch → Router como Trunk.",
+        "Digite 'vlan 30' para criar a VLAN de TI.",
 
-        "Configure o Router utilizando Router-on-a-Stick.",
+        "Digite 'name TI' para nomear a VLAN.",
 
-        "Crie as três subinterfaces no Router.",
+        "Configure as portas do PC1 e PC2 como Access e associe-as à VLAN 10.",
 
-        "Configure o encapsulamento 802.1Q de cada VLAN.",
+        "Configure as portas do PC3 e PC4 como Access e associe-as à VLAN 20.",
 
-        "Configure um gateway para cada VLAN.",
+        "Configure a porta do PC5 como Access e associe-a à VLAN 30.",
 
-        "Configure os endereços IP, máscaras e gateways dos cinco PCs.",
+        "Acesse a porta do Switch conectada ao Router.",
 
-        "Ative Port Security nas portas dos PCs.",
+        "Digite 'switchport mode trunk' para configurar o uplink como Trunk.",
 
-        "Ative Sticky MAC nas portas protegidas.",
+        "Configure Port Security nas portas dos cinco PCs.",
+
+        "Utilize 'switchport port-security mac-address sticky' para ativar o aprendizado Sticky MAC.",
+
+        "No Router, acesse 'interface gigabitethernet 0/0.10'.",
+
+        "Digite 'encapsulation dot1Q 10' para configurar o encapsulamento da VLAN 10.",
+
+        "Digite 'ip address 192.168.10.1 255.255.255.0' para configurar o gateway da Vendas.",
+
+        "Acesse 'interface gigabitethernet 0/0.20'.",
+
+        "Digite 'encapsulation dot1Q 20' para configurar o encapsulamento da VLAN 20.",
+
+        "Digite 'ip address 192.168.20.1 255.255.255.0' para configurar o gateway da Administração.",
+
+        "Acesse 'interface gigabitethernet 0/0.30'.",
+
+        "Digite 'encapsulation dot1Q 30' para configurar o encapsulamento da VLAN 30.",
+
+        "Digite 'ip address 192.168.30.1 255.255.255.0' para configurar o gateway da TI.",
+
+        "Acesse 'interface gigabitethernet 0/0' e digite 'no shutdown' para ativar a interface física.",
+
+        "Configure o PC1 com 192.168.10.10/24 e gateway 192.168.10.1.",
+
+        "Configure o PC2 com 192.168.10.11/24 e gateway 192.168.10.1.",
+
+        "Configure o PC3 com 192.168.20.10/24 e gateway 192.168.20.1.",
+
+        "Configure o PC4 com 192.168.20.11/24 e gateway 192.168.20.1.",
+
+        "Configure o PC5 com 192.168.30.10/24 e gateway 192.168.30.1.",
 
         "Configure hostname no Switch e no Router.",
 
-        "Configure um banner MOTD nos dispositivos.",
+        "Configure um banner MOTD nos dois dispositivos.",
 
-        "Configure as senhas de acesso.",
+        "Configure as senhas de acesso nos dois dispositivos.",
 
-        "Configure a criptografia das senhas.",
+        "Ative 'service password-encryption' nos dois dispositivos.",
 
-        "Configure uma rede de gerenciamento para o Switch.",
+        "Crie a VLAN 99 para gerenciamento.",
 
-        "Configure o gerenciamento através do Router.",
+        "Acesse 'interface vlan 99' no Switch.",
 
-        "Teste PC → Gateway.",
+        "Digite 'ip address 192.168.99.2 255.255.255.0' para configurar o IP de gerenciamento.",
+
+        "Digite 'no shutdown' para ativar a SVI.",
+
+        "Digite 'ip default-gateway 192.168.99.1' no Switch.",
+
+        "No Router, acesse 'interface gigabitethernet 0/0.99'.",
+
+        "Digite 'encapsulation dot1Q 99'.",
+
+        "Digite 'ip address 192.168.99.1 255.255.255.0' para configurar o gateway da rede de gerenciamento.",
+
+        "Teste PC → Gateway em cada VLAN.",
 
         "Teste PC → PC dentro da mesma VLAN.",
 
         "Teste PC → PC entre VLANs diferentes.",
 
-        "Verifique as interfaces e configurações dos dispositivos.",
+        "Utilize 'show vlan brief' para verificar as VLANs do Switch.",
 
-        "Salve a configuração na startup-config.",
+        "Utilize 'show interfaces trunk' para verificar o enlace Trunk.",
+
+        "Utilize 'show ip interface brief' para verificar as interfaces do Router.",
+
+        "Utilize 'show port-security' para verificar a proteção das portas.",
+
+        "Utilize 'show running-config' para revisar as configurações.",
+
+        "No Switch, utilize 'copy running-config startup-config' para salvar a configuração.",
+
+        "No Router, utilize 'copy running-config startup-config' para salvar a configuração.",
 
         "Revise toda a topologia e confirme que a infraestrutura está funcionando."
 
@@ -853,19 +1099,6 @@ final_corporate_project: {
 }
 
 };
-
-
-/*
-=================================================
-OBTER MISSÃO
-=================================================
-*/
-
-export function getMission(id) {
-
-    return missions[id] || null;
-
-}
 
 
 /*
