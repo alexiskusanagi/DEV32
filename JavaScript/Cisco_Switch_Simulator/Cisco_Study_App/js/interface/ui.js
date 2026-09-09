@@ -57,6 +57,9 @@ const topologyContainer =
 const btnReset =
     document.getElementById("btn-reset");
 
+const btnTroubleshooting =
+    document.getElementById("btn-troubleshooting");
+
 
 // =====================================================
 // BOTÕES DE DISPOSITIVO
@@ -117,6 +120,9 @@ let onDeviceSelect = null;
 
 let onReset = null;
 
+let onTroubleshooting;
+
+
 
 // =====================================================
 // INICIALIZAÇÃO DA INTERFACE
@@ -147,6 +153,18 @@ export function initializeUI(
             options.onReset;
 
     }
+
+    // TROUBLESHOOTING
+    if (
+    typeof options.onTroubleshooting ===
+    "function"
+) {
+
+    onTroubleshooting =
+        options.onTroubleshooting;
+
+}
+
 
     bindUIEvents();
 
@@ -268,6 +286,26 @@ function bindUIEvents() {
             ) {
 
                 onReset();
+
+            }
+
+        }
+    );
+
+}
+
+if (btnTroubleshooting) {
+
+    btnTroubleshooting.addEventListener(
+        "click",
+        () => {
+
+            if (
+                typeof onTroubleshooting ===
+                "function"
+            ) {
+
+                onTroubleshooting();
 
             }
 

@@ -60,6 +60,10 @@ import {
     createLabFactory
 } from "./labfactory.js";
 
+import {
+    createTroubleshootingLab1
+} from "../troubleshootingLab/lab1.js";
+
 
 import {
     initializeCLI,
@@ -108,7 +112,10 @@ function initializeApp() {
     onDeviceSelect: selectDevice,
 
     onReset:
-        resetApp
+        resetApp,
+
+    onTroubleshooting:
+        startTroubleshootingLab
 });
 
     renderMissions(
@@ -1260,6 +1267,57 @@ export function selectDevice(
     return false;
 
 }
+
+/*
+=====================================================
+TROUBLESHOOTING LAB
+=====================================================
+*/
+
+function startTroubleshootingLab() {
+
+    const lab =
+        createTroubleshootingLab1();
+
+    const success =
+        resetLab(lab);
+
+    if (!success) {
+
+        return false;
+
+    }
+
+    resetAllCliSessions();
+
+    setCliDevice(
+        appState.currentDeviceType ||
+        "switch"
+    );
+
+    setPrompt(
+        getCliPrompt()
+    );
+
+    refreshUI();
+
+     /*
+    ---------------------------------------------
+    MENSAGEM DO TROUBLESHOOTING LAB
+    ---------------------------------------------
+    */
+
+    writeLine("");
+
+    writeLine(
+        lab.troubleshootingMessage
+    );
+
+    writeLine("");
+
+    return true;
+}
+
 
 
 /*
