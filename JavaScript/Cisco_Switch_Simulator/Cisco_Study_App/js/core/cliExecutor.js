@@ -82,7 +82,10 @@ const switchContext = {
 
     interfaceName: null,
 
-    lineType: null
+    lineType: null,
+///////////////////
+    interfaceRange: []
+
 
 };
 
@@ -95,7 +98,10 @@ const routerContext = {
 
     interfaceName: null,
 
-    lineType: null
+    lineType: null,
+/////////////
+    interfaceRange: []
+
 
 };
 
@@ -1606,26 +1612,85 @@ INTERFACE
 =====================================================
 */
 
-function executeInterface(
-    args
-) {
+function executeInterface(args) {
 
-    const context =
-        getActiveContext();
+    const context = getActiveContext();
 
-
-    if (
-        context.mode !== "global"
-    ) {
-
+    if (context.mode !== "global") {
         return createResult(
             false,
             "interface",
             "% Comando permitido somente no modo global."
         );
-
     }
 
+    // =============================================
+    // INTERFACE RANGE
+    // =============================================
+
+    const raw = args.join(" ").trim();
+
+    if (/^range\s+/i.test(raw)) {
+
+        if (!requireDevice("switch")) {
+            return createResult(
+                false,
+                "interface",
+                "% interface range pertence ao Switch."
+            );
+        }
+
+        const rangeExpression =
+            raw.replace(/^range\s+/i, "").trim();
+
+        const interfaces =
+            resolveInterfaceRange(rangeExpression);
+
+        if (!interfaces.length) {
+            return createResult(
+                false,
+                "interface",
+                "% Nenhuma interface válida encontrada."
+            );
+        }
+
+        context.mode = "interface";
+        context.interfaceType = "physical";
+        context.interfaceName = interfaces[0];
+        context.interfaceRange = interfaces;
+
+        return createResult(
+            true,
+            "interface",
+            ""
+        );
+    
+
+    // ... continua sua lógica atual
+        }
+
+
+// function executeInterface(
+//     args
+// ) {
+
+//     const context =
+//         getActiveContext();
+
+
+//     if (
+//         context.mode !== "global"
+//     ) {
+
+//         return createResult(
+//             false,
+//             "interface",
+//             "% Comando permitido somente no modo global."
+//         );
+
+//     }
+
+    
 
     let interfaceName =
         args
@@ -1884,6 +1949,210 @@ function getSwitchInterfaceName(
         ||
         interfaceName
     );
+
+}
+
+function resolveInterfaceRange(expression) {
+
+    
+    const ports =
+        appState.switch?.ports || {};
+
+    const available =
+        Object.keys(ports);
+
+    const result = [];
+console.log("EXPRESSION:", expression);
+console.log("PARTS:", expression.split(","));
+
+    const parts =
+        expression
+            .split(",")
+            .map(part => part.trim())
+            .filter(Boolean);
+
+    for (const part of parts) {
+
+        const rangeMatch =
+            part.match(
+                /^(.+?)\s*-\s*(.+)$/
+            );
+
+        if (rangeMatch) {
+console.log("RANGE MATCH:", rangeMatch);
+
+            const start =
+                normalizeInterfaceName(
+                    rangeMatch[1]
+                );
+
+            let end =
+                normalizeInterfaceName(
+                    rangeMatch[2]
+                );
+
+            if (/^\d+$/.test(end)) {
+
+                const prefix =
+                    start.match(
+                        // /^[a-z]+ethernet\s+\d+\//
+                        /^(.+\d+\/)/
+                    )?.[1];
+
+                if (!prefix) {
+                    continue;
+                }
+
+                end =
+                    prefix + end;
+            }
+console.log("START:", start);
+console.log("END RAW:", end);
+
+            const startPort =
+                findSwitchInterface(start);
+
+            const endPort =
+                findSwitchInterface(end);
+console.log("START PORT:", startPort);
+console.log("END:", end);
+console.log("END PORT:", endPort);
+
+
+            if (!startPort || !endPort) {
+                continue;
+            }
+
+            const startIndex =
+                getInterfaceNumber(startPort);
+
+            const endIndex =
+                getInterfaceNumber(endPort);
+
+console.log("START INDEX:", getInterfaceNumber(startPort));
+console.log("END INDEX:", getInterfaceNumber(endPort));
+
+
+            if (
+                startIndex === null ||
+                endIndex === null
+            ) {
+                continue;
+            }
+
+            const min =
+                Math.min(startIndex, endIndex);
+
+            const max =
+                Math.max(startIndex, endIndex);
+
+                available.forEach(name => {
+
+                const number =
+                    getInterfaceNumber(name);
+
+                if (
+                    number !== null &&
+                    number >= min &&
+                    number <= max &&
+                    /^fa0\/\d+$/i.test(name)
+                ) {
+                    result.push(name);
+                }
+
+            });
+
+
+            // available.forEach(name => {
+
+            //     const normalized =
+            //         normalizeInterfaceName(name);
+
+            //     if (
+            //         normalized.startsWith(
+            //             "fastethernet "
+            //         )
+            //     ) {
+
+            //         const number =
+            //             getInterfaceNumber(name);
+
+            //         if (
+            //             number >= min &&
+            //             number <= max
+            //         ) {
+            //             result.push(name);
+            //         }
+            //     }
+
+            // });
+
+        } 
+        
+        else {
+
+            const resolved =
+                findSwitchInterface(part);
+
+            if (resolved) {
+                result.push(resolved);
+            }
+
+        }
+    }
+
+    return [
+        ...new Set(result)
+    ];
+}
+
+
+///////////////// Switch NAME
+function findSwitchInterface(name) {
+
+    const normalized =
+        normalizeInterfaceName(name);
+
+    return Object.keys(
+        appState.switch?.ports || {}
+    ).find(
+        port =>
+            normalizeInterfaceName(port) ===
+            normalized
+    );
+
+}
+
+
+function getInterfaceNumber(name) {
+
+    const match =
+        String(name)
+            .match(/\/(\d+)$/);
+
+    return match
+        ? Number(match[1])
+        : null;
+
+}
+
+function getTargetInterfaces() {
+
+    const context =
+        getActiveContext();
+
+    if (
+        context.interfaceRange &&
+        context.interfaceRange.length
+    ) {
+
+        return context.interfaceRange;
+
+    }
+
+    return context.interfaceName
+        ? [context.interfaceName]
+        : [];
 
 }
 
@@ -2503,6 +2772,8 @@ function executeSwitchportMode(
 
     }
 
+    const context =
+        switchContext;
 
     if (
         switchContext.mode !== "interface" ||
@@ -2538,12 +2809,61 @@ function executeSwitchportMode(
         );
 
     }
+    
 
+    // const success =
+    //     setPortMode(
+    //         mode
+    //     );
 
-    const success =
-        setPortMode(
-            mode
+     const interfaces =
+        getTargetInterfaces();
+
+console.log("TARGET INTERFACES:", interfaces);
+
+    if (!interfaces.length) {
+
+        return createResult(
+            false,
+            "switchport-mode",
+            "% Nenhuma interface selecionada."
         );
+
+    }
+
+
+    let success = true;
+
+
+    for (
+        const interfaceName
+        of interfaces
+    ) {
+
+        selectInterface(
+            interfaceName
+        );
+
+
+        const result =
+            setPortMode(
+                mode
+            );
+
+console.log(
+    "SET PORT MODE:",
+    interfaceName,
+    mode,
+    result
+);
+
+        if (!result) {
+
+            success = false;
+
+        }
+
+    }
 
 
     return createResult(
@@ -2579,6 +2899,9 @@ function executeSwitchportAccessVlan(
 
     }
 
+    const context =
+        switchContext;
+
 
     if (
         switchContext.mode !== "interface" ||
@@ -2600,10 +2923,67 @@ function executeSwitchportAccessVlan(
         );
 
 
-    const success =
-        assignPortVlan(
-            vlanId
+    if (
+        !Number.isInteger(vlanId)
+    ) {
+
+        return createResult(
+            false,
+            "switchport-access-vlan",
+            "% VLAN inválida."
         );
+
+    }
+
+
+    const interfaces =
+        getTargetInterfaces();
+
+
+    if (!interfaces.length) {
+
+        return createResult(
+            false,
+            "switchport-access-vlan",
+            "% Nenhuma interface selecionada."
+        );
+
+    }
+
+
+    let success = true;
+
+
+    for (
+        const interfaceName
+        of interfaces
+    ) {
+
+        selectInterface(
+            interfaceName
+        );
+
+
+        const result =
+            assignPortVlan(
+                vlanId
+            );
+
+
+        if (!result) {
+
+            success = false;
+
+        }
+
+    }
+    
+
+
+    // const success =
+    //     assignPortVlan(
+    //         vlanId
+    //     );
 
 
     return createResult(

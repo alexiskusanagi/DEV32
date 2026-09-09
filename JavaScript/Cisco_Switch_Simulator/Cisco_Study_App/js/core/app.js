@@ -704,9 +704,9 @@ function updateStatus() {
 
 
     /*
-    =============================================
+    =====================================================
     SWITCH
-    =============================================
+    =====================================================
     */
 
     if (
@@ -732,7 +732,214 @@ function updateStatus() {
         }
 
 
-        renderStatus({
+        /*
+        ---------------------------------------------
+        VLAN 1 — mantém o comportamento atual
+        ---------------------------------------------
+        */
+
+        const vlan1 =
+            switchState.vlanInterfaces?.[1];
+
+
+        /*
+        ---------------------------------------------
+        VLANs e portas
+        ---------------------------------------------
+        */
+
+        const vlanPortMap = {};
+
+
+        const vlans =
+            switchState.vlans || {};
+
+
+        Object.keys(vlans).forEach(
+            vlanId => {
+
+                vlanPortMap[vlanId] = [];
+
+            }
+        );
+
+
+        const ports =
+            switchState.ports || {};
+
+           Object.entries(ports).forEach(
+            ([portName, port]) => {
+
+                if (
+                    portName.startsWith("GigabitEthernet")
+                ) {
+
+                    return;
+
+                }
+
+
+                const vlanId =
+                    String(
+                        port?.vlan
+                    );
+
+
+                if (
+                    !vlanPortMap[vlanId]
+                ) {
+
+                    vlanPortMap[vlanId] = [];
+
+                }
+
+
+                vlanPortMap[vlanId].push(
+                    portName
+                );
+
+            }
+        );
+ 
+        // Object.entries(ports).forEach(
+        //     ([portName, port]) => {
+
+        //         const vlanId =
+        //             String(
+        //                 port?.vlan
+        //             );
+
+
+        //         if (
+        //             !vlanPortMap[vlanId]
+        //         ) {
+
+        //             vlanPortMap[vlanId] = [];
+
+        //         }
+
+
+        //         vlanPortMap[vlanId].push(
+        //             portName
+        //         );
+
+        //     }
+        // );
+
+
+        /*
+        ---------------------------------------------
+        AGRUPAR PORTAS CONSECUTIVAS
+        ---------------------------------------------
+        */
+
+        function formatPortList(
+            portList
+        ) {
+
+            if (
+                !portList.length
+            ) {
+
+                return "sem portas definidas";
+
+            }
+
+
+            const sorted =
+                [...portList].sort(
+                    (a, b) => {
+
+                        const aNumber =
+                            Number(
+                                a.split("/").pop()
+                            );
+
+                        const bNumber =
+                            Number(
+                                b.split("/").pop()
+                            );
+
+                        return aNumber - bNumber;
+
+                    }
+                );
+
+
+            const result = [];
+
+
+            let start =
+                sorted[0];
+
+            let previous =
+                sorted[0];
+
+
+            for (
+                let i = 1;
+                i < sorted.length;
+                i++
+            ) {
+
+                const current =
+                    sorted[i];
+
+
+                const previousNumber =
+                    Number(
+                        previous.split("/").pop()
+                    );
+
+
+                const currentNumber =
+                    Number(
+                        current.split("/").pop()
+                    );
+
+
+                if (
+                    currentNumber ===
+                    previousNumber + 1
+                ) {
+
+                    previous =
+                        current;
+
+                    continue;
+
+                }
+
+
+                result.push(
+                    start === previous
+                        ? start
+                        : `${start} a ${previous}`
+                );
+
+
+                start =
+                    current;
+
+                previous =
+                    current;
+
+            }
+
+
+            result.push(
+                start === previous
+                    ? start
+                    : `${start} a ${previous}`
+            );
+
+
+            return result.join(", ");
+
+        }
+
+
+        const statusData = {
 
             Dispositivo:
                 "Switch",
@@ -742,21 +949,21 @@ function updateStatus() {
                 "Switch",
 
             "VLAN 1 IP":
-                switchState.vlan1?.ip ||
+                vlan1?.ip ||
                 "não configurado",
 
             "VLAN 1 Mask":
-                switchState.vlan1?.mask ||
+                vlan1?.mask ||
                 "não configurada",
 
             "VLAN 1 Status":
-                switchState.vlan1?.isUp
+                vlan1?.isUp
                     ? "up"
                     : "down",
 
-            "Porta atual":
-                switchState.activePhysicalPort ||
-                "nenhuma",
+            // "Porta atual":
+            //     switchState.activePhysicalPort ||
+            //     "nenhuma",
 
             "VLAN atual":
                 switchState.activeVlanId ||
@@ -767,12 +974,82 @@ function updateStatus() {
                     ? "presente"
                     : "ausente"
 
+        };
 
-        });
+
+        /*
+        ---------------------------------------------
+        VLANs existentes + portas
+        ---------------------------------------------
+        */
+
+        Object.entries(
+            vlanPortMap
+        ).forEach(
+            ([vlanId, portList]) => {
+
+                statusData[
+                    `VLAN ${vlanId} - Portas`
+                ] =
+                    formatPortList(
+                        portList
+                    );
+
+            }
+        );
+
+        /*
+---------------------------------------------
+STATUS DAS PORTAS
+---------------------------------------------
+*/
+
+const portStatus = {};
+
+Object.entries(
+    switchState.ports || {}
+).forEach(
+    ([portName, port]) => {
+
+        let status =
+            port?.status || "down";
+
+        if (status === "connected") {
+            status = "up";
+        }
+        else if (status === "shutdown") {
+            status = "down";
+        }
+
+        portStatus[
+            `Porta ${portName}`
+        ] = status;
+
+         portStatus[
+            `MAC Sticky ${portName}`
+        ] =
+            port?.portSecurity?.isSticky
+                ? "enabled"
+                : "disabled";
+
+    }
+);
+
+        Object.assign(
+            statusData,
+            portStatus
+        );
+
+        renderStatus(
+            statusData
+        );
 
         return;
 
+
     }
+
+
 
 
     /*

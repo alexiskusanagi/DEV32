@@ -762,6 +762,46 @@ function parseInterfaceCommand(
 
     }
 
+    // =============================================
+    // INTERFACE RANGE
+    // =============================================
+
+    if (
+        tokens[1].toLowerCase() === "range"
+    ) {
+
+        const rangeExpression =
+            tokens
+                .slice(2)
+                .join(" ")
+                .trim();
+
+        if (!rangeExpression) {
+
+            return {
+                type: "invalid",
+                command: "interface",
+                args: [],
+                raw,
+                error: "Range de interfaces não informado."
+            };
+
+        }
+
+        return createCommand(
+            "interface",
+            [
+                "range",
+                rangeExpression
+            ],
+            raw
+        );
+    }
+
+    // =============================================
+    // INTERFACE NORMAL
+    // =============================================
+
     const interfaceName =
         normalizeInterfaceName(
             tokens.slice(1).join(" ")
@@ -789,6 +829,53 @@ function parseInterfaceCommand(
         raw
     );
 }
+
+
+
+// function parseInterfaceCommand(
+//     tokens,
+//     raw
+// ) {
+
+//     if (tokens.length < 2) {
+
+//         return {
+//             type: "invalid",
+//             command: "interface",
+//             args: [],
+//             raw,
+//             error: "Interface não informada."
+//         };
+
+//     }
+
+//     const interfaceName =
+//         normalizeInterfaceName(
+//             tokens.slice(1).join(" ")
+//         );
+
+//     if (
+//         !isValidInterfaceName(
+//             interfaceName
+//         )
+//     ) {
+
+//         return {
+//             type: "invalid",
+//             command: "interface",
+//             args: tokens.slice(1),
+//             raw,
+//             error: "Interface inválida."
+//         };
+
+//     }
+
+//     return createCommand(
+//         "interface",
+//         [interfaceName],
+//         raw
+//     );
+// }
 
 
 /*
